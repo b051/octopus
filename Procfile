@@ -1,1 +1,1 @@
-web: node lib/app.js
+web: runjs app.coffee

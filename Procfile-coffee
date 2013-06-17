@@ -1,2 +1,0 @@
-web: runjs lib/app.js
-coffee: coffee -cwo lib/ src/
