@@ -1,0 +1,36 @@
+{
+  "name": "wei",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "foreman start -f Procfile-coffee",
+    "test": "mocha"
+  },
+  "dependencies": {
+    "express": "3.x",
+    "parse": "1.2.x",
+    "mongoose": "3.x",
+    "ws": "*",
+    "apn": "*"
+  },
+  "devDependencies": {
+    "chai": "*",
+    "chai-as-promised": "*",
+    "mocha": "*",
+    "coffee-script": "*",
+    "run": "*",
+    "fakeredis": "*",
+    "sinon-chai": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "wei.rexsheng.com:wei.git"
+  },
+  "keywords": [
+    "wei"
+  ],
+  "author": "rexsheng",
+  "license": "Commercial",
+  "private": true
+}
