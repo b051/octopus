@@ -8,12 +8,15 @@ db = new Db("octopusdb", server, safe: true)
 db.open (err, db) ->
   unless err
     console.log "Connected to 'octopusdb' database"
-    db.collection "wines",
-      safe: true
-    , (err, collection) ->
-      if err or collection.count() is 0
+    db.collection "wines", safe: true, (err, collection) ->
+      if err
         console.log "The 'wines' collection doesn't exist. Creating it with sample data..."
         populateDB()
+      else
+        collection.count (err, count) ->
+          if count is 0
+            console.log "The 'wines' collection is empty. Creating it with sample data..."
+            populateDB()
 
 exports.findById = (req, res) ->
   id = req.params.id
