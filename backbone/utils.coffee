@@ -5,7 +5,7 @@ window.utils =
     deferreds = []
     $.each views, (index, view) ->
       if window[view]
-        deferreds.push $.get("tpl/" + view + ".html", (data) ->
+        deferreds.push $.get("tpl/#{view}.html", (data) ->
           window[view]::template = _.template(data)
         )
       else
@@ -19,19 +19,19 @@ window.utils =
     @showAlert "Warning!", "Fix validation errors and try again", "alert-warning"
 
   addValidationError: (field, message) ->
-    controlGroup = $("#" + field).parent().parent()
+    controlGroup = $("##{field}").parent().parent()
     controlGroup.addClass "error"
     $(".help-inline", controlGroup).html message
 
   removeValidationError: (field) ->
-    controlGroup = $("#" + field).parent().parent()
+    controlGroup = $("##{field}").parent().parent()
     controlGroup.removeClass "error"
     $(".help-inline", controlGroup).html ""
 
   showAlert: (title, text, klass) ->
     $(".alert").removeClass "alert-error alert-warning alert-success alert-info"
     $(".alert").addClass klass
-    $(".alert").html "<strong>" + title + "</strong> " + text
+    $(".alert").html "<strong>#{title}</strong> #{text}"
     $(".alert").show()
 
   hideAlert: ->
