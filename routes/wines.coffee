@@ -11,7 +11,7 @@ db.open (err, db) ->
     db.collection "wines",
       safe: true
     , (err, collection) ->
-      if err
+      if err or collection.count() is 0
         console.log "The 'wines' collection doesn't exist. Creating it with sample data..."
         populateDB()
 
