@@ -1,13 +1,12 @@
 http = require "http"
-path = require "path"
 express = require "express"
 hbs = require "express-hbs"
 
 app = express()
 
 app.engine 'hbs', hbs.express3
-  defaultLayout: __dirname + '/views/layouts/main.hbs'
-  partialsDir: __dirname + '/views/partials'
+  defaultLayout: "#{__dirname}/views/layouts/main.hbs"
+  partialsDir: "#{__dirname}/views/partials"
 
 app.set "view engine", 'hbs'
 
@@ -18,8 +17,8 @@ app.use express.methodOverride()
 app.use express.cookieParser("your secret here")
 app.use express.session()
 app.use app.router
-app.use require("stylus").middleware(__dirname + "/public")
-app.use express.static(path.join(__dirname, "public"))
+app.use require("stylus").middleware("#{__dirname}/public")
+app.use express.static "#{__dirname}/public"
 
 # development only
 app.use express.errorHandler()  if "development" is app.get("env")
