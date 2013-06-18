@@ -7,7 +7,8 @@
   },
   "dependencies": {
     "express": "3.x",
-    "mongodb": "*"
+    "mongodb": "*",
+    "socket.io": "*"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
