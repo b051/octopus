@@ -1,1 +1,1 @@
-web: node serverwithanalytics.js
+web: coffee app.coffee
