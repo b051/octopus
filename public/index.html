@@ -26,16 +26,15 @@
     <script src="http://use.edgefonts.net/arvo.js"></script>
 
 	<script type="text/javascript" src="socket.io/socket.io.js"></script>
-    <script>
-// UNCOMMENT THIS CODE IF YOU USE THE "serverwithanalytics" SERVER
-//        var socket = io.connect();
-//        socket.on('connect', function () {
-//            socket.send(window.location.href);
-//        });
-//        window.onhashchange = function () {
-//            socket.send(window.location.href);
-//        }
-    </script>
+  <script>
+     var socket = io.connect();
+     socket.on('connect', function () {
+         socket.send(window.location.href);
+     });
+     window.onhashchange = function () {
+         socket.send(window.location.href);
+     }
+  </script>
 
 </head>
 
@@ -50,14 +49,8 @@
     </div>
 
     <footer class="footer">
-        <p class="pull-right"><a href="#">Back Home</a></p>
-        <p>Built as a sample application with <a href="http://documentcloud.github.com/backbone/">Backbone.js</a>,
-        <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a>,
-        <a href="http://nodejs.org/">Node.js</a>,
-        <a href="http://expressjs.com/">Express</a>,
-        and <a href="http://www.mongodb.org/">MongoDB</a> by
-        <a href="http://coenraets.org" target="_blank">Christophe Coenraets</a>.<br/>
-        The source code for this application is available in <a href="#">this repository</a> on GitHub.</p>
+        <p>The source code for this application is available in <a href="https://github.com/b051/octopus">this repository</a> on GitHub.</p>
+</p>
     </footer>
 
 </div>
