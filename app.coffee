@@ -25,7 +25,7 @@ app.use express.static(path.join(__dirname, "public"))
 app.use express.errorHandler()  if "development" is app.get("env")
 
 app.get "/", (req, res) ->
-  res.render 'index', title: 'Express'
+  res.render 'index', title: 'Nodejs'
 
 port = process.env.PORT or 3000
 http.createServer(app).listen port, ->
