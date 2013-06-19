@@ -44,7 +44,11 @@ AppRouter = Backbone.Router.extend
     $("#content").html @aboutView.el
     @headerView.selectMenuItem "about-menu"
 
-utils.loadTemplate ["HomeView", "HeaderView", "WineView", "WineListItemView", "AboutView"], ->
+views = ["HomeView", "HeaderView", "WineView", "WineListItemView", "AboutView"]
+getTpl = (view) ->
+  $.get "tpl/#{view}.html", (data) ->
+    window[view]::template = _.template(data)
+
+$.when.apply(null, (getTpl(view) for view in views when window[view])).done ->
   app = new AppRouter()
   Backbone.history.start()
-
