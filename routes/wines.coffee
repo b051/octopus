@@ -2,7 +2,7 @@ mongo = require 'mongodb'
 Server = mongo.Server
 Db = mongo.Db
 BSON = mongo.BSONPure
-server = new Server("localhost", 27017, auto_reconnect: true)
+server = new Server("localhost", 27017, auto_reconnect: yes)
 db = new Db("octopusdb", server, safe: true)
 
 wines = (callback) ->
@@ -37,9 +37,7 @@ exports.addWine = (req, res) ->
   wine = req.body
   console.log "Adding wine: " + JSON.stringify(wine)
   wines (err, collection) ->
-    collection.insert wine,
-      safe: true
-    , (err, result) ->
+    collection.insert wine, safe: true, (err, result) ->
       if err
         res.send error: "An error has occurred"
       else
@@ -51,8 +49,8 @@ exports.updateWine = (req, res) ->
   wine = req.body
   delete wine._id
 
-  console.log "Updating wine: " + id
-  console.log JSON.stringify(wine)
+  console.log "Updating wine: #{id}"
+  console.log JSON.stringify wine
   wines (err, collection) ->
     collection.update
       _id: new BSON.ObjectID(id)
@@ -68,7 +66,7 @@ exports.updateWine = (req, res) ->
 
 exports.deleteWine = (req, res) ->
   id = req.params.id
-  console.log "Deleting wine: " + id
+  console.log "Deleting wine: #{id}"
   wines (err, collection) ->
     collection.remove
       _id: new BSON.ObjectID(id)
