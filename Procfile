@@ -1,3 +1,3 @@
 web: coffee app.coffee
-coffee: coffee --output public/js/ -cmw backbone/
+coffee: coffee -cmwo public/js/ backbone/
 mongod: mongod --dbpath db
