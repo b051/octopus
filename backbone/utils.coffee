@@ -14,8 +14,8 @@ window.utils =
     $.when.apply(null, deferreds).done callback
 
   displayValidationErrors: (messages) ->
-    for key of messages
-      @addValidationError key, messages[key]  if messages.hasOwnProperty(key)
+    for key, message of messages
+      @addValidationError key, message
     @showAlert "Warning!", "Fix validation errors and try again", "alert-warning"
 
   addValidationError: (field, message) ->
@@ -35,4 +35,6 @@ window.utils =
     $(".alert").show()
 
   hideAlert: ->
+    $(".help-inline").html ''
+    $('.error').removeClass 'error'
     $(".alert").hide()

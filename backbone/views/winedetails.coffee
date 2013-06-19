@@ -24,16 +24,12 @@ window.WineView = Backbone.View.extend
     @model.set change
     
     # Run validation rule (if any) on changed item
-    check = @model.validateItem(target.id)
-    if not check.isValid
-      utils.addValidationError target.id, check.message
-    else
-      utils.removeValidationError target.id
+    if not @model.isValid()
+      utils.displayValidationErrors @model.validationError
 
   beforeSave: ->
-    check = @model.validateAll()
-    if not check.isValid
-      utils.displayValidationErrors check.messages
+    if not @model.isValid()
+      utils.displayValidationErrors @model.validationError
       return false
     @saveWine()
     false
