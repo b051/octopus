@@ -1,4 +1,4 @@
-AppRouter = Backbone.Router.extend(
+AppRouter = Backbone.Router.extend
   routes:
     "": "home"
     wines: "list"
@@ -11,8 +11,8 @@ AppRouter = Backbone.Router.extend(
     @headerView = new HeaderView()
     $(".header").html @headerView.el
 
-  home: (id) ->
-    @homeView = new HomeView()  unless @homeView
+  home: ->
+    @homeView = new HomeView() unless @homeView
     $("#content").html @homeView.el
     @headerView.selectMenuItem "home-menu"
 
@@ -43,7 +43,7 @@ AppRouter = Backbone.Router.extend(
     @aboutView = new AboutView() unless @aboutView
     $("#content").html @aboutView.el
     @headerView.selectMenuItem "about-menu"
-)
+
 utils.loadTemplate ["HomeView", "HeaderView", "WineView", "WineListItemView", "AboutView"], ->
   app = new AppRouter()
   Backbone.history.start()

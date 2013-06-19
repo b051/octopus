@@ -9,10 +9,7 @@ window.Paginator = Backbone.View.extend
     len = items.length
     pageCount = Math.ceil(len / 8)
     $(@el).html "<ul />"
-    i = 0
-
-    while i < pageCount
-      cssClass = if (i + 1) is @options.page then "'active'" else ""
-      $("ul", @el).append "<li class=#{cssClass}><a href='#wines/page/#{i + 1}'>#{i + 1}</a></li>"
-      i++
+    for i in [1..pageCount]
+      cssClass = if i is @options.page then "'active'" else ""
+      $("ul", @el).append "<li class=#{cssClass}><a href='#wines/page/#{i}'>#{i}</a></li>"
     this

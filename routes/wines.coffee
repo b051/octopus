@@ -5,10 +5,13 @@ BSON = mongo.BSONPure
 server = new Server("localhost", 27017, auto_reconnect: true)
 db = new Db("octopusdb", server, safe: true)
 
+wines = (callback) ->
+  db.collection 'wines', callback
+
 db.open (err, db) ->
   unless err
     console.log "Connected to 'octopusdb' database"
-    db.collection "wines", safe: true, (err, collection) ->
+    wines (err, collection) ->
       if err
         console.log "The 'wines' collection doesn't exist. Creating it with sample data..."
         populateDB()
@@ -21,21 +24,19 @@ db.open (err, db) ->
 exports.findById = (req, res) ->
   id = req.params.id
   console.log "Retrieving wine: " + id
-  db.collection "wines", (err, collection) ->
-    collection.findOne
-      _id: new BSON.ObjectID(id)
-    , (err, item) ->
+  wines (err, collection) ->
+    collection.findOne _id: new BSON.ObjectID(id), (err, item) ->
       res.send item
 
 exports.findAll = (req, res) ->
-  db.collection "wines", (err, collection) ->
+  wines (err, collection) ->
     collection.find().toArray (err, items) ->
       res.send items
 
 exports.addWine = (req, res) ->
   wine = req.body
   console.log "Adding wine: " + JSON.stringify(wine)
-  db.collection "wines", (err, collection) ->
+  wines (err, collection) ->
     collection.insert wine,
       safe: true
     , (err, result) ->
@@ -52,7 +53,7 @@ exports.updateWine = (req, res) ->
 
   console.log "Updating wine: " + id
   console.log JSON.stringify(wine)
-  db.collection "wines", (err, collection) ->
+  wines (err, collection) ->
     collection.update
       _id: new BSON.ObjectID(id)
     , wine,
@@ -68,7 +69,7 @@ exports.updateWine = (req, res) ->
 exports.deleteWine = (req, res) ->
   id = req.params.id
   console.log "Deleting wine: " + id
-  db.collection "wines", (err, collection) ->
+  wines (err, collection) ->
     collection.remove
       _id: new BSON.ObjectID(id)
     ,

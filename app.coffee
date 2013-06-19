@@ -7,6 +7,7 @@ wines = require "./routes/wines"
 
 app.use app.router
 app.use express.static "#{__dirname}/public"
+app.use "/backbone", express.static "#{__dirname}/backbone"
 
 app.get "/wines", wines.findAll
 app.get "/wines/:id", wines.findById
