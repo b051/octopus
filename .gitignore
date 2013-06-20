@@ -1,3 +1,4 @@
 /node_modules/
 db
 public/js/
+dump.rdb

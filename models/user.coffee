@@ -2,7 +2,7 @@ mongoose = require 'mongoose'
 
 schema = mongoose.Schema
   username: String
-  password: String
+  hash: String
   email: String
   salt: String
 

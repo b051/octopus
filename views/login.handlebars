@@ -1,0 +1,19 @@
+
+<form action="/login" method="post" class="form-signin">
+  <h2 class="form-signin-heading">Please sign in</h2>
+  <input name="username" type="text" class="input-block-level" placeholder="Email address">
+  <input name="password" type="password" class="input-block-level" placeholder="Password">
+  <label class="checkbox">
+    <input name="remember" type="checkbox" value="remember-me"> Remember me
+  </label>
+  <button class="btn btn-large btn-primary" type="submit">Sign in</button>
+  <a href="/register" class="btn btn-large" style="margin-left:10px">Sign up</a>
+  
+  {{#if message}}
+  <div class="alert " style="margin-top:20px">
+    {{{message}}}
+  </div>
+  {{/if}}
+</form>
+
+

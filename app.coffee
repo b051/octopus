@@ -1,10 +1,10 @@
 express = require 'express'
+expresshbs = require 'express3-handlebars'
 mongoose = require 'mongoose'
 app = express()
 server = require('http').createServer(app)
 io = require('socket.io').listen(server)
 passport = require 'passport'
-flash = require 'connect-flash'
 Wine = require './models/wine'
 hour = 3600000
 day = hour * 24
@@ -20,6 +20,8 @@ db.once 'open', ->
     if count is 0
       console.log "The 'wine' collection is empty. Creating it with sample data..."
       Wine.populateDB()
+
+hbs = expresshbs.create defaultLayout: 'main'
 
 # parse request bodies (req.body)
 app.use express.bodyParser uploadDir:'./public/pics/'
@@ -37,9 +39,11 @@ app.use express.session
   secret: 's31gsad983'
   maxAge: month
 
-app.use flash()
 app.use passport.initialize()
 app.use passport.session()
+
+app.engine 'handlebars', hbs.engine 
+app.set 'view engine', 'handlebars'
 app.use app.router
 app.use express.compress()
 app.use express.static "#{__dirname}/public"
