@@ -1,87 +1,17 @@
-mongo = require 'mongodb'
-Server = mongo.Server
-Db = mongo.Db
-BSON = mongo.BSONPure
-server = new Server("localhost", 27017, auto_reconnect: yes)
-db = new Db("octopusdb", server, safe: true)
+mongoose = require 'mongoose'
 
-wines = (callback) ->
-  db.collection 'wines', callback
+schema = new mongoose.Schema
+  name: String
+  year: String
+  grapes: String
+  country: String
+  region: String
+  description: String
+  picture: String
 
-db.open (err, db) ->
-  unless err
-    console.log "Connected to 'octopusdb' database"
-    wines (err, collection) ->
-      if err
-        console.log "The 'wines' collection doesn't exist. Creating it with sample data..."
-        populateDB()
-      else
-        collection.count (err, count) ->
-          if count is 0
-            console.log "The 'wines' collection is empty. Creating it with sample data..."
-            populateDB()
+module.exports = Wine = mongoose.model 'Wine', schema
 
-exports.findById = (req, res) ->
-  id = req.params.id
-  console.log "Retrieving wine: " + id
-  wines (err, collection) ->
-    collection.findOne _id: new BSON.ObjectID(id), (err, item) ->
-      res.send item
-
-exports.findAll = (req, res) ->
-  wines (err, collection) ->
-    collection.find().toArray (err, items) ->
-      res.send items
-
-exports.addWine = (req, res) ->
-  wine = req.body
-  console.log "Adding wine: " + JSON.stringify(wine)
-  wines (err, collection) ->
-    collection.insert wine, safe: true, (err, result) ->
-      if err
-        res.send error: "An error has occurred"
-      else
-        console.log "Success: " + JSON.stringify(result[0])
-        res.send result[0]
-
-exports.updateWine = (req, res) ->
-  id = req.params.id
-  wine = req.body
-  delete wine._id
-
-  console.log "Updating wine: #{id}"
-  console.log JSON.stringify wine
-  wines (err, collection) ->
-    collection.update
-      _id: new BSON.ObjectID(id)
-    , wine,
-      safe: true
-    , (err, result) ->
-      if err
-        console.log "Error updating wine: " + err
-        res.send error: "An error has occurred"
-      else
-        console.log "" + result + " document(s) updated"
-        res.send wine
-
-exports.deleteWine = (req, res) ->
-  id = req.params.id
-  console.log "Deleting wine: #{id}"
-  wines (err, collection) ->
-    collection.remove
-      _id: new BSON.ObjectID(id)
-    ,
-      safe: true
-    , (err, result) ->
-      if err
-        res.send error: "An error has occurred - " + err
-      else
-        console.log "" + result + " document(s) deleted"
-        res.send req.body
-
-# Populate database with sample data -- Only used once: the first time the application is started.
-# You'd typically not find this code in a real-life app, since the database would already exist.
-populateDB = ->
+Wine.populateDB = ->
   wines = [
     name: "CHATEAU DE SAINT COSME"
     year: "2009"
@@ -275,8 +205,5 @@ populateDB = ->
     description: "Legend has it the gods didn't share their ambrosia with mere mortals.  This merlot may be the closest we've ever come to a taste of heaven."
     picture: "waterbrook.jpg"
   ]
-  db.collection "wines", (err, collection) ->
-    collection.insert wines,
-      safe: true
-    , (err, result) ->
-
+  Wine.create wines..., (err) ->
+    console.error err if err

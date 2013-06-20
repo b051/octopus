@@ -1,19 +1,53 @@
 express = require 'express'
+mongoose = require 'mongoose'
 app = express()
 server = require('http').createServer(app)
 io = require('socket.io').listen(server)
+passport = require 'passport'
+flash = require 'connect-flash'
+Wine = require './models/wine'
+hour = 3600000
+day = hour * 24
+month = day * 30
 
-wines = require "./routes/wines"
+RedisStore = require('connect-redis') express
+mongoose.connect 'mongodb://localhost/octopus'
 
+db = mongoose.connection
+db.once 'open', ->
+  console.log "Connected to '#{db.name}' database"
+  Wine.collection.count (err, count) ->
+    if count is 0
+      console.log "The 'wine' collection is empty. Creating it with sample data..."
+      Wine.populateDB()
+
+# parse request bodies (req.body)
+app.use express.bodyParser uploadDir:'./public/pics/'
+# support _method (PUT in forms etc)
+app.use express.methodOverride()
+# cookieParser is required by session() middleware
+# pass the secret for signed cookies These two *must*
+# be placed in the order shown.
+app.use express.cookieParser 'dM3nMWcxF85n'
+
+# session() populates req.session
+app.use express.session
+  store: new RedisStore
+    db: 'octopus_session'
+  secret: 's31gsad983'
+  maxAge: month
+
+app.use flash()
+app.use passport.initialize()
+app.use passport.session()
 app.use app.router
+app.use express.compress()
 app.use express.static "#{__dirname}/public"
 app.use "/backbone", express.static "#{__dirname}/backbone"
 
-app.get "/wines", wines.findAll
-app.get "/wines/:id", wines.findById
-app.post "/wines", wines.addWine
-app.put "/wines/:id", wines.updateWine
-app.delete "/wines/:id", wines.deleteWine
+require("./routes")(app)
+
+io.set 'log level', 1
 
 io.sockets.on 'connection', (socket) ->
   socket.on 'message', (message) ->
