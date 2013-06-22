@@ -37,7 +37,6 @@
       .form-signin input[type="password"] {
         font-size: 16px;
         height: auto;
-        margin-bottom: 15px;
         padding: 7px 9px;
       }
 
@@ -64,33 +63,24 @@
   </head>
 
   <body>
-
-    {{#unless hideNavigationBar}}
-      {{> page/navigationBar}}
-    {{/unless}}
+    <div class="header"></div>
     <div class="container">
-      <div class="row-fluid">
+      <div class="row-fluid" id="content">
       {{{body}}}
       </div>
-      
-      <hr>
-      {{#unless hideNavigationBar}}
-      <footer>
-        <p>&copy; Company 2013</p>
-      </footer>
-      {{/unless}}
     </div>
 
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="/lib/jquery-1.8.2.min.js"></script>
+    <script src="/lib/jquery-2.0.2.min.js"></script>
     <script src="/lib/underscore-min.js"></script>
     <script src="/lib/bootstrap.min.js"></script>
     {{#if loadBackbone}}
     <script src="/lib/backbone-min.js"></script>
     <script src="js/models/models.js"></script>
     <script src="js/views/about.js"></script>
+    <script src="js/views/login.js"></script>
     <script src="js/views/header.js"></script>
     <script src="js/views/home.js"></script>
     <script src="js/views/paginator.js"></script>

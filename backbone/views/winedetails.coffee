@@ -13,26 +13,24 @@ window.WineView = Backbone.View.extend
     "drop #picture": "dropHandler"
   
   change: (event) ->
-    @hideAlert()
+    Alert.hide()
     
     # Apply the change to the model
     target = event.target
-    change = {}
-    change[target.name] = target.value
-    @model.set change
+    @model.set target.id, target.value or ''
     
     # Run validation rule (if any) on changed item
     if not @model.isValid()
       errors = @model.validationError
       if errors[target.id]
-        @addValidationError target.id errors[target.id]
+        Alert.addValidationError target.id, errors[target.id]
 
   beforeSave: ->
     if not @model.isValid()
-      @displayValidationErrors @model.validationError
-      return false
-    @saveWine()
-    false
+      Alert.displayValidationErrors @model.validationError
+    else
+      @saveWine()
+    no
 
   saveWine: ->
     console.log "before save"
@@ -40,10 +38,10 @@ window.WineView = Backbone.View.extend
       success: (model) =>
         @render()
         app.navigate "wines/#{model.id}", false
-        @showAlert "Success!", "Wine saved successfully", "alert-success"
+        Alert.show "Success!", "Wine saved successfully", "alert-success"
 
       error: ->
-        @showAlert "Error", "An error occurred while trying to delete this item", "alert-error"
+        Alert.show "Error", "An error occurred while trying to delete this item", "alert-error"
 
   deleteWine: ->
     @model.destroy success: ->
@@ -65,30 +63,3 @@ window.WineView = Backbone.View.extend
       $("#picture").attr "src", reader.result
 
     reader.readAsDataURL @pictureFile
-  
-  displayValidationErrors: (messages) ->
-    for key, message of messages
-      @addValidationError key, message
-    @showAlert "Warning!", "Fix validation errors and try again", "alert-warning"
-
-  addValidationError: (field, message) ->
-    controlGroup = $("##{field}").parent().parent()
-    controlGroup.addClass "error"
-    $(".help-inline", controlGroup).html message
-
-  removeValidationError: (field) ->
-    controlGroup = $("##{field}").parent().parent()
-    controlGroup.removeClass "error"
-    $(".help-inline", controlGroup).html ""
-
-  showAlert: (title, text, klass) ->
-    @$(".alert")
-    .removeClass("alert-error alert-warning alert-success alert-info")
-    .addClass(klass)
-    .html("<strong>#{title}</strong> #{text}")
-    .show()
-
-  hideAlert: ->
-    @$(".help-inline").html ''
-    @$('.error').removeClass 'error'
-    @$(".alert").hide()

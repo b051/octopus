@@ -1,6 +1,4 @@
 passport = require 'passport'
-{Strategy} = require 'passport-local'
-{hash} = require 'pwd'
 User = require '../models/user'
 Wine = require '../models/wine'
 
@@ -10,19 +8,7 @@ passport.serializeUser (user, done) ->
 passport.deserializeUser (id, done) ->
   User.findById id, done
 
-passport.use new Strategy (email, password, done) ->
-  process.nextTick ->
-    User.findOne email: email, (err, user) ->
-      return done(err) if err
-      if user
-        pass.hash password, user.salt, (error, hash) ->
-          return done(error) if error
-          if user.hash is hash
-            done null, user
-          else
-            done null, no, message: '<strong>Oh Snap!</strong> Your password does not match.'
-      else
-        done null, no, message:"<strong>Oh Snap!</strong> We do not recognize your email '#{email}'"
+passport.use User.authenticateStrategy()
 
 needAuthorize = (req, res, next) ->
   if req.isAuthenticated()
@@ -31,16 +17,14 @@ needAuthorize = (req, res, next) ->
 
 authorize = (req, res, next) ->
   local = passport.authenticate 'local', (err, user, info) ->
-    console.log err, user, info
     return next(err) if err
     if not user
-      req.session.messages = [info.message]
-      res.redirect '/login'
+      res.send error: info.message
     else
       req.logIn user, (err) ->
         return next err if err
-        return res.redirect '/'
-  local(req, res, next)
+        res.send user: user
+  local req, res, next
 
 module.exports = (app) ->
   
@@ -53,13 +37,19 @@ module.exports = (app) ->
     req.logout()
     res.redirect '/'
   
-  app.get '/login', (req, res) ->
-    res.render 'login',
-      hideNavigationBar: yes
-      user: req.user
-      message: req.session?.messages
-  
   app.post '/login', authorize
+  
+  app.post '/user', (req, res, next) ->
+    username = req.params.username
+    password = req.params.password
+    User.register username, password, (err, user, messages) ->
+      return next err if err
+      if not user
+        res.send error: info.message
+      else
+        req.logIn user, (err) ->
+          return next err if err
+          res.send user: user
   
   app.get "/wines", (req, res) ->
     Wine.find {}, null, (err, items) ->
