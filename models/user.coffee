@@ -7,16 +7,6 @@ schema = mongoose.Schema
   hash: Buffer
   salt: String
 
-sameBuffer = (buf0, buf) ->
-  console.log buf0.length, buf.length
-  console.log buf0.toJSON(), buf.toJSON()
-  return no if buf0.length isnt buf.length
-  for i in [0..buf0.length]
-    if buf0[i] isnt buf[i]
-      console.log "different at #{i}"
-      return no
-  yes
-
 schema.set 'autoIndex', no
 
 schema.statics.authenticateStrategy = ->
