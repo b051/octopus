@@ -36,7 +36,6 @@ window.User = Backbone.Model.extend
     errors = {}
     errors.username = "You must enter your username" unless attrs.username.length > 6
     errors.password = "You must enter your password" unless attrs.password.length >= 6
-    console.log "options #{options}"
     if Object.keys(errors).length
       return errors
     no

@@ -39,12 +39,11 @@ app.use express.session
 app.use passport.initialize()
 app.use passport.session()
 
-# app.engine 'handlebars', hbs.engine 
-# app.set 'view engine', 'handlebars'
-
 app.use app.router
 app.use express.compress()
 app.use express.static "#{__dirname}/public"
+
+#this is for debug coffee script in chrome
 app.use "/backbone", express.static "#{__dirname}/backbone"
 
 require("./routes")(app)

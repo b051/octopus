@@ -1,6 +1,6 @@
 passport = require 'passport'
-User = require '../models/user'
-Wine = require '../models/wine'
+User = require './models/user'
+Wine = require './models/wine'
 
 passport.serializeUser (user, done) ->
   done null, user._id
@@ -28,15 +28,21 @@ authorize = (req, res, next) ->
 
 module.exports = (app) ->
   
-  app.get '/logout', (req, res) ->
+  app.post '/logout', (req, res) ->
     req.logout()
-    res.redirect '/'
-  
+    res.send []
+
   app.post '/login', authorize
-  
+
+  app.get '/user', (req, res) ->
+    if req.user
+      {_id, username} = req.user
+      res.send user: _id: _id, username: username
+    else
+      res.send error: 'no session found'
+
   app.post '/user', (req, res, next) ->
-    username = req.params.username
-    password = req.params.password
+    {username, password} = req.body
     User.register username, password, (err, user, messages) ->
       return next err if err
       if not user
@@ -45,11 +51,11 @@ module.exports = (app) ->
         req.logIn user, (err) ->
           return next err if err
           res.send user: user
-  
+
   app.get "/wines", (req, res) ->
     Wine.find {}, null, (err, items) ->
       res.send items
-  
+
   app.get "/wines/:id", (req, res) ->
     id = req.params.id
     Wine.findById id, (err, wine) ->

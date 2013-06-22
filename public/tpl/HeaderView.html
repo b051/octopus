@@ -9,37 +9,38 @@
             <a class="brand" href="#">Octopus</a>
 
             <div class="nav-collapse collapse">
+              <ul class="nav">
+                  <li class="add-menu"><a href="#wines">Browse Wines</a></li>
+                  <li class="add-menu"><a href="#wines/add"><i class="icon-edit icon-white"></i> Add Wine</a></li>
+                  <li class="about-menu"><a href="#about">About</a></li>
+                  <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown">Resources <b class="caret"></b></a>
+                      <ul class="dropdown-menu">
+                          <li><a href="http://documentcloud.github.com/backbone/" target="_blank">Backbone.js</a></li>
+                          <li><a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a></li>
+                          <li><a href="http://nodejs.org/" target="_blank">Node.js</a>
+                          <li><a href="http://expressjs.com/mongodb" target="_blank">Express</a>
+                          <li><a href="http://www.mongodb.org/" target="_blank">MongoDB</a>
+                          </li>
+                          <li class="divider"></li>
+                          <li class="nav-header">This App</li>
+                          <li><a href="https://github.com/b051/octopus" target="_blank">GitHub Repository</a></li>
+                      </ul>
+                  </li>
+              </ul>
 
-                <ul class="nav">
-                    <li class="add-menu"><a href="#wines">Browse Wines</a></li>
-                    <li class="add-menu"><a href="#wines/add"><i class="icon-edit icon-white"></i> Add Wine</a></li>
-                    <li class="about-menu"><a href="#about">About</a></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Resources <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="http://documentcloud.github.com/backbone/" target="_blank">Backbone.js</a></li>
-                            <li><a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a></li>
-                            <li><a href="http://nodejs.org/" target="_blank">Node.js</a>
-                            <li><a href="http://expressjs.com/mongodb" target="_blank">Express</a>
-                            <li><a href="http://www.mongodb.org/" target="_blank">MongoDB</a>
-                            </li>
-                            <li class="divider"></li>
-                            <li class="nav-header">This App</li>
-                            <li><a href="https://github.com/b051/octopus" target="_blank">GitHub Repository</a></li>
-                        </ul>
-                    </li>
-                </ul>
-
-                <ul class="nav pull-right">
-                    
-                </ul>
-                <form action="/login" method="post" class="navbar-form pull-right">
-                  <input name="username" class="span2" type="text" placeholder="Email">
-                  <input name="password" class="span2" type="password" placeholder="Password">
-                  <button type="submit" class="btn">Sign in</button>
-                </form>
+              <ul class="nav pull-right control-group">
+                <li id="nav-login">
+                  <form action="/login" method="post" class="navbar-form">
+                    <input name="username" class="span2" type="text" placeholder="Email">
+                    <input name="password" class="span2" type="password" placeholder="Password">
+                    <button type="submit" class="btn btn-primary">Sign in</button>
+                    <a href="#signup" class="btn">Sign up</a>
+                  </form>
+                  <span class="help-block" style="margin-bottom: 0;"></span>
+                </li>
+              </ul>
             </div>
-            <!--/.nav-collapse -->
         </div>
     </div>
 </div>

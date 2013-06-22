@@ -8,7 +8,7 @@ window.UserView = Backbone.View.extend
     this
 
   events:
-    "blur input": "validate"
+    "change": "validate"
     "submit form": "onSubmit"
   
   validate: (event) ->
@@ -31,8 +31,7 @@ window.UserView = Backbone.View.extend
     else
       @model.save null,
         success: (data) ->
-          app.navigate ""
-          Alert.show "Success!", "Welcome back #{model.username}!", "alert-success"
+          app.navigate "", trigger: yes
         
         error: (data) ->
           Alert.show "Error!", data.error, "alert-error"

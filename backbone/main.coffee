@@ -6,14 +6,16 @@ window.Alert = class Alert
     @show "Warning!", "Fix validation errors and try again", "alert-warning"
 
   @addValidationError: (field, message) ->
-    controlGroup = $("##{field}").parents('.control-group')
+    controlGroup = $("input[name=#{field}]").parents('.control-group')
     controlGroup.addClass "error"
     $(".help-inline", controlGroup).html message
+    $(".help-block", controlGroup).html message
 
   @removeValidationError: (field) ->
-    controlGroup = $("##{field}").parents('.control-group')
+    controlGroup = $("input[name=#{field}]").parents('.control-group')
     controlGroup.removeClass "error"
     $(".help-inline", controlGroup).html ""
+    $(".help-block", controlGroup).html ""
 
   @show: (title, text, klass) ->
     $(".alert")
@@ -24,6 +26,7 @@ window.Alert = class Alert
 
   @hide: ->
     $(".help-inline").html ''
+    $(".help-block").html ''
     $('.error').removeClass 'error'
     $(".alert").hide()
 
@@ -31,6 +34,7 @@ AppRouter = Backbone.Router.extend
   routes:
     "": "home"
     login: "login"
+    logout: 'logout'
     signup: "signup"
     wines: "list"
     "wines/page/:page": "list"
@@ -39,10 +43,16 @@ AppRouter = Backbone.Router.extend
     about: "about"
 
   initialize: ->
+    @reloadNav()
+
+  reloadNav: ->
     @headerView = new HeaderView()
     $(".header").html(@headerView.el).show()
+    $.get '/user', ({user}) =>
+      @headerView.user user if user
 
   home: ->
+    $(@headerView.el).fadeIn()
     @homeView = new HomeView() unless @homeView
     $("#content").html @homeView.el
     @headerView.selectMenuItem "home-menu"
@@ -52,6 +62,11 @@ AppRouter = Backbone.Router.extend
     template 'LoginView', =>
       @loginView = new LoginView()
       $('#content').html @loginView.el
+
+  logout: ->
+    $.post '/logout', (data) =>
+      app.navigate '', trigger: yes
+      @reloadNav()
   
   signup: ->
     $(@headerView.el).fadeOut()
@@ -59,8 +74,9 @@ AppRouter = Backbone.Router.extend
       UserView::template = temp
       @loginView = new UserView()
       $('#content').html @loginView.el
-  
+
   list: (page) ->
+    $(@headerView.el).fadeIn()
     p = (if page then parseInt(page, 10) else 1)
     wineList = new WineCollection()
     wineList.fetch success: ->
@@ -72,6 +88,7 @@ AppRouter = Backbone.Router.extend
     @headerView.selectMenuItem "home-menu"
 
   wineDetails: (id) ->
+    $(@headerView.el).fadeIn()
     wine = new Wine(_id: id)
     wine.fetch success: ->
       $("#content").html new WineView(model: wine).el
