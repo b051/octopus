@@ -28,11 +28,6 @@ authorize = (req, res, next) ->
 
 module.exports = (app) ->
   
-  app.get '/', (req, res) ->
-    res.render 'home',
-      tracking: yes
-      loadBackbone: yes
-  
   app.get '/logout', (req, res) ->
     req.logout()
     res.redirect '/'

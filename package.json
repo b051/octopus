@@ -12,7 +12,6 @@
     "passport": "*",
     "passport-local": "0.1.6",
     "connect-redis": "1.4.5",
-    "pwd": "0.0.2",
-    "express3-handlebars": "0.4.1"
+    "pwd": "0.0.2"
   }
 }

@@ -1,5 +1,4 @@
 express = require 'express'
-expresshbs = require 'express3-handlebars'
 mongoose = require 'mongoose'
 app = express()
 server = require('http').createServer(app)
@@ -21,12 +20,10 @@ db.once 'open', ->
       console.log "The 'wine' collection is empty. Creating it with sample data..."
       Wine.populateDB()
 
-hbs = expresshbs.create defaultLayout: 'main'
-
 # parse request bodies (req.body)
 app.use express.bodyParser uploadDir:'./public/pics/'
 # support _method (PUT in forms etc)
-app.use express.methodOverride()
+# app.use express.methodOverride()
 # cookieParser is required by session() middleware
 # pass the secret for signed cookies These two *must*
 # be placed in the order shown.
@@ -42,8 +39,9 @@ app.use express.session
 app.use passport.initialize()
 app.use passport.session()
 
-app.engine 'handlebars', hbs.engine 
-app.set 'view engine', 'handlebars'
+# app.engine 'handlebars', hbs.engine 
+# app.set 'view engine', 'handlebars'
+
 app.use app.router
 app.use express.compress()
 app.use express.static "#{__dirname}/public"
