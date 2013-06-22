@@ -1,31 +1,75 @@
-http = require "http"
-express = require "express"
-hbs = require "express-hbs"
-
+express = require 'express'
+expresshbs = require 'express3-handlebars'
+mongoose = require 'mongoose'
 app = express()
+server = require('http').createServer(app)
+io = require('socket.io').listen(server)
+passport = require 'passport'
+Wine = require './models/wine'
+hour = 3600000
+day = hour * 24
+month = day * 30
 
-app.engine 'hbs', hbs.express3
-  defaultLayout: "#{__dirname}/views/layouts/main.hbs"
-  partialsDir: "#{__dirname}/views/partials"
+RedisStore = require('connect-redis') express
+mongoose.connect 'mongodb://localhost/octopus'
 
-app.set "view engine", 'hbs'
+db = mongoose.connection
+db.once 'open', ->
+  console.log "Connected to '#{db.name}' database"
+  Wine.collection.count (err, count) ->
+    if count is 0
+      console.log "The 'wine' collection is empty. Creating it with sample data..."
+      Wine.populateDB()
 
-app.use express.favicon()
-app.use express.logger("dev")
-app.use express.bodyParser()
+hbs = expresshbs.create defaultLayout: 'main'
+
+# parse request bodies (req.body)
+app.use express.bodyParser uploadDir:'./public/pics/'
+# support _method (PUT in forms etc)
 app.use express.methodOverride()
-app.use express.cookieParser("your secret here")
-app.use express.session()
+# cookieParser is required by session() middleware
+# pass the secret for signed cookies These two *must*
+# be placed in the order shown.
+app.use express.cookieParser 'dM3nMWcxF85n'
+
+# session() populates req.session
+app.use express.session
+  store: new RedisStore
+    db: 'octopus_session'
+  secret: 's31gsad983'
+  maxAge: month
+
+app.use passport.initialize()
+app.use passport.session()
+
+app.engine 'handlebars', hbs.engine 
+app.set 'view engine', 'handlebars'
 app.use app.router
-app.use require("stylus").middleware("#{__dirname}/public")
+app.use express.compress()
 app.use express.static "#{__dirname}/public"
+app.use "/backbone", express.static "#{__dirname}/backbone"
 
-# development only
-app.use express.errorHandler()  if "development" is app.get("env")
+require("./routes")(app)
 
-app.get "/", (req, res) ->
-  res.render 'index', title: 'Nodejs'
+io.set 'log level', 1
+
+io.sockets.on 'connection', (socket) ->
+  socket.on 'message', (message) ->
+    console.log "Got message: #{message}"
+    ip = socket.handshake.address.address
+    url = message
+    io.sockets.emit 'pageview',
+      connections: Object.keys(io.connected).length
+      ip: "***.***.***.#{ip.substring(ip.lastIndexOf('.') + 1)}"
+      url: url
+      xdomain: socket.handshake.xdomain
+      timestamp: new Date()
+    
+  socket.on 'disconnect', ->
+    console.log "Socket disconnected"
+    io.sockets.emit 'pageview',
+      connections: Object.keys(io.connected).length
 
 port = process.env.PORT or 3000
-http.createServer(app).listen port, ->
-  console.log "Express server listening on port #{port}"
+server.listen port, ->
+  console.log "Listening on #{port}"

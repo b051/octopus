@@ -1,2 +1,4 @@
 /node_modules/
-*.css
+db
+public/js/
+dump.rdb
