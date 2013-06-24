@@ -6,6 +6,7 @@ schema = mongoose.Schema
   username: type: String, required: yes, unique: yes
   hash: Buffer
   salt: String
+  toolsets: [type: mongoose.Schema.Types.ObjectId, ref:'Toolset']
 
 schema.set 'autoIndex', no
 
