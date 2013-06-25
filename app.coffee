@@ -42,6 +42,7 @@ app.use passport.session()
 app.use app.router
 app.use express.compress()
 app.use express.static "#{__dirname}/public"
+app.use '/chosen', express.static "#{__dirname}/chosen/public"
 
 #this is for debug coffee script in chrome
 app.use "/backbone", express.static "#{__dirname}/backbone"

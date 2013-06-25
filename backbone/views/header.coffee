@@ -7,7 +7,7 @@ window.HeaderView = Backbone.View.extend
     this
   
   events:
-    "submit form": "onSubmit"
+    "submit form.nav-login": "onSubmit"
   
   onSubmit: (event) ->
     event.preventDefault()
@@ -24,9 +24,7 @@ window.HeaderView = Backbone.View.extend
           @user data.user
   
   user: (user) ->
-    dropdown = @$('#nav-login').addClass('dropdown').html("<a class='dropdown-toggle' data-toggle='dropdown' href='#me'>#{user.username} <b class='caret'></b></a>")
-    ul = $('<ul/>', class:'dropdown-menu').append($('<li/>').append($('<a/>', href:'#logout', text:'Logout')))
-    ul.appendTo dropdown
+    console.log user
   
   selectMenuItem: (menuItem) ->
     $(".nav li").removeClass "active"

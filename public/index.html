@@ -8,46 +8,21 @@
     <meta name="author" content="">
 
     <!-- Le styles -->
-    <link rel="stylesheet" href="/css/bootstrap.css">
-    <style type="text/css">
-    
-      body {
-        padding-top: 40px;
-        padding-bottom: 40px;
-      }
-
-      .form-signin {
-        max-width: 300px;
-        padding: 19px 29px 29px;
-        margin: 0 auto 20px;
-        background-color: #fff;
-        border: 1px solid #e5e5e5;
-        -webkit-border-radius: 5px;
-           -moz-border-radius: 5px;
-                border-radius: 5px;
-        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-                box-shadow: 0 1px 2px rgba(0,0,0,.05);
-      }
-      .form-signin .form-signin-heading,
-      .form-signin .checkbox {
-        margin-bottom: 10px;
-      }
-      .form-signin input[type="text"],
-      .form-signin input[type="password"] {
-        font-size: 16px;
-        height: auto;
-        padding: 7px 9px;
-      }
-
-    </style>
-    <link rel="stylesheet" href="/css/bootstrap-responsive.css">
-
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css">
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
+    <link rel="stylesheet" href="/chosen/chosen.min.css">
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/DT_bootstrap.css">
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="/lib/html5shiv.js"></script>
     <![endif]-->
-    
+      <style type="text/css" media="screen">
+      .nav-profile {
+        display: none;
+      }
+      </style>
     <script type="text/javascript" src="socket.io/socket.io.js"></script>
     <script>
        var socket = io.connect();
@@ -61,7 +36,26 @@
   </head>
 
   <body>
-    <div class="header"></div>
+    <div class="header" role="banner">
+      <a id="menu-link" class="head-button-link menu-hide" href="#menu"><span>Menu</span></a>
+      <a href="dashboard.html" class="logo"><h1>Octopus</h1></a>
+
+      <!--Search-->
+      <form class="search" action="#">
+       <input type="text" name="q" placeholder="Search...">
+      </form>
+      <!--Search END-->
+
+      <div class="right">
+        <form class="nav-login left">
+          <input name="username" class="span2" type="text" placeholder="Email">
+          <input name="password" class="span2" type="password" placeholder="Password">
+          <button type="submit" class="btn btn-primary">Sign in</button>
+          <a href="#signup" class="btn">Sign up</a>
+        </form>
+        <div class="clearfix"></div>
+      </div>
+    </div>
     <div class="container">
       <div class="row-fluid" id="content">
       </div>
@@ -70,7 +64,9 @@
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="/lib/jquery-2.0.2.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.9.1.js" type="text/javascript" charset="utf-8"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/lib/jquery.dataTables.js" type="text/javascript" charset="utf-8"></script>
     <script src="/lib/underscore-min.js"></script>
     <script src="/lib/bootstrap.min.js"></script>
     <script src="/lib/backbone-min.js"></script>

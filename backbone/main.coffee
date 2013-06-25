@@ -43,22 +43,23 @@ AppRouter = Backbone.Router.extend
     about: "about"
 
   initialize: ->
+    @navLogin = $('.nav-login')
     @reloadNav()
 
   reloadNav: ->
-    @headerView = new HeaderView()
-    $(".header").html(@headerView.el).show()
     $.get '/user', ({user}) =>
+      @headerView = new HeaderView()
+      @navLogin.replaceWith $(@headerView.el)
       @headerView.user user if user
 
   home: ->
-    $(@headerView.el).fadeIn()
+    $('.header').fadeIn()
     @homeView = new HomeView() unless @homeView
     $("#content").html @homeView.el
-    @headerView.selectMenuItem "home-menu"
+    # @headerView.selectMenuItem "home-menu"
 
   login: ->
-    $(@headerView.el).fadeOut()
+    $('.header').fadeOut()
     template 'LoginView', =>
       @loginView = new LoginView()
       $('#content').html @loginView.el
@@ -69,14 +70,14 @@ AppRouter = Backbone.Router.extend
       @reloadNav()
   
   signup: ->
-    $(@headerView.el).fadeOut()
+    $('.header').fadeOut()
     template 'RegisterView', (temp) =>
       UserView::template = temp
       @loginView = new UserView()
       $('#content').html @loginView.el
 
   list: (page) ->
-    $(@headerView.el).fadeIn()
+    $('.header').fadeIn()
     p = (if page then parseInt(page, 10) else 1)
     wineList = new WineCollection()
     wineList.fetch success: ->
@@ -85,26 +86,26 @@ AppRouter = Backbone.Router.extend
         page: p
       ).el
 
-    @headerView.selectMenuItem "home-menu"
+    # @headerView.selectMenuItem "home-menu"
 
   wineDetails: (id) ->
-    $(@headerView.el).fadeIn()
+    $('.header').fadeIn()
     wine = new Wine(_id: id)
     wine.fetch success: ->
       $("#content").html new WineView(model: wine).el
 
-    @headerView.selectMenuItem()
+    # @headerView.selectMenuItem()
 
   addWine: ->
     wine = new Wine()
     $("#content").html new WineView(model: wine).el
-    @headerView.selectMenuItem "add-menu"
+    # @headerView.selectMenuItem "add-menu"
 
   about: ->
     template 'AboutView', =>
       @aboutView = new AboutView() unless @aboutView
       $("#content").html @aboutView.el
-      @headerView.selectMenuItem "about-menu"
+      # @headerView.selectMenuItem "about-menu"
 
 views = ["LoginView", "HomeView", "HeaderView", "WineView", "WineListItemView"]
 template = (view, done) ->
