@@ -1,4 +1,4 @@
-window.AboutView = Backbone.View.extend
+window.AboutView = Parse.View.extend
   initialize: ->
     @render()
 

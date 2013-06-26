@@ -1,4 +1,4 @@
-window.WineListView = Backbone.View.extend
+window.WineListView = Parse.View.extend
   initialize: ->
     @render()
 
@@ -19,7 +19,7 @@ window.WineListView = Backbone.View.extend
     ).render().el
     this
 
-window.WineListItemView = Backbone.View.extend
+window.WineListItemView = Parse.View.extend
   tagName: "li"
   initialize: ->
     @model.bind "change", @render, this

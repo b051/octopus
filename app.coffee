@@ -4,6 +4,7 @@ app = express()
 server = require('http').createServer(app)
 io = require('socket.io').listen(server)
 passport = require 'passport'
+User = require './models/user'
 Wine = require './models/wine'
 hour = 3600000
 day = hour * 24
@@ -46,6 +47,7 @@ app.use '/chosen', express.static "#{__dirname}/chosen/public"
 
 #this is for debug coffee script in chrome
 app.use "/backbone", express.static "#{__dirname}/backbone"
+app.use "/parse", express.static "#{__dirname}/node_modules/parse/build"
 
 require("./routes")(app)
 

@@ -1,43 +1,31 @@
-window.Wine = Backbone.Model.extend
-  urlRoot: "/wines"
-  idAttribute: "_id"
+if require?
+  {Parse} = require 'parse'
+else
+  Parse = window.Parse
+
+Parse.initialize 'FPijVqDF5EAKrkGuFv1oj43Au7kOFguvoQgwt6Bp', 'l3EnH19I64YJC6q59v4A7fjZJ3bWJryyk5x8IWrm'
+
+Toolset = Parse.Object.extend
+  className: 'Toolset'
   
   defaults:
-    _id: null
     name: ""
-    grapes: ""
-    country: "USA"
-    region: "California"
-    year: ""
-    description: ""
-    picture: null
-  
-  validate: (attrs, options) ->
-    errors = {}
-    errors.name = "You must enter a name" unless attrs.name.length
-    errors.grapes = "You must enter a grape variety" unless attrs.grapes.length
-    errors.country = "You must enter a country" unless attrs.country.length
-    if Object.keys(errors).length
-      return errors
-    no
+    administrator: null
 
-window.WineCollection = Backbone.Collection.extend
-  model: Wine
-  url: "/wines"
+ToolInfo = Parse.Object.extend
+  className: 'ToolInfo'
 
-window.User = Backbone.Model.extend
-  url: '/user'
-  
+Tool = Parse.Object.extend
+  className: 'Tool'
+
   defaults:
-    username: ''
-    password: ''
-  
-  validate: (attrs, options) ->
-    errors = {}
-    errors.username = "You must enter your username" unless attrs.username.length > 6
-    errors.password = "You must enter your password" unless attrs.password.length >= 6
-    if Object.keys(errors).length
-      return errors
-    no
-  
-    
+    info: null
+    expiresOn: null
+    toolset: null
+
+
+if not exports?
+  exports = window
+exports.User = Parse.User
+exports.Toolset = Toolset
+exports.Tool = Tool

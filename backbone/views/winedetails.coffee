@@ -1,4 +1,4 @@
-window.WineView = Backbone.View.extend
+window.WineView = Parse.View.extend
   initialize: ->
     @render()
 

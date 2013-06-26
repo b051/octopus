@@ -30,12 +30,12 @@ window.Alert = class Alert
     $('.error').removeClass 'error'
     $(".alert").hide()
 
-AppRouter = Backbone.Router.extend
+AppRouter = Parse.Router.extend
   routes:
-    "": "home"
-    login: "login"
+    "": 'home'
+    login: 'login'
     logout: 'logout'
-    signup: "signup"
+    signup: 'signup'
     wines: "list"
     "wines/page/:page": "list"
     "wines/add": "addWine"
@@ -43,26 +43,27 @@ AppRouter = Backbone.Router.extend
     about: "about"
 
   initialize: ->
-    @navLogin = $('.nav-login')
-    @reloadNav()
-
-  reloadNav: ->
-    $.get '/user', ({user}) =>
-      @headerView = new HeaderView()
-      @navLogin.replaceWith $(@headerView.el)
-      @headerView.user user if user
-
+    @navbar = new NavBar
+    @navbar.render()
+  
   home: ->
+    if not Parse.User.current()
+      route = Parse.history.fragment
+      if route not in ['login', 'signup']
+        return app.navigate 'login', trigger:yes
+    
     $('.header').fadeIn()
     @homeView = new HomeView() unless @homeView
     $("#content").html @homeView.el
-    # @headerView.selectMenuItem "home-menu"
 
   login: ->
-    $('.header').fadeOut()
-    template 'LoginView', =>
-      @loginView = new LoginView()
-      $('#content').html @loginView.el
+    console.log 'login'
+    $('.subnavbar').remove()
+    $('.main').remove()
+    $('.extra').hide()
+    $('.footer').hide()
+    @loginView ?= new LoginView
+    $('.footer').before @loginView.el, @loginView.extra.el
 
   logout: ->
     $.post '/logout', (data) =>
@@ -70,11 +71,15 @@ AppRouter = Backbone.Router.extend
       @reloadNav()
   
   signup: ->
-    $('.header').fadeOut()
-    template 'RegisterView', (temp) =>
-      UserView::template = temp
-      @loginView = new UserView()
-      $('#content').html @loginView.el
+    console.log 'signup'
+    $('.subnavbar').remove()
+    $('.main').remove()
+    $('.extra').hide()
+    $('.footer').hide()
+    $(@loginView?.el).remove()
+    $(@loginView?.extra.el).remove()
+    @signupView ?= new SignupView
+    $('.footer').before @signupView.el, @signupView.extra.el
 
   list: (page) ->
     $('.header').fadeIn()
@@ -107,13 +112,13 @@ AppRouter = Backbone.Router.extend
       $("#content").html @aboutView.el
       # @headerView.selectMenuItem "about-menu"
 
-views = ["LoginView", "HomeView", "HeaderView", "WineView", "WineListItemView"]
+views = ["HomeView", "WineView", "WineListItemView"]
 template = (view, done) ->
   $.get "tpl/#{view}.html", (data) ->
-    temp = _.template(data)
+    temp = Parse._.template(data)
     window[view]::template = temp if window[view]
     done?(temp)
 
 $.when.apply(null, (template(view) for view in views when window[view])).done ->
   window.app = new AppRouter()
-  Backbone.history.start()
+  Parse.history.start()

@@ -1,4 +1,4 @@
-window.Paginator = Backbone.View.extend
+window.Paginator = Parse.View.extend
   className: "pagination pagination-centered"
   initialize: ->
     @model.bind "reset", @render, this
