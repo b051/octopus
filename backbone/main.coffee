@@ -50,36 +50,28 @@ AppRouter = Parse.Router.extend
     if not Parse.User.current()
       route = Parse.history.fragment
       if route not in ['login', 'signup']
-        return app.navigate 'login', trigger:yes
-    
-    $('.header').fadeIn()
-    @homeView = new HomeView() unless @homeView
-    $("#content").html @homeView.el
-
+        @navbar.update()
+        return app.navigate 'login', yes
+    else
+      $('.login-extra, .account-container.stacked').remove()
+      $('.footer').show()
+  
   login: ->
-    console.log 'login'
-    $('.subnavbar').remove()
-    $('.main').remove()
-    $('.extra').hide()
-    $('.footer').hide()
+    @navbar.update()
+    $('.subnavbar, .main, .extra, .login-extra, .account-container.stacked').remove()
     @loginView ?= new LoginView
-    $('.footer').before @loginView.el, @loginView.extra.el
+    $('.footer').hide().before @loginView.el, @loginView.extra.el
 
   logout: ->
-    $.post '/logout', (data) =>
-      app.navigate '', trigger: yes
-      @reloadNav()
+    Parse.User.logOut()
+    @navbar.render()
+    app.navigate '', yes
   
   signup: ->
-    console.log 'signup'
-    $('.subnavbar').remove()
-    $('.main').remove()
-    $('.extra').hide()
-    $('.footer').hide()
-    $(@loginView?.el).remove()
-    $(@loginView?.extra.el).remove()
+    @navbar.update()
+    $('.subnavbar, .main, .extra, .login-extra, .account-container.stacked').remove()
     @signupView ?= new SignupView
-    $('.footer').before @signupView.el, @signupView.extra.el
+    $('.footer').hide().before @signupView.el, @signupView.extra.el
 
   list: (page) ->
     $('.header').fadeIn()

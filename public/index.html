@@ -592,7 +592,7 @@
 	
 	<a href="index.html#" class="dropdown-toggle" data-toggle="dropdown">
 		<i class="icon-user"></i> 
-		<%- user.username %>
+		<%- user.get('username') %>
 		<b class="caret"></b>
 	</a>
 	
@@ -600,7 +600,7 @@
 		<li><a href="javascript:;">My Profile</a></li>
 		<li><a href="javascript:;">My Groups</a></li>
 		<li class="divider"></li>
-		<li><a href="javascript:;">Logout</a></li>
+		<li><a href="#logout">Logout</a></li>
 	</ul>
 </li>
 </script>
@@ -630,7 +630,7 @@
 	
 	<form action="" method="post">
 	
-		<h1>Sign In</h1>		
+		<h1>Sign In</h1>
 		
 		<div class="login-fields">
 			
@@ -638,13 +638,13 @@
 			
 			<div class="field username-field">
 				<input type="text" id="username" name="username" value="" placeholder="Username" class="login" />
-			</div> <!-- /field -->
+			</div>
 			
 			<div class="field password-field">
 				<input type="password" id="password" name="password" value="" placeholder="Password" class="login"/>
-			</div> <!-- /password -->
+			</div>
 			
-		</div> <!-- /login-fields -->
+		</div>
 		
 		<div class="login-actions">
 			
@@ -652,10 +652,9 @@
 				<input id="Field" name="Field" type="checkbox" class="field login-checkbox" value="First Choice" tabindex="4" />
 				<label class="choice" for="Field">Keep me signed in</label>
 			</span>
-								
 			<button class="button btn btn-warning btn-large">Sign In</button>
 			
-		</div> <!-- .actions -->
+		</div>
 		
 		<div class="login-social">
 			<p>Sign in using social network:</p>

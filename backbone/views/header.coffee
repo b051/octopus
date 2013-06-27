@@ -12,6 +12,9 @@ window.NavBar = Parse.View.extend
     else
       @noprofileView ?= new NoProfileView
       @$el.empty().append @noprofileView.el
+  
+  update: ->
+    @noprofileView?.update Parse.history.fragment
 
 
 NoProfileView = Parse.View.extend
@@ -19,12 +22,13 @@ NoProfileView = Parse.View.extend
   className: 'nav pull-right'
   
   initialize: ->
-    Parse.history.on 'route', (route, fragment, param) =>
-      @$('.create-an-account').fadeTo(100, fragment isnt 'signup')
-      @$('.back-to-home').fadeTo(100, fragment isnt 'home')
     @render()
   
   template: Parse._.template($('#navbar-noprofile').html())
+  
+  update: (fragment) ->
+    @$('.create-an-account').fadeTo(100, fragment isnt 'signup')
+    @$('.back-to-home').fadeTo(100, fragment isnt 'home')
   
   render: ->
     @$el.html @template {}
