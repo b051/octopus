@@ -55,7 +55,7 @@ window.LoginView = Parse.View.extend
   
   render: ->
     @$el.html @template {}
-    this
+    @
   
   events:
     "change": "change"
@@ -74,7 +74,7 @@ window.LoginView = Parse.View.extend
         success: (user) ->
           app.navigate "", yes
         error: (user, error) ->
-          alert error
+          alert error.message
 
 LoginExtraView = Parse.View.extend
   className: 'login-extra'

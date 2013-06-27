@@ -50,16 +50,18 @@ AppRouter = Parse.Router.extend
     @subnavbar.render()
   
   home: ->
-    Parse.User.current().fetch()
     if not Parse.User.current()
       route = Parse.history.fragment
       if route not in ['login', 'signup']
         @navbar.update()
         return app.navigate 'login', yes
     else
+      Parse.User.current().fetch()
       @_switchToLogin no
       @homeView = new HomeView
       @_switchMain @homeView.el
+      console.log 'render navbar'
+      @navbar.render()
       @subnavbar.update()
   
   _switchMain: (el) ->
@@ -72,8 +74,8 @@ AppRouter = Parse.Router.extend
   
   login: ->
     @_switchToLogin yes
-    @loginView ?= new LoginView
-    $('.footer').before @loginView.el, @loginView.extra.el
+    loginView = new LoginView
+    $('.footer').before loginView.el, loginView.extra.el
 
   logout: ->
     Parse.User.logOut()
@@ -82,12 +84,12 @@ AppRouter = Parse.Router.extend
   
   signup: ->
     @_switchToLogin yes
-    @signupView ?= new SignupView
-    $('.footer').before @signupView.el, @signupView.extra.el
+    signupView = new SignupView
+    $('.footer').before signupView.el, signupView.extra.el
   
   profile: ->
-    @profileView ?= new ProfileView
-    @_switchMain @profileView.render().el
+    profileView = new ProfileView
+    @_switchMain profileView.render().el
   
   list: (page) ->
     $('.header').fadeIn()
