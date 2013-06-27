@@ -58,7 +58,12 @@ AppRouter = Parse.Router.extend
         return app.navigate 'login', yes
     else
       @_switchToLogin no
+      @homeView = new HomeView
+      @_switchMain @homeView.el
       @subnavbar.update()
+  
+  _switchMain: (el) ->
+    $('.main>.container').empty().append el
   
   _switchToLogin: (toLogin) ->
     @navbar.update()
@@ -82,7 +87,7 @@ AppRouter = Parse.Router.extend
   
   profile: ->
     @profileView ?= new ProfileView
-    $('.main > .container').empty().append @profileView.render().el
+    @_switchMain @profileView.render().el
   
   list: (page) ->
     $('.header').fadeIn()
@@ -115,13 +120,5 @@ AppRouter = Parse.Router.extend
       $("#content").html @aboutView.el
       # @headerView.selectMenuItem "about-menu"
 
-views = ["HomeView", "WineView", "WineListItemView"]
-template = (view, done) ->
-  $.get "tpl/#{view}.html", (data) ->
-    temp = Parse._.template(data)
-    window[view]::template = temp if window[view]
-    done?(temp)
-
-$.when.apply(null, (template(view) for view in views when window[view])).done ->
-  window.app = new AppRouter()
-  Parse.history.start()
+window.app = new AppRouter()
+Parse.history.start()

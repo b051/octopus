@@ -3,6 +3,9 @@ window.ProfileView = Parse.View.extend
   
   template: _.template $('#content-profile').html()
   
+  initialize: ->
+    @render()
+  
   render: ->
     @attrs = Parse.User.current().attributes
     @$el.html @template user: @attrs
