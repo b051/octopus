@@ -36,6 +36,7 @@ AppRouter = Parse.Router.extend
     login: 'login'
     logout: 'logout'
     signup: 'signup'
+    profile: 'profile'
     wines: "list"
     "wines/page/:page": "list"
     "wines/add": "addWine"
@@ -44,23 +45,30 @@ AppRouter = Parse.Router.extend
 
   initialize: ->
     @navbar = new NavBar
+    @subnavbar = new SubNavBar
     @navbar.render()
+    @subnavbar.render()
   
   home: ->
+    Parse.User.current().fetch()
     if not Parse.User.current()
       route = Parse.history.fragment
       if route not in ['login', 'signup']
         @navbar.update()
         return app.navigate 'login', yes
     else
-      $('.login-extra, .account-container.stacked').remove()
-      $('.footer').show()
+      @_switchToLogin no
+      @subnavbar.update()
+  
+  _switchToLogin: (toLogin) ->
+    @navbar.update()
+    $('.main >.container, .extra, .subnavbar-inner, .footer')[if toLogin then 'hide' else 'show']()
+    $('.login-extra, .account-container.stacked').remove()
   
   login: ->
-    @navbar.update()
-    $('.subnavbar, .main, .extra, .login-extra, .account-container.stacked').remove()
+    @_switchToLogin yes
     @loginView ?= new LoginView
-    $('.footer').hide().before @loginView.el, @loginView.extra.el
+    $('.footer').before @loginView.el, @loginView.extra.el
 
   logout: ->
     Parse.User.logOut()
@@ -68,11 +76,14 @@ AppRouter = Parse.Router.extend
     app.navigate '', yes
   
   signup: ->
-    @navbar.update()
-    $('.subnavbar, .main, .extra, .login-extra, .account-container.stacked').remove()
+    @_switchToLogin yes
     @signupView ?= new SignupView
-    $('.footer').hide().before @signupView.el, @signupView.extra.el
-
+    $('.footer').before @signupView.el, @signupView.extra.el
+  
+  profile: ->
+    @profileView ?= new ProfileView
+    $('.main > .container').empty().append @profileView.render().el
+  
   list: (page) ->
     $('.header').fadeIn()
     p = (if page then parseInt(page, 10) else 1)

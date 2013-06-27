@@ -6,11 +6,11 @@ window.SignupView = Parse.View.extend
     @extra = new SignupExtraView
     @render()
   
-  template: Parse._.template($('#content-signup').html())
+  template: _.template($('#content-signup').html())
   
   render: ->
     @$el.html @template {}
-    this
+    @
   
   events:
     "change": "change"
@@ -51,7 +51,7 @@ window.LoginView = Parse.View.extend
     @extra = new LoginExtraView
     @render()
   
-  template: Parse._.template($('#content-login').html())
+  template: _.template($('#content-login').html())
   
   render: ->
     @$el.html @template {}
@@ -82,7 +82,7 @@ LoginExtraView = Parse.View.extend
   initialize: ->
     @render()
   
-  template: Parse._.template($('#content-loginextra').html())
+  template: _.template($('#content-loginextra').html())
   
   render: ->
     @$el.html @template {}
@@ -94,7 +94,7 @@ SignupExtraView = Parse.View.extend
   initialize: ->
     @render()
   
-  template: Parse._.template($('#content-signupextra').html())
+  template: _.template($('#content-signupextra').html())
   
   render: ->
     @$el.html @template {}

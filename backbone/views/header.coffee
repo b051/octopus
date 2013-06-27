@@ -24,7 +24,7 @@ NoProfileView = Parse.View.extend
   initialize: ->
     @render()
   
-  template: Parse._.template($('#navbar-noprofile').html())
+  template: _.template($('#navbar-noprofile').html())
   
   update: (fragment) ->
     @$('.create-an-account').fadeTo(100, fragment isnt 'signup')
@@ -34,41 +34,18 @@ NoProfileView = Parse.View.extend
     @$el.html @template {}
     this
 
+
 ProfileView = Parse.View.extend
   tagName: 'ul'
   className: 'nav pull-right'
   
   initialize: ->
   
-  template: Parse._.template($('#navbar-profile').html())
+  template: _.template($('#navbar-profile').html())
   
   render: ->
     @$el.html @template {user: Parse.User.current()}
     this
-  
-  events:
-    "submit form.nav-login": "onSubmit"
-  
-  onSubmit: (event) ->
-    event.preventDefault()
-    user = new User
-      username: @$('input[name=username]').val()
-      password: @$('input[name=password]').val()
-    if not user.isValid()
-      Alert.displayValidationErrors user.validationError
-    else
-      $.post '/login', user.toJSON(), (data) =>
-        if data.error
-          app.navigate 'login', trigger: yes
-        else
-          @user data.user
-  
-  user: (user) ->
-    console.log user
-  
-  selectMenuItem: (menuItem) ->
-    $(".nav li").removeClass "active"
-    $(".#{menuItem}").addClass "active" if menuItem
 
 
 SearchForm = Parse.View.extend
@@ -78,11 +55,32 @@ SearchForm = Parse.View.extend
   initialize: ->
     @render()
   
-  template: Parse._.template($('#navbar-search').html())
+  template: _.template($('#navbar-search').html())
   
   render: ->
-    console.log @$el, @template {}
     @$el.html @template {}
     this
+
+window.SubNavBar = Parse.View.extend
+  className: 'container'
   
+  template: _.template $('#subnavbar-container').html()
   
+  update: ->
+    fragment = Parse.history.fragment
+    activeTab = 0
+    if fragment in ['elements', 'validation', 'jqueryui', 'charts', 'popups']
+      activeTab = 1
+    else if fragment in ['pricing', 'faq', 'gallery', 'reports', 'account']
+      activeTab = 2
+    else if fragment in ['error']
+      activeTab = 3
+    $('.mainnav > li').each (index, li) ->
+      if index is activeTab
+        $(li).addClass 'active', duration:200
+      else
+        $(li).removeClass 'active', duration:200
+  
+  render: ->
+    $('.subnavbar-inner').empty().append(@$el)
+    @$el.html @template {}
