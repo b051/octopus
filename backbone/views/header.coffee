@@ -1,3 +1,5 @@
+dropdown = _.template $('#widget-dropdown').html()
+
 window.NavBar = Parse.View.extend
   el: $('.nav-collapse')
   
@@ -44,8 +46,8 @@ ProfileView = Parse.View.extend
   template: _.template($('#navbar-profile').html())
   
   render: ->
-    @$el.html @template {user: Parse.User.current()}
-    this
+    @$el.html @template user: Parse.User.current(), dropdown:dropdown
+    @
 
 
 SearchForm = Parse.View.extend
@@ -83,4 +85,4 @@ window.SubNavBar = Parse.View.extend
   
   render: ->
     $('.subnavbar-inner').empty().append(@$el)
-    @$el.html @template {}
+    @$el.html @template dropdown:dropdown

@@ -3,13 +3,14 @@ window.SignupView = Parse.View.extend
   
   initialize: ->
     @user = new Parse.User()
-    @extra = new SignupExtraView
     @render()
   
-  template: _.template($('#content-signup').html())
+  template: _.template $('#content-signup').html()
+  extraTemplate: _.template $('#content-signupextra').html()
   
   render: ->
-    @$el.html @template {}
+    @$el.html @template()
+    $('.footer').before @$el, @extraTemplate()
     @
   
   events:
@@ -48,13 +49,14 @@ window.LoginView = Parse.View.extend
   
   initialize: ->
     @user = new Parse.User()
-    @extra = new LoginExtraView
     @render()
   
-  template: _.template($('#content-login').html())
+  template: _.template $('#content-login').html()
+  extraTemplate: _.template $('#content-loginextra').html()
   
   render: ->
-    @$el.html @template {}
+    @$el.html @template()
+    $('.footer').before @$el, @extraTemplate()
     @
   
   events:
@@ -75,28 +77,4 @@ window.LoginView = Parse.View.extend
           app.navigate "", yes
         error: (user, error) ->
           alert error.message
-
-LoginExtraView = Parse.View.extend
-  className: 'login-extra'
-  
-  initialize: ->
-    @render()
-  
-  template: _.template($('#content-loginextra').html())
-  
-  render: ->
-    @$el.html @template {}
-    this
-
-SignupExtraView = Parse.View.extend
-  className: 'login-extra'
-  
-  initialize: ->
-    @render()
-  
-  template: _.template($('#content-signupextra').html())
-  
-  render: ->
-    @$el.html @template {}
-    this
 

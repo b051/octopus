@@ -9,13 +9,12 @@
 		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css">
 		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600">
 		<link rel="stylesheet" href="css/font-awesome.min.css">
-		<link rel="stylesheet" href="css/ui-lightness/jquery-ui-1.10.0.custom.min.css">
 		<link rel="stylesheet" href="chosen/chosen.min.css">
 
 		<link href="css/base-admin-2.css" rel="stylesheet">
 		<link href="css/base-admin-2-responsive.css" rel="stylesheet">
 
-		<link href="css/pages/dashboard.css" rel="stylesheet">   
+		<link href="css/pages/dashboard.css" rel="stylesheet">
 		<link href="css/pages/signin.css" rel="stylesheet">
 
 		<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -152,7 +151,6 @@
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="lib/jquery-2.0.2.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js" type="text/javascript" charset="utf-8"></script>
 <script src="parse/parse-latest.js" type="text/javascript" charset="utf-8"></script>
 <script>_ = Parse._;</script>
 <script src="lib/bootstrap.min.js"></script>
@@ -166,39 +164,42 @@
 <!-- <script src="js/charts/area.js"></script>
 <script src="js/charts/donut.js"></script> -->
 
-<script type="text/template" id="navbar-profile">
+<script type="text/template" id="widget-dropdown">
 <li class="dropdown">
-	
-	<a href="index.html#" class="dropdown-toggle" data-toggle="dropdown">
+	<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+	<% if (typeof icon != 'undefined') { %>
+		<i class="<%= icon %>"></i>
+		<span><%- text %></span>
+	<% } else { %>
 		<i class="icon-cog"></i>
-		Settings
+		<%- text %>
+	<% } %>
 		<b class="caret"></b>
 	</a>
 	
 	<ul class="dropdown-menu">
-		<li><a href="#profile">Account Settings</a></li>
-		<li><a href="javascript:;">Privacy Settings</a></li>
-		<li class="divider"></li>
-		<li><a href="javascript:;">Help</a></li>
+	<% _.each(items, function(item) { %>
+		<% if (item == '') { %>
+			<li class="divider"></li>
+		<% } else if (typeof item[2] == 'object') { %>
+			<li class="dropdown-submenu">
+				<a tabindex="-1" href="#<%= item[0] %>"><%= item[1] %></a>
+				<ul class="dropdown-menu">
+				<% _.each(item[2], function(subitem) { %>
+					<li><a tabindex="-1" href="#<%= subitem[0] %>"><%= subitem[1] %></a></li>
+				<% }) %>
+				</ul>
+			</li>
+		<% } else { %>
+			<li><a href="#<%= item[0] %>"><%= item[1] %></a></li>
+	<% }}) %>
 	</ul>
-	
 </li>
+</script>
 
-<li class="dropdown">
-	
-	<a href="index.html#" class="dropdown-toggle" data-toggle="dropdown">
-		<i class="icon-user"></i> 
-		<%- user.get('username') %>
-		<b class="caret"></b>
-	</a>
-	
-	<ul class="dropdown-menu">
-		<li><a href="#profile">My Profile</a></li>
-		<li><a href="javascript:;">My Groups</a></li>
-		<li class="divider"></li>
-		<li><a href="#logout">Logout</a></li>
-	</ul>
-</li>
+<script type="text/template" id="navbar-profile">
+<%= dropdown({text:'Settings', items:[['profile', 'Account Settings'], ['privacy', 'Privacy Settings'], '', ['help', 'Help']]}) %>
+<%= dropdown({text:user.get('username'), items:[['profile', 'My Profile'], ['groups', 'My Groups'], '', ['logout', 'Logout']]}) %>
 </script>
 
 <script type="text/template" id="navbar-noprofile">
@@ -269,7 +270,9 @@
 </script>
 
 <script type="text/template" id="content-loginextra">
+<div class='login-extra'>
 Don&#x27;t have an account? <a href="#signup">Sign Up</a><br/>Remind <a href="#">Password</a>
+</div>
 </script>
 
 <script type="text/template" id="content-signup">
@@ -338,8 +341,11 @@ Don&#x27;t have an account? <a href="#signup">Sign Up</a><br/>Remind <a href="#"
 </div>
 </script>
 
+
 <script type="text/template" id="content-signupextra">
+<div class='login-extra'>
 	Already have an account? <a href="#login">Login</a>
+</div>
 </script>
 
 <script type="text/template" id="subnavbar-container">
@@ -347,69 +353,20 @@ Don&#x27;t have an account? <a href="#signup">Sign Up</a><br/>Remind <a href="#"
 	<i class="icon-reorder"></i>
 </a>
 
-<div class="subnav-collapse collapse">
-	<ul class="mainnav">
-	
-		<li class="">
-			<a href="#">
-				<i class="icon-home"></i>
-				<span>Home</span>
-			</a>
-		</li>
-		
-		<li class="dropdown">
-			<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-				<i class="icon-th"></i>
-				<span>Components</span>
-				<b class="caret"></b>
-			</a>
-		
-			<ul class="dropdown-menu">
-				<li><a href="#elements">Elements</a></li>
-				<li><a href="#validation">Validation</a></li>
-				<li><a href="#jqueryui">jQuery UI</a></li>
-				<li><a href="#charts">Charts</a></li>
-				<li><a href="#popups">Popups/Notifications</a></li>
-			</ul>
-		</li>
-		
-		<li class="dropdown">
-			<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-				<i class="icon-copy"></i>
-				<span>Sample Pages</span>
-				<b class="caret"></b>
-			</a>
-			
-			<ul class="dropdown-menu">
-				<li><a href="pricing.html">Pricing Plans</a></li>
-				<li><a href="faq.html">FAQ&#x27;s</a></li>
-				<li><a href="gallery.html">Gallery</a></li>
-				<li><a href="reports.html">Reports</a></li>
-			</ul>
-		</li>
-		
-		<li class="dropdown">
-			<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-				<i class="icon-external-link"></i>
-				<span>Extra Pages</span>
-				<b class="caret"></b>
-			</a>
-			
-			<ul class="dropdown-menu">
-				<li><a href="error.html">Error</a></li>
-				<li class="dropdown-submenu">
-					<a tabindex="-1" href="index.html#">Dropdown menu</a>
-					<ul class="dropdown-menu">
-						<li><a tabindex="-1" href="index.html#">Second level link</a></li>
-						<li><a tabindex="-1" href="index.html#">Second level link</a></li>
-						<li><a tabindex="-1" href="index.html#">Second level link</a></li>
-					</ul>
-				</li>
-			</ul>
-		</li>
-	</ul>
-</div>
+<div class="subnav-collapse collapse"><ul class="mainnav">
+	<li class="">
+		<a href="#">
+			<i class="icon-home"></i>
+			<span>Home</span>
+		</a>
+	</li>
+	<%= dropdown({icon:'icon-th', text:'Components', items:[['elements', 'Elements'], ['validation', 'Validation'], ['jqueryui', 'jQuery UI'], ['charts', 'Charts'], ['popups', 'Popups/Notifications']]}) %>
+	<%= dropdown({icon:'icon-copy', text:'Sample Pages', items:[['pricing', 'Pricing Plans']]}) %>
+	<%= dropdown({icon:'icon-external-link', text:'Extra Pages', items:[['error', 'Error', [['', 'Second level link']]]]}) %>
+</ul></div>
 </script>
+
+
 <script type="text/template" id="content-home">
 <div class="span12">
 	<div class="widget stacked ">

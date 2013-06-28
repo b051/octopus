@@ -74,8 +74,7 @@ AppRouter = Parse.Router.extend
   
   login: ->
     @_switchToLogin yes
-    loginView = new LoginView
-    $('.footer').before loginView.el, loginView.extra.el
+    new LoginView
 
   logout: ->
     Parse.User.logOut()
@@ -84,8 +83,7 @@ AppRouter = Parse.Router.extend
   
   signup: ->
     @_switchToLogin yes
-    signupView = new SignupView
-    $('.footer').before signupView.el, signupView.extra.el
+    new SignupView
   
   profile: ->
     profileView = new ProfileView
