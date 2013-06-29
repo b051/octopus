@@ -8,5 +8,8 @@ window.HomeView = Parse.View.extend
   
   render: ->
     @$el.html @template {}
-    @$('table').dataTable()
+    @$('table').dataTable().delegate 'tbody > tr', 'click', (event) ->
+      tr = $(event.target).parent('tr')
+      number = $('td.sorting_1', tr).html()
+      $.msgbox number
     @

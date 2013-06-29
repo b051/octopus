@@ -3,12 +3,12 @@ window.AccountView = Parse.View.extend
   
   template: _.template $('#content-account').html()
   
-  initialize: (@tab) ->
+  initialize: (@tab = 'profile') ->
     @render()
   
   render: ->
     @attrs = Parse.User.current().attributes
-    @$el.html @template user: @attrs, tab: @tab ? 'profile'
+    @$el.html @template user: @attrs, tab: @tab
     @
   
   events:

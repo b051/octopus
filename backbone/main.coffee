@@ -49,7 +49,9 @@ AppRouter = Parse.Router.extend
     @subnavbar = new SubNavBar
     @navbar.render()
     @subnavbar.render()
-  
+    Parse.history.on 'route', =>
+      @subnavbar.update()
+
   home: ->
     if not Parse.User.current()
       route = Parse.history.fragment
@@ -70,6 +72,7 @@ AppRouter = Parse.Router.extend
   
   _switchToLogin: (toLogin) ->
     @navbar.update()
+    @subnavbar.update()
     $('.main >.container, .extra, .subnavbar-inner, .footer')[if toLogin then 'hide' else 'show']()
     $('.login-extra, .account-container.stacked').remove()
   

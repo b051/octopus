@@ -70,6 +70,7 @@ window.SubNavBar = Parse.View.extend
   
   update: ->
     fragment = Parse.history.fragment
+    console.log "update #{fragment}"
     activeTab = 0
     if fragment in ['elements', 'validation', 'jqueryui', 'charts', 'popups']
       activeTab = 1
