@@ -26,7 +26,7 @@ NoProfileView = Parse.View.extend
   initialize: ->
     @render()
   
-  template: _.template($('#navbar-noprofile').html())
+  template: _.template $('#navbar-noprofile').html()
   
   update: (fragment) ->
     @$('.create-an-account').fadeTo(100, fragment isnt 'signup')
@@ -43,7 +43,7 @@ ProfileView = Parse.View.extend
   
   initialize: ->
   
-  template: _.template($('#navbar-profile').html())
+  template: _.template $('#navbar-profile').html()
   
   render: ->
     @$el.html @template user: Parse.User.current(), dropdown:dropdown
@@ -57,7 +57,7 @@ SearchForm = Parse.View.extend
   initialize: ->
     @render()
   
-  template: _.template($('#navbar-search').html())
+  template: _.template $('#navbar-search').html()
   
   render: ->
     @$el.html @template {}

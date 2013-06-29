@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Dashboard :: Base Admin</title>
+		<title>Dashboard :: Octopus</title>
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">    
@@ -10,12 +10,11 @@
 		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600">
 		<link rel="stylesheet" href="css/font-awesome.min.css">
 		<link rel="stylesheet" href="chosen/chosen.min.css">
-
-		<link href="css/base-admin-2.css" rel="stylesheet">
-		<link href="css/base-admin-2-responsive.css" rel="stylesheet">
-
-		<link href="css/pages/dashboard.css" rel="stylesheet">
-		<link href="css/pages/signin.css" rel="stylesheet">
+		<link rel="stylesheet" href="js/plugins/msgbox/jquery.msgbox.css">
+		<link rel="stylesheet" href="css/base-admin-2.css">
+		<link rel="stylesheet" href="css/base-admin-2-responsive.css">
+		<link rel="stylesheet" href="css/pages/dashboard.css">
+		<link rel="stylesheet" href="css/pages/signin.css">
 
 		<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 		<!--[if lt IE 9]>
@@ -25,28 +24,18 @@
 <body>
 
 <div class="navbar navbar-inverse navbar-fixed-top">
-	
 	<div class="navbar-inner">
-		
 		<div class="container">
-			
 			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
 				<i class="icon-cog"></i>
 			</a>
-			
 			<a class="brand" href="#">
-				Base Admin <sup>2.0</sup>
-			</a>		
-			
-			<div class="nav-collapse collapse">
-			</div>
-	
+				Octopus <sup>0.1</sup>
+			</a>
+			<div class="nav-collapse collapse"></div>
 		</div>
-
 	</div>
-
 </div>
-
 
 <div class="subnavbar">
 	<div class="subnavbar-inner"></div>
@@ -57,105 +46,77 @@
 </div>
 
 <div class="extra">
-
 	<div class="container">
-
 		<div class="row">
 			
 			<div class="span3">
-				
 				<h4>About</h4>
-				
 				<ul>
 					<li><a href="javascript:;">About Us</a></li>
 					<li><a href="javascript:;">Twitter</a></li>
 					<li><a href="javascript:;">Facebook</a></li>
 					<li><a href="javascript:;">Google+</a></li>
 				</ul>
-				
-			</div> <!-- /span3 -->
+			</div>
 			
 			<div class="span3">
-				
 				<h4>Support</h4>
-				
 				<ul>
 					<li><a href="javascript:;">Frequently Asked Questions</a></li>
 					<li><a href="javascript:;">Ask a Question</a></li>
 					<li><a href="javascript:;">Video Tutorial</a></li>
 					<li><a href="javascript:;">Feedback</a></li>
 				</ul>
-				
-			</div> <!-- /span3 -->
+			</div>
 			
 			<div class="span3">
-				
 				<h4>Legal</h4>
-				
 				<ul>
 					<li><a href="javascript:;">License</a></li>
 					<li><a href="javascript:;">Terms of Use</a></li>
 					<li><a href="javascript:;">Privacy Policy</a></li>
 					<li><a href="javascript:;">Security</a></li>
 				</ul>
-				
-			</div> <!-- /span3 -->
+			</div>
 			
 			<div class="span3">
-				
 				<h4>Settings</h4>
-				
 				<ul>
 					<li><a href="javascript:;">Consectetur adipisicing</a></li>
 					<li><a href="javascript:;">Eiusmod tempor </a></li>
 					<li><a href="javascript:;">Fugiat nulla pariatur</a></li>
 					<li><a href="javascript:;">Officia deserunt</a></li>
 				</ul>
-				
-			</div> <!-- /span3 -->
+			</div>
 			
-		</div> <!-- /row -->
-
-	</div> <!-- /container -->
-
-</div> <!-- /extra -->
+		</div>
+	</div>
+</div>
 
 
-    
-    
 <div class="footer">
-		
 	<div class="container">
-		
 		<div class="row">
-			
 			<div id="footer-copyright" class="span6">
 				&copy; 2012-13 Jumpstart UI.
-			</div> <!-- /span6 -->
-			
+			</div>
 			<div id="footer-terms" class="span6">
 				Theme by <a href="http://jumpstartui.com" target="_blank">Jumpstart UI</a>
-			</div> <!-- /.span6 -->
-			
-		</div> <!-- /row -->
-		
-	</div> <!-- /container -->
-	
-</div> <!-- /footer -->
+			</div>
+		</div>
+	</div>
+</div>
 
-
-
-    
 
 <!-- Le javascript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="lib/jquery-2.0.2.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="parse/parse-latest.js" type="text/javascript" charset="utf-8"></script>
+<script src="lib/jquery-2.0.2.min.js"></script>
+<script src="parse/parse-latest.js"></script>
 <script>_ = Parse._;</script>
 <script src="lib/bootstrap.min.js"></script>
-<script src="lib/jquery.dataTables.js" type="text/javascript" charset="utf-8"></script>
-
+<script src="lib/jquery.dataTables.js"></script>
+<script src="js/plugins/msgbox/jquery.msgbox.min.js"></script>
 <script src="js/plugins/flot/jquery.flot.js"></script>
 <script src="js/plugins/flot/jquery.flot.pie.js"></script>
 <script src="js/plugins/flot/jquery.flot.resize.js"></script>
@@ -165,18 +126,20 @@
 <script src="js/charts/donut.js"></script> -->
 
 <script type="text/template" id="widget-dropdown">
-<li class="dropdown">
+<li class="<%= typeof items != 'undefined' ? 'dropdown':''%>">
 	<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-	<% if (typeof icon != 'undefined') { %>
-		<i class="<%= icon %>"></i>
-		<span><%- text %></span>
+<% if (typeof icon != 'undefined') { %>
+	<i class="<%= icon %>"></i>
+	<span><%- text %></span>
 	<% } else { %>
-		<i class="icon-cog"></i>
-		<%- text %>
+	<i class="icon-cog"></i>
+	<%- text %>
 	<% } %>
+	<% if (typeof items != 'undefined') { %> 
 		<b class="caret"></b>
+	<% } %>
 	</a>
-	
+<% if (typeof items != 'undefined') { %>
 	<ul class="dropdown-menu">
 	<% _.each(items, function(item) { %>
 		<% if (item == '') { %>
@@ -194,13 +157,16 @@
 			<li><a href="#<%= item[0] %>"><%= item[1] %></a></li>
 	<% }}) %>
 	</ul>
+<% } %>
 </li>
 </script>
+
 
 <script type="text/template" id="navbar-profile">
 <%= dropdown({text:'Settings', items:[['profile', 'Account Settings'], ['privacy', 'Privacy Settings'], '', ['help', 'Help']]}) %>
 <%= dropdown({text:user.get('username'), items:[['profile', 'My Profile'], ['groups', 'My Groups'], '', ['logout', 'Logout']]}) %>
 </script>
+
 
 <script type="text/template" id="navbar-noprofile">
 <li class="create-an-account">
@@ -217,57 +183,48 @@
 </li>
 </script>
 
+
 <script type="text/template" id="navbar-search">
 	<input type="text" class="search-query" placeholder="Search">
 </script>
 
+
 <script type="text/template" id="content-login">
 <div class="content clearfix">
-	
 	<form action="" method="post">
-	
 		<h1>Sign In</h1>
 		
 		<div class="login-fields">
-			
 			<p>Sign in using your registered account:</p>
-			
 			<div class="field username-field">
 				<input type="text" id="username" name="username" value="" placeholder="Username" class="login" />
 			</div>
-			
 			<div class="field password-field">
 				<input type="password" id="password" name="password" value="" placeholder="Password" class="login"/>
 			</div>
-			
 		</div>
 		
 		<div class="login-actions">
-			
 			<span class="login-checkbox">
 				<input id="Field" name="Field" type="checkbox" class="field login-checkbox" value="First Choice" tabindex="4" />
 				<label class="choice" for="Field">Keep me signed in</label>
 			</span>
 			<button class="button btn btn-warning btn-large" type="submit">Sign In</button>
-			
 		</div>
 		
 		<div class="login-social">
 			<p>Sign in using social network:</p>
-			
 			<div class="twitter">
 				<a href="javascript:;" class="btn_1">Login with Twitter</a>
 			</div>
-			
 			<div class="fb">
 				<a href="javascript:;" class="btn_2">Login with Facebook</a>
 			</div>
 		</div>
-		
 	</form>
-	
 </div>
 </script>
+
 
 <script type="text/template" id="content-loginextra">
 <div class='login-extra'>
@@ -275,36 +232,30 @@ Don&#x27;t have an account? <a href="#signup">Sign Up</a><br/>Remind <a href="#"
 </div>
 </script>
 
+
 <script type="text/template" id="content-signup">
 <div class="content clearfix">
-	
 	<form>
-	
 		<h1>Create Your Account</h1>
-		
+
 		<div class="login-social">
 			<p>Sign in using social network:</p>
-			
 			<div class="twitter">
 				<a href="#" class="btn_1">Login with Twitter</a>
 			</div>
-			
 			<div class="fb">
 				<a href="#" class="btn_2">Login with Facebook</a>
 			</div>
 		</div>
 		
 		<div class="login-fields">
-			
 			<p>Create your free account:</p>
-			
 			<div class="field">
 				<label for="firstname">First Name:</label>
 				<input type="text" id="firstname" name="firstname" value="" placeholder="First Name" class="login" />
 			</div>
-			
 			<div class="field">
-				<label for="lastname">Last Name:</label>	
+				<label for="lastname">Last Name:</label>
 				<input type="text" id="lastname" name="lastname" value="" placeholder="Last Name" class="login" />
 			</div>
 			
@@ -312,32 +263,25 @@ Don&#x27;t have an account? <a href="#signup">Sign Up</a><br/>Remind <a href="#"
 				<label for="email">Email Address:</label>
 				<input type="text" id="email" name="email" value="" placeholder="Email" class="login"/>
 			</div>
-			
 			<div class="field">
 				<label for="password">Password:</label>
 				<input type="password" id="password" name="password" value="" placeholder="Password" class="login"/>
 			</div>
-			
 			<div class="field">
 				<label for="confirm_password">Confirm Password:</label>
 				<input type="password" id="confirm_password" name="confirm_password" value="" placeholder="Confirm Password" class="login"/>
 			</div>
-			
 		</div>
-		
+
 		<div class="login-actions">
-			
 			<span class="login-checkbox">
 				<input id="Field" name="Field" type="checkbox" class="field login-checkbox" value="First Choice" tabindex="4" />
 				<label class="choice" for="Field">I have read and agree with the Terms of Use.</label>
 			</span>
 
 			<button class="button btn btn-primary btn-large">Register</button>
-			
 		</div>
-		
 	</form>
-	
 </div>
 </script>
 
@@ -348,22 +292,20 @@ Don&#x27;t have an account? <a href="#signup">Sign Up</a><br/>Remind <a href="#"
 </div>
 </script>
 
+
 <script type="text/template" id="subnavbar-container">
 <a class="btn-subnavbar collapsed" data-toggle="collapse" data-target=".subnav-collapse">
 	<i class="icon-reorder"></i>
 </a>
 
-<div class="subnav-collapse collapse"><ul class="mainnav">
-	<li class="">
-		<a href="#">
-			<i class="icon-home"></i>
-			<span>Home</span>
-		</a>
-	</li>
-	<%= dropdown({icon:'icon-th', text:'Components', items:[['elements', 'Elements'], ['validation', 'Validation'], ['jqueryui', 'jQuery UI'], ['charts', 'Charts'], ['popups', 'Popups/Notifications']]}) %>
-	<%= dropdown({icon:'icon-copy', text:'Sample Pages', items:[['pricing', 'Pricing Plans']]}) %>
-	<%= dropdown({icon:'icon-external-link', text:'Extra Pages', items:[['error', 'Error', [['', 'Second level link']]]]}) %>
-</ul></div>
+<div class="subnav-collapse collapse">
+	<ul class="mainnav">
+		<%= dropdown({icon:'icon-home', text:'Home'}) %>
+		<%= dropdown({icon:'icon-th', text:'Components', items:[['elements', 'Elements'], ['validation', 'Validation'], ['jqueryui', 'jQuery UI'], ['charts', 'Charts'], ['popups', 'Popups/Notifications']]}) %>
+		<%= dropdown({icon:'icon-copy', text:'Sample Pages', items:[['pricing', 'Pricing Plans']]}) %>
+		<%= dropdown({icon:'icon-external-link', text:'Extra Pages', items:[['error', 'Error', [['', 'Second level link']]]]}) %>
+	</ul>
+</div>
 </script>
 
 
@@ -421,6 +363,8 @@ Don&#x27;t have an account? <a href="#signup">Sign Up</a><br/>Remind <a href="#"
 	</div>
 </div>
 </script>
+
+
 <script type="text/template" id="content-profile">
 <div class="span8">
 	<div class="widget stacked">

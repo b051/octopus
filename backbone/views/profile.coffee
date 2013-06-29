@@ -26,11 +26,8 @@ window.ProfileView = Parse.View.extend
   onSubmit: (event) ->
     event.preventDefault()
     user = Parse.User.current()
-    console.log @attrs
     user.save @attrs,
       success: (user) ->
-        console.log user
         app.navigate '', yes
       error: (user, error) ->
-        console.log user, error
-        alert error
+        $.msgbox error.message, type:'error'

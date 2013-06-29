@@ -33,16 +33,18 @@ window.SignupView = Parse.View.extend
     if firstChoice
       @user.unset('Field')
     else
-      return alert 'You have to agree the Term of Services'
+       $.msgbox 'You have to agree the Term of Services'
+       return
     
     if not @user.isValid()
-      Alert.displayValidationErrors @model.validationError
+      $.msgbox @user.validationError
     else
       @user.signUp null,
         success: (user) ->
           app.navigate "", yes
         error: (user, error) ->
-          alert error
+          $.msgbox error, type:'error'
+
 
 window.LoginView = Parse.View.extend
   className: 'account-container stacked'
@@ -68,13 +70,15 @@ window.LoginView = Parse.View.extend
   
   onSubmit: (event) ->
     event.preventDefault()
-    
+    @user.set 'username', @$('#username').val()
+    @user.set 'password', @$('#password').val()
+    console.log @user.isValid()
     if not @user.isValid()
-      Alert.displayValidationErrors @model.validationError
+      $.msgbox @user.validationError
     else
       @user.logIn
         success: (user) ->
           app.navigate "", yes
         error: (user, error) ->
-          alert error.message
+          $.msgbox error.message, type:'error'
 
