@@ -21,8 +21,12 @@ App.HomeView = Parse.View.extend
       manufacture: 'Microsoft'
       quantity: 200
       schedule: new Date 2013, 12, 12
+    ,
+      name: 'S<carlett'
+      manufacture: 'Microsoft'
+      quantity: 200
+      schedule: new Date 2013, 12, 12
     ]
-    console.log collection
     @$el.html @template collection: collection
     @$('table').dataTable().delegate 'tbody > tr', 'click', (event) ->
       tr = $(event.target).parent('tr')

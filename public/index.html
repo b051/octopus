@@ -147,15 +147,15 @@
 			<li class="divider"></li>
 		<% } else if (typeof item[2] == 'object') { %>
 			<li class="dropdown-submenu">
-				<a tabindex="-1" href="#<%= item[0] %>"><%= item[1] %></a>
+				<a tabindex="-1" href="#<%- item[0] %>"><%- item[1] %></a>
 				<ul class="dropdown-menu">
 				<% _.each(item[2], function(subitem) { %>
-					<li><a tabindex="-1" href="#<%= subitem[0] %>"><%= subitem[1] %></a></li>
+					<li><a tabindex="-1" href="#<%- subitem[0] %>"><%- subitem[1] %></a></li>
 				<% }) %>
 				</ul>
 			</li>
 		<% } else { %>
-			<li><a href="#<%= item[0] %>"><%= item[1] %></a></li>
+			<li><a href="#<%- item[0] %>"><%- item[1] %></a></li>
 	<% }}) %>
 	</ul>
 <% } %>
@@ -318,32 +318,61 @@ Don&#x27;t have an account? <a href="#signup">Sign Up</a><br/>Remind <a href="#"
 			<h3>Bootstrap Elements</h3>
 		</div>
 		<div class="widget-content">
-<table class="table table-bordered table-striped table-highlight">
-<thead>
-	<tr>
-		<th>#</th>
-		<th>Name</th>
-		<th>Manufacture</th>
-		<th>Quantity</th>
-		<th>Schedule</th>
-	</tr>
-</thead>
-<tbody>
-<% collection.each(function(tool, i) { %>
-	<tr>
-		<td><%= i + 1 %></td>
-		<td><%= tool.get('name') %></td>
-		<td><%= tool.get('manufacture') %></td>
-		<td><%= tool.get('quantity') %></td>
-		<td><%= tool.get('schedule') %></td>
-	</tr>
-<% }) %>
-</tbody>
-</table>
+			<table class="table table-bordered table-striped table-highlight">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Name</th>
+					<th>Manufacture</th>
+					<th>Quantity</th>
+					<th>Schedule</th>
+				</tr>
+			</thead>
+			<tbody>
+			<% collection.each(function(tool, i) { %>
+				<tr>
+					<td><%= i + 1 %></td>
+					<td><%- tool.get('name') %></td>
+					<td><%- tool.get('manufacture') %></td>
+					<td><%- tool.get('quantity') %></td>
+					<td><%- tool.get('schedule') %></td>
+				</tr>
+			<% }) %>
+			</tbody>
+			</table>
 		</div>
 	</div>
 </div>
 
+<div class="span12">
+	<div class="widget stacked">
+		
+		<div class="widget-header">
+			<i class="icon-user"></i>
+			<h3>Item Detail</h3>
+		</div>
+	
+		<div class="widget-content">
+			<div class="tabbable">
+				<ul class="nav nav-tabs">
+					<li class="active"><a href="#tab1" data-toggle="tab">Tab1</a></li>
+					<li><a href="#tab2" data-toggle="tab">Tab2</a></li>
+					<li><a href="#tab3" data-toggle="tab">Tab3</a></li>
+					<li><a href="#tab4" data-toggle="tab">Tab4</a></li>
+					<li><a href="#tab5" data-toggle="tab">Tab5</a></li>
+				</ul>
+				<div class="tab-content" style="margin-top:1em;">
+					<div class="tab-pane active" id="tab1"></div>
+					<div class="tab-pane" id="tab2"></div>
+					<div class="tab-pane" id="tab3"></div>
+					<div class="tab-pane" id="tab4"></div>
+					<div class="tab-pane" id="tab5"></div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
 
 </script>
 
@@ -396,7 +425,7 @@ Don&#x27;t have an account? <a href="#signup">Sign Up</a><br/>Remind <a href="#"
 <div class="control-group">
 	<label class="control-label" for="username">Username</label>
 	<div class="controls">
-		<input type="text" class="input-medium disabled" id="username" value="<%= user.username %>" disabled>
+		<input type="text" class="input-medium disabled" id="username" value="<%- user.username %>" disabled>
 		<p class="help-block">Your username is for logging in and cannot be changed.</p>
 	</div>
 </div>
@@ -404,21 +433,21 @@ Don&#x27;t have an account? <a href="#signup">Sign Up</a><br/>Remind <a href="#"
 <div class="control-group">
 	<label class="control-label" for="firstname">First Name</label>
 	<div class="controls">
-		<input type="text" class="input-medium" id="firstname" value="<%= user.firstname %>">
+		<input type="text" class="input-medium" id="firstname" value="<%- user.firstname %>">
 	</div>
 </div>
 
 <div class="control-group">
 	<label class="control-label" for="lastname">Last Name</label>
 	<div class="controls">
-		<input type="text" class="input-medium" id="lastname" value="<%= user.lastname %>">
+		<input type="text" class="input-medium" id="lastname" value="<%- user.lastname %>">
 	</div>
 </div>
 
 <div class="control-group">
 	<label class="control-label" for="email">Email Address</label>
 	<div class="controls">
-		<input type="text" class="input-large" id="email" value="<%= user.email %>">
+		<input type="text" class="input-large" id="email" value="<%- user.email %>">
 	</div>
 </div>
 <br />
