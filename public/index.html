@@ -116,6 +116,7 @@
 <script>_ = Parse._;</script>
 <script src="lib/bootstrap.min.js"></script>
 <script src="lib/jquery.dataTables.js"></script>
+<script src="lib/DT_bootstrap.js"></script>
 <script src="js/plugins/msgbox/jquery.msgbox.min.js"></script>
 <script src="js/plugins/flot/jquery.flot.js"></script>
 <script src="js/plugins/flot/jquery.flot.pie.js"></script>
@@ -163,8 +164,8 @@
 
 
 <script type="text/template" id="navbar-profile">
-<%= dropdown({text:'Settings', items:[['profile', 'Account Settings'], ['privacy', 'Privacy Settings'], '', ['help', 'Help']]}) %>
-<%= dropdown({text:user.get('username'), items:[['profile', 'My Profile'], ['groups', 'My Groups'], '', ['logout', 'Logout']]}) %>
+<%= dropdown({text:'Settings', items:[['account/settings', 'Account Settings'], ['privacy', 'Privacy Settings'], '', ['help', 'Help']]}) %>
+<%= dropdown({text:user.get('username'), items:[['account', 'My Profile'], ['groups', 'My Groups'], '', ['logout', 'Logout']]}) %>
 </script>
 
 
@@ -365,7 +366,7 @@ Don&#x27;t have an account? <a href="#signup">Sign Up</a><br/>Remind <a href="#"
 </script>
 
 
-<script type="text/template" id="content-profile">
+<script type="text/template" id="content-account">
 <div class="span8">
 	<div class="widget stacked">
 		<div class="widget-header">
@@ -376,12 +377,12 @@ Don&#x27;t have an account? <a href="#signup">Sign Up</a><br/>Remind <a href="#"
 		<div class="widget-content">
 			<div class="tabbable">
 				<ul class="nav nav-tabs">
-					<li class="active"><a href="#profile" data-toggle="tab">Profile</a></li>
-					<li><a href="#settings" data-toggle="tab">Settings</a></li>
+					<li class="<%= tab == 'profile' ? 'active' : '' %>"><a href="#profile" data-toggle="tab">Profile</a></li>
+					<li class="<%= tab == 'settings' ? 'active' : '' %>"><a href="#settings" data-toggle="tab">Settings</a></li>
 				</ul>
 				<div class="tab-content" style="margin-top:1em;">
 
-<div class="tab-pane active" id="profile"><form id="edit-profile" class="form-horizontal"><fieldset>
+<div class="tab-pane <%= tab == 'profile' ? 'active' : '' %>" id="profile"><form id="edit-profile" class="form-horizontal"><fieldset>
 
 <div class="control-group">
 	<label class="control-label" for="username">Username</label>
@@ -435,7 +436,7 @@ Don&#x27;t have an account? <a href="#signup">Sign Up</a><br/>Remind <a href="#"
 
 </fieldset></form></div>
 
-<div class="tab-pane" id="settings"><form id="edit-profile2" class="form-horizontal"><fieldset>
+<div class="tab-pane <%= tab == 'settings' ? 'active' : '' %>" id="settings"><form id="edit-profile2" class="form-horizontal"><fieldset>
 
 <div class="control-group">
 	<label class="control-label" for="accountadvanced">Advanced Settings</label>

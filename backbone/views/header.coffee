@@ -8,18 +8,18 @@ window.NavBar = Parse.View.extend
   
   render: ->
     if Parse.User.current()
-      @profileView ?= new ProfileView
-      @searchForm ?= new SearchForm
+      @profileView ?= new NavProfileView
+      @searchForm ?= new NavSearchForm
       @$el.empty().append @profileView.render().el, @searchForm.el
     else
-      @noprofileView ?= new NoProfileView
+      @noprofileView ?= new NavNoProfileView
       @$el.empty().append @noprofileView.el
   
   update: ->
     @noprofileView?.update Parse.history.fragment
 
 
-NoProfileView = Parse.View.extend
+NavNoProfileView = Parse.View.extend
   tagName: 'ul'
   className: 'nav pull-right'
   
@@ -37,7 +37,7 @@ NoProfileView = Parse.View.extend
     this
 
 
-ProfileView = Parse.View.extend
+NavProfileView = Parse.View.extend
   tagName: 'ul'
   className: 'nav pull-right'
   
@@ -50,7 +50,7 @@ ProfileView = Parse.View.extend
     @
 
 
-SearchForm = Parse.View.extend
+NavSearchForm = Parse.View.extend
   tagName: 'form'
   className: 'navbar-search pull-right'
   

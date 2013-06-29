@@ -8,4 +8,5 @@ window.HomeView = Parse.View.extend
   
   render: ->
     @$el.html @template {}
+    @$('table').dataTable()
     @

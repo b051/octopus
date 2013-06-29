@@ -36,7 +36,8 @@ AppRouter = Parse.Router.extend
     login: 'login'
     logout: 'logout'
     signup: 'signup'
-    profile: 'profile'
+    'account': 'account'
+    'account/:tab': 'account'
     wines: "list"
     "wines/page/:page": "list"
     "wines/add": "addWine"
@@ -85,9 +86,8 @@ AppRouter = Parse.Router.extend
     @_switchToLogin yes
     new SignupView
   
-  profile: ->
-    profileView = new ProfileView
-    @_switchMain profileView.render().el
+  account: (tab) ->
+    @_switchMain new AccountView(tab).el
   
   list: (page) ->
     $('.header').fadeIn()

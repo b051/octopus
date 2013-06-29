@@ -1,14 +1,14 @@
-window.ProfileView = Parse.View.extend
+window.AccountView = Parse.View.extend
   className: 'row'
   
-  template: _.template $('#content-profile').html()
+  template: _.template $('#content-account').html()
   
-  initialize: ->
+  initialize: (@tab) ->
     @render()
   
   render: ->
     @attrs = Parse.User.current().attributes
-    @$el.html @template user: @attrs
+    @$el.html @template user: @attrs, tab: @tab ? 'profile'
     @
   
   events:
