@@ -113,7 +113,7 @@
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="lib/jquery-2.0.2.min.js"></script>
 <script src="parse/parse-latest.js"></script>
-<script>_ = Parse._;</script>
+<script>_ = Parse._; App = {};</script>
 <script src="lib/bootstrap.min.js"></script>
 <script src="lib/jquery.dataTables.js"></script>
 <script src="lib/DT_bootstrap.js"></script>
@@ -312,7 +312,7 @@ Don&#x27;t have an account? <a href="#signup">Sign Up</a><br/>Remind <a href="#"
 
 <script type="text/template" id="content-home">
 <div class="span12">
-	<div class="widget stacked ">
+	<div class="widget stacked">
 		<div class="widget-header">
 			<i class="icon-pencil"></i>
 			<h3>Bootstrap Elements</h3>
@@ -322,53 +322,36 @@ Don&#x27;t have an account? <a href="#signup">Sign Up</a><br/>Remind <a href="#"
 <thead>
 	<tr>
 		<th>#</th>
-		<th>First Name</th>
-		<th>Last Name</th>
-		<th>Username</th>
+		<th>Name</th>
+		<th>Manufacture</th>
+		<th>Quantity</th>
+		<th>Schedule</th>
 	</tr>
 </thead>
 <tbody>
+<% collection.each(function(tool, i) { %>
 	<tr>
-		<td>1</td>
-		<td>Michael</td>
-		<td>Jordan</td>
-		<td>@mjordan</td>
+		<td><%= i + 1 %></td>
+		<td><%= tool.get('name') %></td>
+		<td><%= tool.get('manufacture') %></td>
+		<td><%= tool.get('quantity') %></td>
+		<td><%= tool.get('schedule') %></td>
 	</tr>
-	<tr>
-		<td>2</td>
-		<td>Magic</td>
-		<td>Johnson</td>
-		<td>@mjohnson</td>
-	</tr>
-	<tr>
-		<td>3</td>
-		<td>Larry</td>
-		<td>the Bird</td>
-		<td>@twitter</td>
-	</tr>
-	<tr>
-		<td>4</td>
-		<td>Charles</td>
-		<td>Barkley</td>
-		<td>@cbark</td>
-	</tr>
-	<tr>
-		<td>5</td>
-		<td>Karl</td>
-		<td>Malone</td>
-		<td>@kmalone</td>
-	</tr>
+<% }) %>
 </tbody>
 </table>
 		</div>
 	</div>
 </div>
+
+
 </script>
 
 
 <script type="text/template" id="content-account">
 <div class="span8">
 	<div class="widget stacked">
+		
 		<div class="widget-header">
 			<i class="icon-user"></i>
 			<h3>Your Account</h3>
@@ -381,8 +364,34 @@ Don&#x27;t have an account? <a href="#signup">Sign Up</a><br/>Remind <a href="#"
 					<li class="<%= tab == 'settings' ? 'active' : '' %>"><a href="#settings" data-toggle="tab">Settings</a></li>
 				</ul>
 				<div class="tab-content" style="margin-top:1em;">
+					<div class="tab-pane <%= tab == 'profile' ? 'active' : '' %>" id="profile"><%= profile.$el.html() %></div>
+					<div class="tab-pane <%= tab == 'settings' ? 'active' : '' %>" id="settings"><%= settings.$el.html() %></div>
+				</div>
+			</div>
+		</div>
 
-<div class="tab-pane <%= tab == 'profile' ? 'active' : '' %>" id="profile"><form id="edit-profile" class="form-horizontal"><fieldset>
+	</div>
+</div>
+
+<div class="span4">
+	<div class="widget stacked">
+		<div class="widget-header">
+			<h3>Extra Info</h3>
+		</div>
+
+		<div class="widget-content">
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+
+			<p> Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+		</div>
+	</div>
+</div>
+
+</script>
+
+
+<script type="text/template" id="form-edit-profile">
+<form id="edit-profile" class="form-horizontal"><fieldset>
 
 <div class="control-group">
 	<label class="control-label" for="username">Username</label>
@@ -434,9 +443,11 @@ Don&#x27;t have an account? <a href="#signup">Sign Up</a><br/>Remind <a href="#"
 	<button class="btn btn-cancel">Cancel</button>
 </div>
 
-</fieldset></form></div>
+</fieldset></form>
+</script>
 
-<div class="tab-pane <%= tab == 'settings' ? 'active' : '' %>" id="settings"><form id="edit-profile2" class="form-horizontal"><fieldset>
+<script type="text/template" id="form-account-settings">
+<form id="edit-profile2" class="form-horizontal"><fieldset>
 
 <div class="control-group">
 	<label class="control-label" for="accountadvanced">Advanced Settings</label>
@@ -458,31 +469,8 @@ Download all message on connection
 	<button type="submit" class="btn btn-primary">Save</button> <button class="btn">Cancel</button>
 </div>
 
-</fieldset></form></div>
-
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="span4">
-	<div class="widget stacked widget-box">
-		<div class="widget-header">
-			<h3>Extra Info</h3>
-		</div>
-
-		<div class="widget-content">
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-
-			<p> Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-		</div>
-	</div>
-</div>
-
+</fieldset></form>
 </script>
-
-
 <script src="js/views/about.js"></script>
 <script src="js/views/login.js"></script>
 <script src="js/views/profile.js"></script>

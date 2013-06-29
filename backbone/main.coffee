@@ -61,7 +61,7 @@ AppRouter = Parse.Router.extend
     else
       Parse.User.current().fetch()
       @_switchToLogin no
-      @homeView = new HomeView
+      @homeView = new App.HomeView
       @_switchMain @homeView.el
       console.log 'render navbar'
       @navbar.render()
@@ -90,7 +90,7 @@ AppRouter = Parse.Router.extend
     new SignupView
   
   account: (tab) ->
-    @_switchMain new AccountView(tab).el
+    @_switchMain new App.AccountView(tab).el
   
   list: (page) ->
     $('.header').fadeIn()

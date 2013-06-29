@@ -773,10 +773,7 @@ h6 {
   background: transparent;
   border: none;
 }
-.widget.widget-box .widget-content {
-  background: #E3E3E3;
-  background: #FFF;
-}
+
 /*------------------------------------------------------------------
 [ Shortcuts / .shortcuts ]
 */
