@@ -8,7 +8,7 @@ App.SignupView = Parse.View.extend
   template: _.template $('#content-signup').html()
   
   render: ->
-    @$el.html(@template()).appendTo($('body'))
+    @$el.html(@template()).i18n().appendTo($('body'))
     @
   
   events:

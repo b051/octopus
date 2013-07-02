@@ -6,15 +6,17 @@ App.Zh_CN =
 App.translate = App.Zh_CN
 
 $.fn.extend
+  textNodes: ->
+    whitespace = /^\s*$/
+    @contents().filter ->
+      @nodeType is Node.TEXT_NODE and not whitespace.test(@nodeValue)
+  
   i18n: ->
-    @find('*').val (index, value) ->
-      if value
-        return App.translate[value] or value
-      value
+    $('*', @).textNodes().each ->
+        @data = App.translate[@data] or @data
     
     $('input', @).attr 'placeholder', (index, value) ->
-      changed = App.translate[value] or value
-      return changed
+      App.translate[value] or value
     @
 
 class App.Alert
