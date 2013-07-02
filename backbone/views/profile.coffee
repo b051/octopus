@@ -26,6 +26,7 @@ App.AccountView = Parse.View.extend
     app.navigate '', yes
   
   onSubmit: (event) ->
+    event.stopPropagation()
     event.preventDefault()
     user = Parse.User.current()
     user.save @attrs,
@@ -55,6 +56,7 @@ App.EditProfileView = Parse.View.extend
     @attrs[event.target.id] = event.target.value
   
   onCancel: (event) ->
+    event.stopPropagation()
     event.preventDefault()
     app.navigate '', yes
   

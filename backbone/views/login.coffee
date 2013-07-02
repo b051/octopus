@@ -1,84 +1,74 @@
-window.SignupView = Parse.View.extend
-  className: 'account-container register stacked'
+App.SignupView = Parse.View.extend
+  className: 'row-fluid login-wrapper'
   
   initialize: ->
     @user = new Parse.User()
     @render()
   
   template: _.template $('#content-signup').html()
-  extraTemplate: _.template $('#content-signupextra').html()
   
   render: ->
-    @$el.html @template()
-    $('.footer').before @$el, @extraTemplate()
+    @$el.html(@template()).appendTo($('body'))
     @
   
   events:
-    "change": "change"
     "submit form": "onSubmit"
+    "click .login": "onSubmit"
   
-  change: (event) ->
-    @user.set event.target.id, event.target.value
+  alert: (error)->
+    App.Alert.show error, @$('.alert-wrapper').empty()
   
   onSubmit: (event) ->
     event.preventDefault()
-    
-    confirm_password = @user.get('confirm_password')
-    @user.unset('confirm_password')
-    
-    firstname = @user.get('firstname')
-    lastname = @user.get('lastname')
-    @user.set('username', "#{firstname} #{lastname}")
-    firstChoice = @user.get('Field')
-    if firstChoice
-      @user.unset('Field')
-    else
-       $.msgbox 'You have to agree the Term of Services'
-       return
-    
-    if not @user.isValid()
-      $.msgbox @user.validationError
-    else
-      @user.signUp null,
-        success: (user) ->
-          app.navigate "", yes
-        error: (user, error) ->
-          $.msgbox error, type:'error'
+    event.stopPropagation()
+    email = @$('input[name=email]').val()
+    password2 = @$('input[name=confirm_password]').val()
+    password = @$('input[name=password]').val()
+    if password2 isnt password
+      return @alert "<b>警告!</b> 两遍密码不一样"
+    @user.set 'username', email
+    @user.set 'email', email
+    @user.set 'password', password
+    @user.set 'first_name', @$('input[name=first_name]').val()
+    @user.set 'last_name', @$('input[name=last_name]').val()
+
+    @user.signUp null,
+      success: (user) ->
+        app.navigate "", yes
+      error: (user, error) =>
+        @alert "<b>Warning!</b> #{error.message}"
 
 
-window.LoginView = Parse.View.extend
-  className: 'account-container stacked'
+App.LoginView = Parse.View.extend
+  className: 'row-fluid login-wrapper'
+  template: _.template $('#content-login').html()
   
   initialize: ->
     @user = new Parse.User()
     @render()
   
-  template: _.template $('#content-login').html()
-  extraTemplate: _.template $('#content-loginextra').html()
-  
   render: ->
-    @$el.html @template()
-    $('.footer').before @$el, @extraTemplate()
+    @$el.html(@template()).appendTo($('body'))
     @
   
   events:
-    "change": "change"
     "submit form": "onSubmit"
+    "click .login": "onSubmit"
   
-  change: (event) ->
-    @user.set event.target.id, event.target.value
+  alert: (error)->
+    App.Alert.show error, @$('.alert-wrapper').empty()
   
   onSubmit: (event) ->
+    event.stopPropagation()
     event.preventDefault()
-    @user.set 'username', @$('#username').val()
-    @user.set 'password', @$('#password').val()
-    console.log @user.isValid()
+    @user.set 'username', @$('input[name=username]').val()
+    @user.set 'password', @$('input[name=password]').val()
     if not @user.isValid()
       $.msgbox @user.validationError
     else
       @user.logIn
         success: (user) ->
           app.navigate "", yes
-        error: (user, error) ->
-          $.msgbox error.message, type:'error'
+        error: (user, error) =>
+          @alert "<b>Warning!</b> #{error.message}"
 

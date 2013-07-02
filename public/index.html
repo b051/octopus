@@ -1,130 +1,81 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 	<head>
-		<meta charset="utf-8">
 		<title>Dashboard :: Octopus</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-		<meta name="apple-mobile-web-app-capable" content="yes">    
-		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css">
-		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600">
-		<link rel="stylesheet" href="css/font-awesome.min.css">
-		<link rel="stylesheet" href="chosen/chosen.min.css">
-		<link rel="stylesheet" href="js/plugins/msgbox/jquery.msgbox.css">
-		<link rel="stylesheet" href="css/base-admin-2.css">
-		<link rel="stylesheet" href="css/base-admin-2-responsive.css">
-		<link rel="stylesheet" href="css/pages/dashboard.css">
-		<link rel="stylesheet" href="css/pages/signin.css">
+		<!-- bootstrap -->
+		<link href="css/bootstrap/bootstrap.css" rel="stylesheet">
+		<link href="css/bootstrap/bootstrap-responsive.css" rel="stylesheet">
+		<link href="css/bootstrap/bootstrap-overrides.css" rel="stylesheet">
 
-		<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+		<!-- libraries -->
+		<link href="css/lib/jquery-ui-1.10.2.custom.css" rel="stylesheet">
+		<link href="css/lib/font-awesome.css" rel="stylesheet">
+
+		<!-- global styles -->
+		<link rel="stylesheet" href="css/layout.css">
+		<link rel="stylesheet" href="css/elements.css">
+		<link rel="stylesheet" href="css/icons.css">
+
+		<!-- this page specific styles -->
+		<link rel="stylesheet" href="css/compiled/index.css" media="screen">
+		<link rel="stylesheet" href="css/compiled/signin.css" media="screen">
+		
+		<!-- open sans font -->
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+		<!-- lato font -->
+		<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
+
 		<!--[if lt IE 9]>
-			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
-	</head>
 <body>
-
-<div class="navbar navbar-inverse navbar-fixed-top">
+<div class="header" style="display:none;">
+	<a href="index.html">
+		<img src="img/logo.png" class="logo">
+	</a>
+</div>
+<div class="navbar navbar-inverse">
 	<div class="navbar-inner">
-		<div class="container">
-			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-				<i class="icon-cog"></i>
-			</a>
-			<a class="brand" href="#">
-				Octopus <sup>0.1</sup>
-			</a>
-			<div class="nav-collapse collapse"></div>
-		</div>
+		<button type="button" class="btn btn-navbar visible-phone" id="menu-toggler">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+		<a class="brand" href="#"><img src="img/logo.png"></a>
+		<ul class="nav pull-right"></ul>
 	</div>
 </div>
 
-<div class="subnavbar">
-	<div class="subnavbar-inner"></div>
+<div id="sidebar-nav">
+	<ul id="dashboard-menu"></ul>
 </div>
 
-<div class="main">
-	<div class="container"></div>
-</div>
-
-<div class="extra">
-	<div class="container">
-		<div class="row">
-			
-			<div class="span3">
-				<h4>About</h4>
-				<ul>
-					<li><a href="javascript:;">About Us</a></li>
-					<li><a href="javascript:;">Twitter</a></li>
-					<li><a href="javascript:;">Facebook</a></li>
-					<li><a href="javascript:;">Google+</a></li>
-				</ul>
-			</div>
-			
-			<div class="span3">
-				<h4>Support</h4>
-				<ul>
-					<li><a href="javascript:;">Frequently Asked Questions</a></li>
-					<li><a href="javascript:;">Ask a Question</a></li>
-					<li><a href="javascript:;">Video Tutorial</a></li>
-					<li><a href="javascript:;">Feedback</a></li>
-				</ul>
-			</div>
-			
-			<div class="span3">
-				<h4>Legal</h4>
-				<ul>
-					<li><a href="javascript:;">License</a></li>
-					<li><a href="javascript:;">Terms of Use</a></li>
-					<li><a href="javascript:;">Privacy Policy</a></li>
-					<li><a href="javascript:;">Security</a></li>
-				</ul>
-			</div>
-			
-			<div class="span3">
-				<h4>Settings</h4>
-				<ul>
-					<li><a href="javascript:;">Consectetur adipisicing</a></li>
-					<li><a href="javascript:;">Eiusmod tempor </a></li>
-					<li><a href="javascript:;">Fugiat nulla pariatur</a></li>
-					<li><a href="javascript:;">Officia deserunt</a></li>
-				</ul>
-			</div>
-			
-		</div>
+<div class="content">
+	<div class="container-fluid">
+		<div id="pad-wrapper"></div>
 	</div>
 </div>
 
-
-<div class="footer">
-	<div class="container">
-		<div class="row">
-			<div id="footer-copyright" class="span6">
-				&copy; 2012-13 Jumpstart UI.
-			</div>
-			<div id="footer-terms" class="span6">
-				Theme by <a href="http://jumpstartui.com" target="_blank">Jumpstart UI</a>
-			</div>
-		</div>
-	</div>
-</div>
-
-
-<!-- Le javascript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
+<!-- scripts -->
 <script src="lib/jquery-2.0.2.min.js"></script>
+<script src="lib/bootstrap.min.js"></script>
 <script src="parse/parse-latest.js"></script>
 <script>_ = Parse._; App = {};</script>
-<script src="lib/bootstrap.min.js"></script>
+<script src="lib/jquery-ui-1.10.2.custom.min.js"></script>
+<!-- knob -->
+<script src="lib/jquery.knob.js"></script>
+<!-- flot charts -->
+<script src="lib/jquery.flot.js"></script>
+<script src="lib/jquery.flot.stack.js"></script>
+<script src="lib/jquery.flot.resize.js"></script>
 <script src="lib/jquery.dataTables.js"></script>
 <script src="lib/DT_bootstrap.js"></script>
-<script src="js/plugins/msgbox/jquery.msgbox.min.js"></script>
-<script src="js/plugins/flot/jquery.flot.js"></script>
-<script src="js/plugins/flot/jquery.flot.pie.js"></script>
-<script src="js/plugins/flot/jquery.flot.resize.js"></script>
-
+<script src="lib/theme.js"></script>
 <script src="js/models/models.js"></script>
-<!-- <script src="js/charts/area.js"></script>
-<script src="js/charts/donut.js"></script> -->
 
 <script type="text/template" id="widget-dropdown">
 <li class="dropdown">
@@ -163,150 +114,207 @@
 </script>
 
 
-<script type="text/template" id="navbar-profile">
-<%= dropdown({text:'Settings', items:[['account/settings', 'Account Settings'], ['privacy', 'Privacy Settings'], '', ['help', 'Help']]}) %>
-<%= dropdown({text:user.get('username'), items:[['account', 'My Profile'], ['groups', 'My Groups'], '', ['logout', 'Logout']]}) %>
-</script>
-
-
-<script type="text/template" id="navbar-noprofile">
-<li class="create-an-account">
-	<a href="#signup" class="">
-		Create an Account
-	</a>
-</li>
-
-<li class="back-to-home">
-	<a href="#" class="">
-		<i class="icon-chevron-left"></i>
-		Back to Homepage
-	</a>
-</li>
-</script>
-
-
 <script type="text/template" id="navbar-search">
-	<input type="text" class="search-query" placeholder="Search">
+<form>
+	<input type="text" class="search" placeholder="Search">
+</form>
 </script>
 
 
-<script type="text/template" id="content-login">
-<div class="content clearfix">
-	<form action="" method="post">
-		<h1>Sign In</h1>
-		
-		<div class="login-fields">
-			<p>Sign in using your registered account:</p>
-			<div class="field username-field">
-				<input type="text" id="username" name="username" value="" placeholder="Username" class="login" />
-			</div>
-			<div class="field password-field">
-				<input type="password" id="password" name="password" value="" placeholder="Password" class="login"/>
+<script type="text/template" id="navbar-notification">
+<a href="#" class="trigger">
+	<i class="icon-warning-sign"></i>
+	<span class="count">8</span>
+</a>
+<div class="pop-dialog">
+	<div class="pointer right">
+		<div class="arrow"></div>
+		<div class="arrow_border"></div>
+	</div>
+	<div class="body">
+		<a href="#" class="close-icon"><i class="icon-remove-sign"></i></a>
+		<div class="notifications">
+			<h3>You have 6 new notifications</h3>
+			<a href="#" class="item">
+				<i class="icon-signin"></i> New user registration
+				<span class="time"><i class="icon-time"></i> 13 min.</span>
+			</a>
+			<a href="#" class="item">
+				<i class="icon-signin"></i> New user registration
+				<span class="time"><i class="icon-time"></i> 18 min.</span>
+			</a>
+			<a href="#" class="item">
+				<i class="icon-envelope-alt"></i> New message from Alejandra
+				<span class="time"><i class="icon-time"></i> 28 min.</span>
+			</a>
+			<a href="#" class="item">
+				<i class="icon-signin"></i> New user registration
+				<span class="time"><i class="icon-time"></i> 49 min.</span>
+			</a>
+			<a href="#" class="item">
+				<i class="icon-download-alt"></i> New order placed
+				<span class="time"><i class="icon-time"></i> 1 day.</span>
+			</a>
+			<div class="footer">
+				<a href="#" class="logout">View all notifications</a>
 			</div>
 		</div>
-		
-		<div class="login-actions">
-			<span class="login-checkbox">
-				<input id="Field" name="Field" type="checkbox" class="field login-checkbox" value="First Choice" tabindex="4" />
-				<label class="choice" for="Field">Keep me signed in</label>
-			</span>
-			<button class="button btn btn-warning btn-large" type="submit">Sign In</button>
-		</div>
-		
-		<div class="login-social">
-			<p>Sign in using social network:</p>
-			<div class="twitter">
-				<a href="javascript:;" class="btn_1">Login with Twitter</a>
-			</div>
-			<div class="fb">
-				<a href="javascript:;" class="btn_2">Login with Facebook</a>
-			</div>
-		</div>
-	</form>
+	</div>
 </div>
 </script>
 
+<script type="text/template" id="navbar-messages">
+<a href="#" class="trigger">
+	<i class="icon-envelope-alt"></i>
+</a>
+<div class="pop-dialog">
+	<div class="pointer right">
+		<div class="arrow"></div>
+		<div class="arrow_border"></div>
+	</div>
+	<div class="body">
+		<a href="#" class="close-icon"><i class="icon-remove-sign"></i></a>
+		<div class="messages">
+			<a href="#" class="item">
+				<img src="img/contact-img.png" class="display" />
+				<div class="name">Alejandra Galván</div>
+				<div class="msg">
+					There are many variations of available, but the majority have suffered alterations.
+				</div>
+				<span class="time"><i class="icon-time"></i> 13 min.</span>
+			</a>
+			<a href="#" class="item">
+				<img src="img/contact-img2.png" class="display" />
+				<div class="name">Alejandra Galván</div>
+				<div class="msg">
+					There are many variations of available, have suffered alterations.
+				</div>
+				<span class="time"><i class="icon-time"></i> 26 min.</span>
+			</a>
+			<a href="#" class="item last">
+				<img src="img/contact-img.png" class="display" />
+				<div class="name">Alejandra Galván</div>
+				<div class="msg">
+					There are many variations of available, but the majority have suffered alterations.
+				</div>
+				<span class="time"><i class="icon-time"></i> 48 min.</span>
+			</a>
+			<div class="footer">
+				<a href="#" class="logout">View all messages</a>
+			</div>
+		</div>
+	</div>
+</div>
+</script>
 
-<script type="text/template" id="content-loginextra">
-<div class='login-extra'>
-Don&#x27;t have an account? <a href="#signup">Sign Up</a><br/>Remind <a href="#">Password</a>
+<script type="text/template" id="content-login">
+<div class="clearfix"></div>
+<form class="span4 box">
+	<div class="content-wrap">
+		<h6>Log in</h6>
+		<input class="span12" type="text" placeholder="E-mail address" name="username">
+		<input class="span12" type="password" placeholder="Your password" name="password">
+		<a href="#" class="forgot">Forgot password?</a>
+		<div class="remember">
+			<input id="remember-me" type="checkbox">
+			<label for="remember-me">Remember me</label>
+		</div>
+		<a class="btn-glow primary login" href="#">Log in</a>
+	</div>
+</form>
+<div class="span3 no-account alert-wrapper"></div>
+<div class="span4 no-account">
+	<p>Don&#x27;t have an account?</p>
+	<a href="#signup">Sign up</a>
 </div>
 </script>
 
 
 <script type="text/template" id="content-signup">
-<div class="content clearfix">
-	<form>
-		<h1>Create Your Account</h1>
-
-		<div class="login-social">
-			<p>Sign in using social network:</p>
-			<div class="twitter">
-				<a href="#" class="btn_1">Login with Twitter</a>
-			</div>
-			<div class="fb">
-				<a href="#" class="btn_2">Login with Facebook</a>
-			</div>
-		</div>
-		
-		<div class="login-fields">
-			<p>Create your free account:</p>
-			<div class="field">
-				<label for="firstname">First Name:</label>
-				<input type="text" id="firstname" name="firstname" value="" placeholder="First Name" class="login" />
-			</div>
-			<div class="field">
-				<label for="lastname">Last Name:</label>
-				<input type="text" id="lastname" name="lastname" value="" placeholder="Last Name" class="login" />
-			</div>
-			
-			<div class="field">
-				<label for="email">Email Address:</label>
-				<input type="text" id="email" name="email" value="" placeholder="Email" class="login"/>
-			</div>
-			<div class="field">
-				<label for="password">Password:</label>
-				<input type="password" id="password" name="password" value="" placeholder="Password" class="login"/>
-			</div>
-			<div class="field">
-				<label for="confirm_password">Confirm Password:</label>
-				<input type="password" id="confirm_password" name="confirm_password" value="" placeholder="Confirm Password" class="login"/>
-			</div>
-		</div>
-
-		<div class="login-actions">
-			<span class="login-checkbox">
-				<input id="Field" name="Field" type="checkbox" class="field login-checkbox" value="First Choice" tabindex="4" />
-				<label class="choice" for="Field">I have read and agree with the Terms of Use.</label>
-			</span>
-
-			<button class="button btn btn-primary btn-large">Register</button>
-		</div>
-	</form>
+<div class="clearfix"></div>
+<form class="box">
+	<div class="content-wrap">
+		<h6>Sign Up</h6>
+		<input class="span6" type="text" name="first_name" placeholder="First name">
+		<input class="span6" type="text" name="last_name" placeholder="Last name">
+		<input class="span12" type="text" name="email" placeholder="E-mail address">
+		<input class="span12" type="password" name="password" placeholder="Password">
+		<input class="span12" type="password" name="confirm_password" placeholder="Confirm Password">
+		<a class="btn-glow primary login" href="#">Sign up</a>
+	</div>
+</form>
+<div class="span3 no-account alert-wrapper"></div>
+<div class="span4 no-account">
+	<p>Already have an account?</p>
+	<a href="#login">Sign in</a>
 </div>
 </script>
 
-
-<script type="text/template" id="content-signupextra">
-<div class='login-extra'>
-	Already have an account? <a href="#login">Login</a>
-</div>
-</script>
-
-
-<script type="text/template" id="subnavbar-container">
-<a class="btn-subnavbar collapsed" data-toggle="collapse" data-target=".subnav-collapse">
-	<i class="icon-reorder"></i>
-</a>
-
-<div class="subnav-collapse collapse">
-	<ul class="mainnav">
-		<%= dropdown({icon:'icon-home', text:'Home'}) %>
-		<%= dropdown({icon:'icon-th', text:'Components', items:[['elements', 'Elements'], ['validation', 'Validation'], ['jqueryui', 'jQuery UI'], ['charts', 'Charts'], ['popups', 'Popups/Notifications']]}) %>
-		<%= dropdown({icon:'icon-copy', text:'Sample Pages', items:[['pricing', 'Pricing Plans']]}) %>
-		<%= dropdown({icon:'icon-external-link', text:'Extra Pages', items:[['error', 'Error', [['', 'Second level link']]]]}) %>
+<script type="text/template" id="sidebar-menu">
+<li>
+	<a href="#">
+		<i class="icon-home"></i>
+		<span>Home</span>
+	</a>
+</li>
+<li>
+	<a href="#chart-showcase">
+		<i class="icon-signal"></i>
+		<span>Charts</span>
+	</a>
+</li>
+<li>
+	<a class="dropdown-toggle" href="#">
+		<i class="icon-group"></i>
+		<span>Users</span>
+		<i class="icon-chevron-down"></i>
+	</a>
+	<ul class="submenu">
+		<li><a href="#user-list">User list</a></li>
+		<li><a href="#new-user">New user form</a></li>
+		<li><a href="#user-profile">User profile</a></li>
 	</ul>
-</div>
+</li>
+<li>
+	<a class="dropdown-toggle" href="#">
+		<i class="icon-edit"></i>
+		<span>Forms</span>
+		<i class="icon-chevron-down"></i>
+	</a>
+	<ul class="submenu">
+		<li><a href="#form-showcase">Form showcase</a></li>
+		<li><a href="#form-wizard">Form wizard</a></li>
+	</ul>
+</li>
+<li>
+	<a href="#gallery">
+		<i class="icon-picture"></i>
+		<span>Gallery</span>
+	</a>
+</li>
+<li>
+	<a href="#calendar">
+		<i class="icon-calendar-empty"></i>
+		<span>Calendar</span>
+	</a>
+</li>
+<li>
+	<a href="#tables">
+		<i class="icon-th-large"></i>
+		<span>Tables</span>
+	</a>
+</li>
+<li>
+	<a class="dropdown-toggle ui-elements" href="#">
+		<i class="icon-code-fork"></i>
+		<span>UI Elements</span>
+		<i class="icon-chevron-down"></i>
+	</a>
+	<ul class="submenu">
+		<li><a href="#ui-elements">UI Elements</a></li>
+		<li><a href="#icons">Icons</a></li>
+	</ul>
+</li>
 </script>
 
 
@@ -500,14 +508,17 @@ Download all message on connection
 
 </fieldset></form>
 </script>
-<script src="js/views/about.js"></script>
+<script src="js/main.js"></script>
+<script src="js/views/navbar.js"></script>
+<script src="js/views/sidebar.js"></script>
 <script src="js/views/login.js"></script>
 <script src="js/views/profile.js"></script>
 <script src="js/views/home.js"></script>
-<script src="js/views/paginator.js"></script>
-<script src="js/views/winedetails.js"></script>
-<script src="js/views/winelist.js"></script>
-<script src="js/views/header.js"></script>
-<script src="js/main.js"></script>
+<script type="text/javascript">
+$(function(){
+  window.app = new App.Router();
+  Parse.history.start();
+});
+</script>
 </body>
 </html>

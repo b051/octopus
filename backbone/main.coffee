@@ -1,4 +1,23 @@
-window.Alert = class Alert
+App.Zh_CN =
+  "First name": "姓"
+  "Last name": "名"
+  "Sign Up": "注册"
+
+App.translate = App.Zh_CN
+
+$.fn.extend
+  i18n: ->
+    @find('*').val (index, value) ->
+      if value
+        return App.translate[value] or value
+      value
+    
+    $('input', @).attr 'placeholder', (index, value) ->
+      changed = App.translate[value] or value
+      return changed
+    @
+
+class App.Alert
   
   @displayValidationErrors: (messages) ->
     for key, message of messages
@@ -17,12 +36,10 @@ window.Alert = class Alert
     $(".help-inline", controlGroup).html ""
     $(".help-block", controlGroup).html ""
 
-  @show: (title, text, klass) ->
-    $(".alert")
-    .removeClass("alert-error alert-warning alert-success alert-info")
-    .addClass(klass)
-    .html("<strong>#{title}</strong> #{text}")
-    .show()
+  @show: (warning, appendTo = $('body')) ->
+    alert = $('<div>', class:'alert').append($('<button>', class:'close', 'data-dismiss':'alert', type:'button', html:'&times;'), warning)
+    console.log alert, warning
+    alert.appendTo(appendTo)
 
   @hide: ->
     $(".help-inline").html ''
@@ -30,7 +47,7 @@ window.Alert = class Alert
     $('.error').removeClass 'error'
     $(".alert").hide()
 
-AppRouter = Parse.Router.extend
+App.Router = Parse.Router.extend
   routes:
     "": 'home'
     login: 'login'
@@ -38,19 +55,14 @@ AppRouter = Parse.Router.extend
     signup: 'signup'
     'account': 'account'
     'account/:tab': 'account'
-    wines: "list"
-    "wines/page/:page": "list"
-    "wines/add": "addWine"
-    "wines/:id": "wineDetails"
-    about: "about"
 
   initialize: ->
-    @navbar = new NavBar
-    @subnavbar = new SubNavBar
+    @navbar = new App.NavBar
+    @sidebar = new App.SideBar
     @navbar.render()
-    @subnavbar.render()
+    @sidebar.render()
     Parse.history.on 'route', =>
-      @subnavbar.update()
+      @sidebar.update()
 
   home: ->
     if not Parse.User.current()
@@ -65,20 +77,21 @@ AppRouter = Parse.Router.extend
       @_switchMain @homeView.el
       console.log 'render navbar'
       @navbar.render()
-      @subnavbar.update()
+      @sidebar.update()
   
   _switchMain: (el) ->
     $('.main>.container').empty().append el
   
   _switchToLogin: (toLogin) ->
-    @navbar.update()
-    @subnavbar.update()
-    $('.main >.container, .extra, .subnavbar-inner, .footer')[if toLogin then 'hide' else 'show']()
-    $('.login-extra, .account-container.stacked').remove()
+    $('html')[if toLogin then 'addClass' else 'removeClass'] 'login-bg'
+    $('#sidebar-nav, .navbar, body > .content')[if toLogin then 'hide' else 'show']()
+    $('.header')[if toLogin then 'show' else 'hide']()
+    $('.login-wrapper').remove()
+    @sidebar.update()
   
   login: ->
     @_switchToLogin yes
-    new LoginView
+    new App.LoginView
 
   logout: ->
     Parse.User.logOut()
@@ -87,41 +100,8 @@ AppRouter = Parse.Router.extend
   
   signup: ->
     @_switchToLogin yes
-    new SignupView
+    new App.SignupView
   
   account: (tab) ->
     @_switchMain new App.AccountView(tab).el
-  
-  list: (page) ->
-    $('.header').fadeIn()
-    p = (if page then parseInt(page, 10) else 1)
-    wineList = new WineCollection()
-    wineList.fetch success: ->
-      $("#content").html new WineListView(
-        model: wineList
-        page: p
-      ).el
 
-    # @headerView.selectMenuItem "home-menu"
-
-  wineDetails: (id) ->
-    $('.header').fadeIn()
-    wine = new Wine(_id: id)
-    wine.fetch success: ->
-      $("#content").html new WineView(model: wine).el
-
-    # @headerView.selectMenuItem()
-
-  addWine: ->
-    wine = new Wine()
-    $("#content").html new WineView(model: wine).el
-    # @headerView.selectMenuItem "add-menu"
-
-  about: ->
-    template 'AboutView', =>
-      @aboutView = new AboutView() unless @aboutView
-      $("#content").html @aboutView.el
-      # @headerView.selectMenuItem "about-menu"
-
-window.app = new AppRouter()
-Parse.history.start()
