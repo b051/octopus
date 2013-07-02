@@ -26,9 +26,6 @@ App.NavBar = Parse.View.extend
       @$el.empty().append @searchForm.el, @notifications.el, @messagesDropdown.el, profileView
     else
       @$el.empty()
-  
-  update: ->
-    @noprofileView?.update Parse.history.fragment
 
 
 NavNotificationDropDown = Parse.View.extend
@@ -74,7 +71,7 @@ NavMessagesView = NavNotificationDropDown.extend
   template: _.template $('#navbar-messages').html()
   
   render: ->
-    @$el.html @template {}
+    @$el.html @template count:3
     @
 
 
@@ -83,7 +80,7 @@ NavNotificationView = NavNotificationDropDown.extend
   template: _.template $('#navbar-notification').html()
   
   render: ->
-    @$el.html @template {}
+    @$el.html @template count:6
     @
 
 

@@ -13,7 +13,8 @@
 		<!-- libraries -->
 		<link href="css/lib/jquery-ui-1.10.2.custom.css" rel="stylesheet">
 		<link href="css/lib/font-awesome.css" rel="stylesheet">
-
+		<link href='css/lib/fullcalendar.css' rel='stylesheet'>
+		<link href='css/lib/fullcalendar.print.css' rel='stylesheet' media='print'>
 		<!-- global styles -->
 		<link rel="stylesheet" href="css/layout.css">
 		<link rel="stylesheet" href="css/elements.css">
@@ -22,6 +23,7 @@
 		<!-- this page specific styles -->
 		<link rel="stylesheet" href="css/compiled/index.css" media="screen">
 		<link rel="stylesheet" href="css/compiled/signin.css" media="screen">
+		<link rel="stylesheet" href="css/compiled/calendar.css" media="screen">
 		
 		<!-- open sans font -->
 		<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
@@ -67,6 +69,7 @@
 <script src="parse/parse-latest.js"></script>
 <script>_ = Parse._; App = {};</script>
 <script src="lib/jquery-ui-1.10.2.custom.min.js"></script>
+<script src='lib/fullcalendar.min.js'></script>
 <!-- knob -->
 <script src="lib/jquery.knob.js"></script>
 <!-- flot charts -->
@@ -124,7 +127,10 @@
 <script type="text/template" id="navbar-notification">
 <a href="#" class="trigger">
 	<i class="icon-warning-sign"></i>
-	<span class="count">8</span>
+<% if (typeof count != 'undefined') { %>
+	<span class="count"><%= count %></span>
+<% } %>
+	
 </a>
 <div class="pop-dialog">
 	<div class="pointer right">
@@ -166,6 +172,9 @@
 <script type="text/template" id="navbar-messages">
 <a href="#" class="trigger">
 	<i class="icon-envelope-alt"></i>
+<% if (typeof count != 'undefined') { %>
+	<span class="count"><%= count %></span>
+<% } %>
 </a>
 <div class="pop-dialog">
 	<div class="pointer right">
@@ -508,12 +517,39 @@ Download all message on connection
 
 </fieldset></form>
 </script>
+
+
+<script type="text/template" id="content-calendar">
+<div class="span6">
+	<div class='calendar'></div>
+	<div class="new-event popup">
+		<div class="pointer">
+			<div class="arrow"></div>
+			<div class="arrow_border"></div>
+		</div>
+		<i class="close-pop table-delete"></i>
+		<h5>New event popup example</h5>
+		<div class="field">
+			Date: 
+			<span class="date">Thu, 18 April</span>
+		</div>
+		<div class="field">
+			Event:
+			<input type="text" class="event-input" />
+		</div>
+		<input type="submit" value="Create" class="btn-glow primary">
+	</div>
+</div>
+</script>
+
 <script src="js/main.js"></script>
 <script src="js/views/navbar.js"></script>
 <script src="js/views/sidebar.js"></script>
 <script src="js/views/login.js"></script>
 <script src="js/views/profile.js"></script>
 <script src="js/views/home.js"></script>
+<script src="js/views/calendar.js"></script>
+
 <script type="text/javascript">
 $(function(){
   window.app = new App.Router();

@@ -2,6 +2,9 @@ App.Zh_CN = {}
 
 App.translate = App.Zh_CN
 
+$.template = (name) ->
+  _.template $("##{name}").html()
+
 $.fn.extend
   textNodes: ->
     whitespace = /^\s*$/
@@ -52,6 +55,7 @@ App.Router = Parse.Router.extend
     login: 'login'
     logout: 'logout'
     signup: 'signup'
+    calendar: 'calendar'
     'account': 'account'
     'account/:tab': 'account'
 
@@ -79,7 +83,7 @@ App.Router = Parse.Router.extend
       @sidebar.update()
   
   _switchMain: (el) ->
-    $('.main>.container').empty().append el
+    $('#pad-wrapper').empty().append el
   
   _switchToLogin: (toLogin) ->
     $('html')[if toLogin then 'addClass' else 'removeClass'] 'login-bg'
@@ -104,3 +108,6 @@ App.Router = Parse.Router.extend
   account: (tab) ->
     @_switchMain new App.AccountView(tab).el
 
+  calendar: ->
+    @calendarView ?= new App.CalendarView
+    @_switchMain @calendarView.el

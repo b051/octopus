@@ -15,6 +15,8 @@ App.SideBar = Parse.View.extend
     activeTab = 0
     if fragment in ['charts']
       activeTab = 1
+    if fragment in ['calendar']
+      activeTab = 5
     @$('> li').each (index, li) =>
       if index is activeTab
         $(li).addClass('active', duration:200)
