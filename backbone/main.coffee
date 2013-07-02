@@ -55,6 +55,7 @@ App.Router = Parse.Router.extend
     login: 'login'
     logout: 'logout'
     signup: 'signup'
+    charts: 'charts'
     calendar: 'calendar'
     'account': 'account'
     'account/:tab': 'account'
@@ -111,3 +112,10 @@ App.Router = Parse.Router.extend
   calendar: ->
     @calendarView ?= new App.CalendarView
     @_switchMain @calendarView.el
+    @calendarView.update()
+
+  charts: ->
+    @chartsView ?= new App.ChartsView
+    @_switchMain @chartsView.el
+    @chartsView.update()
+

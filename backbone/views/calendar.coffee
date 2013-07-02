@@ -9,6 +9,9 @@ App.CalendarView = Parse.View.extend
   
   render: ->
     @$el.html @template {}
+    @
+  
+  update: ->
     date = new Date()
     d = date.getDate()
     m = date.getMonth()
@@ -49,13 +52,8 @@ App.CalendarView = Parse.View.extend
         url: 'http://google.com/'
       ]
       eventBackgroundColor: '#278ccf'
-    @$ =>
-      setTimeout =>
-        @fullCalendar options
-        @fullCalendar 'render'
-      , 100
-
-    @
+    @fullCalendar options
+    @fullCalendar 'render'
   
   events:
     'click .popup .close-pop': 'closeEvent'
