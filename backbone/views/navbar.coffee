@@ -31,41 +31,24 @@ App.NavBar = Parse.View.extend
     @noprofileView?.update Parse.history.fragment
 
 
-NavMessagesView = Parse.View.extend
+NavNotificationDropDown = Parse.View.extend
+  
   tagName: 'li'
+  
   className: 'notification-dropdown hidden-phone'
-  template: _.template $('#navbar-messages').html()
-  
-  initialize: ->
-    @render()
-  
-  render: ->
-    @$el.html @template {}
-    @
-
-
-NavNotificationView = Parse.View.extend
-  tagName: 'li'
-  className: 'notification-dropdown hidden-phone'
-  
-  initialize: ->
-    $('body').click @closeMenu.bind @
-    @render()
-  
-  template: _.template $('#navbar-notification').html()
-  
-  render: ->
-    @$el.html @template {}
-    @dialog = @$('.pop-dialog')
-    @trigger = @$('.trigger')
-    @
   
   events:
     'click .pop-dialog': 'stopEvent'
     'click .pop-dialog .close-icon': 'closeMenu'
     'click .trigger': 'openMenu'
   
-  closeMenu: (event)->
+  initialize: ->
+    $('body').click @closeMenu.bind @
+    @render()
+    @dialog = @$('.pop-dialog')
+    @trigger = @$('.trigger')
+  
+  closeMenu: (event) ->
     if event.target.className is 'close-icon'
       stopEvent(event)
     @dialog.removeClass('is-visible')
@@ -86,6 +69,24 @@ NavNotificationView = Parse.View.extend
       @trigger.removeClass('active')
 
 
+NavMessagesView = NavNotificationDropDown.extend
+  
+  template: _.template $('#navbar-messages').html()
+  
+  render: ->
+    @$el.html @template {}
+    @
+
+
+NavNotificationView = NavNotificationDropDown.extend
+  
+  template: _.template $('#navbar-notification').html()
+  
+  render: ->
+    @$el.html @template {}
+    @
+
+
 NavSearchForm = Parse.View.extend
   tagName: 'li'
   className: 'hidden-phone'
@@ -98,3 +99,4 @@ NavSearchForm = Parse.View.extend
   render: ->
     @$el.html @template {}
     @
+
