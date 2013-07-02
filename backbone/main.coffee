@@ -1,7 +1,4 @@
-App.Zh_CN =
-  "First name": "姓"
-  "Last name": "名"
-  "Sign Up": "注册"
+App.Zh_CN = {}
 
 App.translate = App.Zh_CN
 

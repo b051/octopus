@@ -25,7 +25,7 @@ App.SignupView = Parse.View.extend
     password2 = @$('input[name=confirm_password]').val()
     password = @$('input[name=password]').val()
     if password2 isnt password
-      return @alert "<b>警告!</b> 两遍密码不一样"
+      return @alert "<b>Warning!</b> password does not match"
     @user.set 'username', email
     @user.set 'email', email
     @user.set 'password', password
