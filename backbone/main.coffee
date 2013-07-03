@@ -72,7 +72,6 @@ App.Router = Parse.Router.extend
     if not Parse.User.current()
       route = Parse.history.fragment
       if route not in ['login', 'signup']
-        @navbar.update()
         return app.navigate 'login', yes
     else
       Parse.User.current().fetch()
