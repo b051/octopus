@@ -7,7 +7,6 @@ App.HomeView = Parse.View.extend
   template: _.template $('#content-home').html()
 
   initialize: ->
-    @render()
   
   render: ->
     collection = new ToolCollection()

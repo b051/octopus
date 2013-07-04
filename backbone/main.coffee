@@ -94,13 +94,14 @@ App.Router = Parse.Router.extend
       @navbar.render()
       view = next()
       @_switchMain view.el
+      view.render()
   
   _switchMain: (el) ->
     $('#pad-wrapper').empty().append el
   
   _switchToLogin: (toLogin) ->
     $('html')[if toLogin then 'addClass' else 'removeClass'] 'login-bg'
-    $('#sidebar-nav, .navbar, body > .content')[if toLogin then 'hide' else 'show']()
+    $('#sidebar-nav, .navbar, #pad-wrapper')[if toLogin then 'hide' else 'show']()
     $('.header')[if toLogin then 'show' else 'hide']()
     $('.login-wrapper').remove()
     @sidebar.update()
@@ -133,12 +134,9 @@ App.Router = Parse.Router.extend
   
   charts: ->
     @requireLogin ->
-      @chartsView ?= new App.ChartsView
-      @chartsView.update()
+      new App.ChartsView
   
   listMeasurings: ->
     @requireLogin ->
-      @chartsView ?= new App.ChartsView
-      @chartsView.update()
-    
+      new App.ChartsView
 

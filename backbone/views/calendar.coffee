@@ -5,7 +5,6 @@ App.CalendarView = Parse.View.extend
   template: $.template 'content-calendar'
   
   initialize: ->
-    @render()
   
   render: ->
     @$el.html @template {}
@@ -50,22 +49,10 @@ App.CalendarView = Parse.View.extend
       ]
       eventBackgroundColor: '#278ccf'
     @fullCalendar options
-    $ =>
-      setTimeout =>
-        @update()
-      , 10
-    @
-  
-  update: ->
-    @fullCalendar 'render'
     @
   
   events:
     'click .popup .close-pop': 'closeEvent'
-    'all' : 'x'
-    
   
-  x: ->
-    console.log 'xxx'
   closeEvent: (event) ->
     $(event.target).parent('.new-event').fadeOut('fast')
