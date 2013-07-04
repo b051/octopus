@@ -12,8 +12,12 @@
 
 		<!-- libraries -->
 		<link href="css/lib/jquery-ui-1.10.2.custom.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/lib/uniform.default.css">
 		<link href="css/lib/font-awesome.css" rel="stylesheet">
 		<link href='css/lib/fullcalendar.css' rel='stylesheet'>
+		<link rel="stylesheet" href="chosen/chosen.min.css" media="screen">
+		<link rel="stylesheet" href="css/lib/bootstrap-wysihtml5.css" type="text/css" media="screen">
+		<link rel="stylesheet" href="css/lib/bootstrap.datepicker.css" type="text/css" media="screen">
 		<link href='css/lib/fullcalendar.print.css' rel='stylesheet' media='print'>
 		<link href="css/lib/morris.css" rel="stylesheet">
 		<!-- global styles -->
@@ -25,13 +29,10 @@
 		<link rel="stylesheet" href="css/compiled/index.css" media="screen">
 		<link rel="stylesheet" href="css/compiled/signin.css" media="screen">
 		<link rel="stylesheet" href="css/compiled/calendar.css" media="screen">
-    <link rel="stylesheet" href="css/compiled/chart-showcase.css" media="screen">
-		
+		<link rel="stylesheet" href="css/compiled/chart-showcase.css" media="screen">
+		<link rel="stylesheet" href="css/compiled/form-showcase.css" media="screen">
 		<!-- open sans font -->
 		<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
-
-		<!-- lato font -->
-		<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
 
 		<!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -66,10 +67,15 @@
 </div>
 
 <!-- scripts -->
+<script src="lib/wysihtml5-0.3.0.js"></script>
 <script src="lib/jquery-2.0.2.min.js"></script>
 <script src="lib/bootstrap.min.js"></script>
 <script src="parse/parse-latest.js"></script>
 <script>_ = Parse._; App = {};</script>
+<script src="lib/bootstrap-wysihtml5-0.0.2.js"></script>
+<script src="lib/bootstrap.datepicker.js"></script>
+<script src="lib/jquery.uniform.min.js"></script>
+<script src="chosen/chosen.jquery.min.js"></script>
 <script src="lib/jquery-ui-1.10.2.custom.min.js"></script>
 <script src='lib/fullcalendar.min.js'></script>
 <!-- knob -->
@@ -254,7 +260,226 @@
 </script>
 
 </div>
-	
+
+<div class="form-templates">
+<script type="text/template" id="form-measuring">
+<div class="span8 column">
+	<form>
+		<div class="field-box">
+			<label>Normal input:</label>
+			<input class="span8" type="text" />
+		</div>
+		<div class="field-box">
+			<label>Inline input:</label>
+			<input class="span8 inline-input" placeholder=".inline-input" type="text">
+		</div>							
+		<div class="field-box">
+			<label>Inline Password:</label>
+			<input class="span8 inline-input" type="password" value="blablabla" />
+		</div>
+		<div class="field-box">
+			<label>Read only:</label>
+			<input class="span8 inline-input" type="text" 
+				readonly="readonly" value="read only input">
+		</div>
+		<div class="field-box">
+			<label>With tooltip:</label>
+			<input class="span8 inline-input" data-toggle="tooltip" data-trigger="focus" title="Please insert a valid email address" data-placement="right" type="text" />
+		</div>
+		<div class="field-box">
+			<label>Predefined value:</label>
+			<div class="predefined">
+				<span class="value">http:%2F%2F</span>
+				<input class="span8 inline-input" type="text">
+			</div>
+		</div>
+		<div class="field-box">
+			<label>With max length:</label>
+			<input class="span8 inline-input" type="text" placeholder="max 20 characters here" maxlength="20" />
+		</div>
+		<div class="field-box">
+			<label>Textarea:</label>
+			<textarea class="span8" rows="4"></textarea>
+		</div>
+		<div class="field-box">
+			<label>Checkboxes:</label>
+			<label class="checkbox">
+				<input type="checkbox"> Option 1
+			</label>
+			<label class="checkbox">
+				<input type="checkbox"> Option 2
+			</label>
+			<label class="checkbox">
+				<input type="checkbox"> Option 3
+			</label>
+		</div>
+		<div class="field-box">
+			<label>Radiobuttons:</label>
+			<div class="span8">
+				<label class="radio">
+					<input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+					Option one is this and that—be sure to include why it%27s great
+				</label>
+				<label class="radio">
+					<input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+					Option two can be something else and selecting it will deselect option one
+				</label>
+			</div>
+		</div>
+		<div class="field-box">
+			<label>Wysiwyg:</label>
+			<div class="wysi-column">
+				<textarea id="wysi" class="span10 wysihtml5" rows="5"></textarea>
+			</div>
+		</div>
+	</form>
+</div>
+
+<!-- right column -->
+<div class="span4 column pull-right">
+	<form>
+		<div class="field-box">
+			<label>Select:</label>
+			<div class="ui-select">
+				<select>
+					<option selected>Dropdown</option>
+					<option>Custom selects</option>
+					<option>Pure css styles</option>
+				</select>
+			</div>
+		</div>
+		<div class="field-box">
+			<label>Select2 plugin styled:</label>
+			<select style="width:250px" class="select2">
+				<option></option>
+				<option value="AK">Alaska</option>
+				<option value="HI">Hawaii</option>
+				<option value="CA">California</option>
+				<option value="NV">Nevada</option>
+				<option value="OR">Oregon</option>
+				<option value="WA">Washington</option>
+				<option value="AZ">Arizona</option>
+				<option value="CO">Colorado</option>
+				<option value="ID">Idaho</option>
+				<option value="MT">Montana</option>
+				<option value="NE">Nebraska</option>
+				<option value="NM">New Mexico</option>
+				<option value="ND">North Dakota</option>
+				<option value="UT">Utah</option>
+				<option value="WY">Wyoming</option>
+				<option value="AL">Alabama</option>
+				<option value="AR">Arkansas</option>
+				<option value="IL">Illinois</option>
+				<option value="IA">Iowa</option>
+				<option value="KS">Kansas</option>
+				<option value="KY">Kentucky</option>
+				<option value="LA">Louisiana</option>
+				<option value="MN">Minnesota</option>
+				<option value="MS">Mississippi</option>
+				<option value="MO">Missouri</option>
+				<option value="OK">Oklahoma</option>
+				<option value="SD">South Dakota</option>
+				<option value="TX">Texas</option>
+				<option value="TN">Tennessee</option>
+				<option value="WI">Wisconsin</option>
+				<option value="CT">Connecticut</option>
+				<option value="DE">Delaware</option>
+				<option value="FL">Florida</option>
+				<option value="GA">Georgia</option>
+				<option value="IN">Indiana</option>
+				<option value="ME">Maine</option>
+				<option value="MD">Maryland</option>
+				<option value="MA">Massachusetts</option>
+				<option value="MI">Michigan</option>
+				<option value="NH">New Hampshire</option>
+				<option value="NJ">New Jersey</option>
+				<option value="NY">New York</option>
+				<option value="NC">North Carolina</option>
+				<option value="OH">Ohio</option>
+				<option value="PA">Pennsylvania</option>
+				<option value="RI">Rhode Island</option>
+				<option value="SC">South Carolina</option>
+				<option value="VT">Vermont</option>
+				<option value="VA">Virginia</option>
+				<option value="WV">West Virginia</option>
+			</select>
+		</div>
+		<div class="field-box">
+			<label>Select2 multiselect:</label>
+			<select style="width:250px" multiple class="select2">
+				<option></option>
+				<option value="AK">Alaska</option>
+				<option value="HI" selected>Hawaii</option>
+				<option value="CA">California</option>
+				<option value="NV">Nevada</option>
+				<option value="OR">Oregon</option>
+				<option value="WA">Washington</option>
+				<option value="AZ">Arizona</option>
+				<option value="CO">Colorado</option>
+				<option value="ID">Idaho</option>
+				<option value="MT">Montana</option>
+				<option value="NE">Nebraska</option>
+				<option value="NM">New Mexico</option>
+				<option value="ND">North Dakota</option>
+				<option value="UT">Utah</option>
+				<option value="WY">Wyoming</option>
+				<option value="AL">Alabama</option>
+				<option value="AR">Arkansas</option>
+				<option value="IL">Illinois</option>
+				<option value="IA">Iowa</option>
+				<option value="KS">Kansas</option>
+				<option value="KY">Kentucky</option>
+				<option value="LA">Louisiana</option>
+				<option value="MN">Minnesota</option>
+				<option value="MS">Mississippi</option>
+				<option value="MO">Missouri</option>
+				<option value="OK">Oklahoma</option>
+				<option value="SD">South Dakota</option>
+				<option value="TX">Texas</option>
+				<option value="TN">Tennessee</option>
+				<option value="WI">Wisconsin</option>
+				<option value="CT">Connecticut</option>
+				<option value="DE">Delaware</option>
+				<option value="FL">Florida</option>
+				<option value="GA">Georgia</option>
+				<option value="IN">Indiana</option>
+				<option value="ME">Maine</option>
+				<option value="MD">Maryland</option>
+				<option value="MA">Massachusetts</option>
+				<option value="MI">Michigan</option>
+				<option value="NH">New Hampshire</option>
+				<option value="NJ">New Jersey</option>
+				<option value="NY">New York</option>
+				<option value="NC">North Carolina</option>
+				<option value="OH">Ohio</option>
+				<option value="PA">Pennsylvania</option>
+				<option value="RI">Rhode Island</option>
+				<option value="SC">South Carolina</option>
+				<option value="VT">Vermont</option>
+				<option value="VA">Virginia</option>
+				<option value="WV">West Virginia</option>
+			</select>
+		</div>
+		<div class="field-box">
+			<label>Input prepend & append:</label>
+			<div class="input-prepend">
+				<span class="add-on">@</span>
+				<input class="input-large" type="text" />
+			</div>
+			<div class="input-append">
+				<input class="input-large" type="text" />
+				<span class="add-on">.00</span>
+			</div>
+		</div>
+		<div class="field-box">
+			<label>Datepicker:</label>
+			<input type="text" value="03/29/2013" class="input-large datepicker" />
+		</div>
+	</form>
+</div>
+</script>
+</div>
+
 <script type="text/template" id="content-home">
 <div class="span12">
 	<div class="widget stacked">
@@ -535,6 +760,7 @@ Download all message on connection
 </div>
 </script>
 
+
 <script src="js/main.js"></script>
 <script src="js/views/navbar.js"></script>
 <script src="js/views/sidebar.js"></script>
@@ -543,7 +769,7 @@ Download all message on connection
 <script src="js/views/home.js"></script>
 <script src="js/views/calendar.js"></script>
 <script src="js/views/charts.js"></script>
-
+<script src="js/views/measuring.js"></script>
 <script type="text/javascript">
 $(function() {
   window.app = new App.Router();

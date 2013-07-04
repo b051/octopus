@@ -139,4 +139,7 @@ App.Router = Parse.Router.extend
   listMeasurings: ->
     @requireLogin ->
       new App.ChartsView
-
+  
+  newMeasuring: ->
+    @requireLogin ->
+      new App.MeasuringView
