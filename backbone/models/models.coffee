@@ -14,9 +14,16 @@ ToolInfo = Parse.Object.extend
 Tool = Parse.Object.extend
   className: 'Tool'
 
+Message = Parse.Object.extend
+  className: 'Message'
+
+MessageCollection = Parse.Collection.extend
+  model: Message
 
 if not exports?
   exports = window
 exports.User = Parse.User
 exports.Toolset = Toolset
 exports.Tool = Tool
+exports.Message = Message
+exports.MessageCollection = MessageCollection

@@ -1,8 +1,31 @@
-dropdown = _.template $('#widget-dropdown').html()
+dropdown = $.template 'widget-dropdown'
+
+minsAgo = (mins) ->
+  new Date(new Date().getTime() - mins * 60 * 1000)
+
+
+timeElapse = (time) ->
+  now = new Date()
+  if not _.isDate(time)
+    time = new Date(time['iso'])
+  
+  elaspe = now.getTime() - time.getTime()
+  if elaspe < 86400000
+    mins = Math.floor elaspe / 60000
+    hours = Math.floor mins / 60
+    mins -= hours * 60
+    if hours
+      return "#{hours} hours"
+    else
+      return "#{mins} mins"
+  else
+    return time.toLocaleDateString()
+
 
 stopEvent = (event) ->
   event.stopPropagation()
   event.preventDefault()
+
 
 App.NavBar = Parse.View.extend
   el: $('.nav')
@@ -68,20 +91,71 @@ NavNotificationDropDown = Parse.View.extend
 
 NavMessagesView = NavNotificationDropDown.extend
   
-  template: _.template $('#navbar-messages').html()
+  template: $.template 'navbar-notification'
+  messageTemplate: $.template 'widget-message'
   
   render: ->
-    @$el.html @template count:3
+    @$el.html @template icon: 'icon-envelope-alt', type: 'messages'
+    
+    collection = new MessageCollection()
+    collection.add [
+      title: 'Alejandra Galván'
+      detail: 'There are many variations of available, but the majority have suffered alterations.'
+      thumbnail: 'img/contact-img.png'
+      time: minsAgo 48
+    ,
+      title: 'Alejandra Galván'
+      detail: 'There are many variations of available, have suffered alterations.'
+      thumbnail: 'img/contact-img2.png'
+      time: minsAgo 26
+    ,
+      title: 'Alejandra Galván'
+      detail: 'There are many variations of available, but the majority have suffered alterations.'
+      thumbnail: 'img/contact-img.png'
+      time: minsAgo 13
+    ]
+    
+    collection.each @addMessage.bind @
+    @$('.count').html if collection.length then collection.length else ''
     @
+  
+  addMessage: (message) ->
+    html = @messageTemplate _.extend message.toJSON(), timeElapse: timeElapse
+    @$('.messages').prepend html
 
 
 NavNotificationView = NavNotificationDropDown.extend
   
-  template: _.template $('#navbar-notification').html()
+  template: $.template 'navbar-notification'
+  notificationTemplate: $.template 'widget-notification'
   
   render: ->
-    @$el.html @template count:6
+    @$el.html @template icon: 'icon-warning-sign', type: 'notifications'
+    @$('.notifications').prepend '<h3>You have <span class="count"></span> new notifications</h3>'
+    objects = [
+      type: 'signin'
+      content: 'New user registration'
+      time: minsAgo 13
+    ,
+      type: 'signin'
+      content: 'New user registration'
+      time: minsAgo 18
+    ,
+      type: 'envelope-alt'
+      content: 'New message from Alejandra'
+      time: minsAgo 28
+    ,
+      type: 'download-alt'
+      content: 'New order placed'
+      time: minsAgo 1440
+    ]
+    _.each objects, @addNotification.bind @
+    @$('.count').html if objects.length then objects.length else ''
     @
+  
+  addNotification: (notification) ->
+    html = @notificationTemplate _.extend notification, timeElapse: timeElapse
+    @$('.notifications .footer').before html
 
 
 NavSearchForm = Parse.View.extend
@@ -91,7 +165,7 @@ NavSearchForm = Parse.View.extend
   initialize: ->
     @render()
   
-  template: _.template $('#navbar-search').html()
+  template: $.template 'navbar-search'
   
   render: ->
     @$el.html @template {}

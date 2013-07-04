@@ -87,7 +87,7 @@ input.search{
 	font-size: 17px;
 	color: #9ba3ad;	
 }
-.navbar-inverse .notification-dropdown .count {
+.navbar-inverse .notification-dropdown .trigger .count {
 	position: absolute;
 	top: 1px;
 	left: 58%;
@@ -207,7 +207,7 @@ input.search{
 	-webkit-transition: all .25s linear;
 	-o-transition: all .25s linear;
 }
-.navbar-inverse  .pop-dialog .messages .item.last {
+.navbar-inverse  .pop-dialog .messages .item:nth-last-child(2) {
 	border-bottom: 0px;
 }
 .navbar-inverse  .pop-dialog .messages .item:hover {
