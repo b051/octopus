@@ -70,6 +70,8 @@ App.Router = Parse.Router.extend
     logout: 'logout'
     signup: 'signup'
     charts: 'charts'
+    measurings : 'listMeasurings'
+    'measurings/add' : 'newMeasuring'
     calendar: 'calendar'
     'account': 'account'
     'account/:tab': 'account'
@@ -82,19 +84,16 @@ App.Router = Parse.Router.extend
     Parse.history.on 'route', =>
       @sidebar.update()
 
-  home: ->
+  requireLogin: (next) ->
     if not Parse.User.current()
       route = Parse.history.fragment
       if route not in ['login', 'signup']
         return app.navigate 'login', yes
     else
-      Parse.User.current().fetch()
       @_switchToLogin no
-      @homeView = new App.HomeView
-      @_switchMain @homeView.el
-      console.log 'render navbar'
       @navbar.render()
-      @sidebar.update()
+      view = next()
+      @_switchMain view.el
   
   _switchMain: (el) ->
     $('#pad-wrapper').empty().append el
@@ -119,16 +118,27 @@ App.Router = Parse.Router.extend
     @_switchToLogin yes
     new App.SignupView
   
+  home: ->
+    @requireLogin ->
+      Parse.User.current().fetch()
+      new App.HomeView
+  
   account: (tab) ->
-    @_switchMain new App.AccountView(tab).el
-
+    @requireLogin ->
+      new App.AccountView(tab)
+  
   calendar: ->
-    @calendarView ?= new App.CalendarView
-    @_switchMain @calendarView.el
-    @calendarView.update()
-
+    @requireLogin ->
+      new App.CalendarView
+  
   charts: ->
-    @chartsView ?= new App.ChartsView
-    @_switchMain @chartsView.el
-    @chartsView.update()
+    @requireLogin ->
+      @chartsView ?= new App.ChartsView
+      @chartsView.update()
+  
+  listMeasurings: ->
+    @requireLogin ->
+      @chartsView ?= new App.ChartsView
+      @chartsView.update()
+    
 
