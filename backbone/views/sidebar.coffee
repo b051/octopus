@@ -10,6 +10,21 @@ App.SideBar = Parse.View.extend
   render: ->
     @$el.html @template {}
   
+  events:
+    'click .dropdown-toggle': 'toggleSubmenu'
+  
+  toggleSubmenu: (event) ->
+    event.preventDefault()
+    toggle = $(event.currentTarget)
+    submenu = toggle.next 'ul.submenu'
+    li = toggle.parent()
+    if li.hasClass 'active'
+      submenu.slideUp 'fast', ->
+        li.removeClass 'active'
+    else
+      submenu.slideDown 'fast', ->
+        li.addClass 'active'
+  
   update: ->
     fragment = Parse.history.fragment
     activeTab = 0

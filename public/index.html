@@ -85,6 +85,7 @@
 <script src="lib/DT_bootstrap.js"></script>
 <script src="js/models/models.js"></script>
 
+<div class="nav-templates">
 <script type="text/template" id="widget-dropdown">
 <li class="dropdown">
 	<a href="#" class="dropdown-toggle" data-toggle="<%= typeof items != 'undefined' ? 'dropdown':''%>">
@@ -224,25 +225,24 @@
 </li>
 <li>
 	<a class="dropdown-toggle" href="#">
+		<i class="icon-th-large"></i>
+		<span>Measuring</span>
+		<i class="icon-chevron-down"></i>
+	</a>
+	<ul class="submenu">
+		<li><a href="#measurings">All measuring</a></li>
+		<li><a href="#measurings/add">Add measuring</a></li>
+	</ul>
+</li>
+<li>
+	<a class="dropdown-toggle" href="#">
 		<i class="icon-group"></i>
 		<span>Users</span>
 		<i class="icon-chevron-down"></i>
 	</a>
 	<ul class="submenu">
-		<li><a href="#user-list">User list</a></li>
-		<li><a href="#new-user">New user form</a></li>
-		<li><a href="#user-profile">User profile</a></li>
-	</ul>
-</li>
-<li>
-	<a class="dropdown-toggle" href="#">
-		<i class="icon-edit"></i>
-		<span>Forms</span>
-		<i class="icon-chevron-down"></i>
-	</a>
-	<ul class="submenu">
-		<li><a href="#form-showcase">Form showcase</a></li>
-		<li><a href="#form-wizard">Form wizard</a></li>
+		<li><a href="#users">Users list</a></li>
+		<li><a href="#users/add">Create user</a></li>
 	</ul>
 </li>
 <li>
@@ -251,26 +251,10 @@
 		<span>Calendar</span>
 	</a>
 </li>
-<li>
-	<a href="#tables">
-		<i class="icon-th-large"></i>
-		<span>Tables</span>
-	</a>
-</li>
-<li>
-	<a class="dropdown-toggle ui-elements" href="#">
-		<i class="icon-code-fork"></i>
-		<span>UI Elements</span>
-		<i class="icon-chevron-down"></i>
-	</a>
-	<ul class="submenu">
-		<li><a href="#ui-elements">UI Elements</a></li>
-		<li><a href="#icons">Icons</a></li>
-	</ul>
-</li>
 </script>
 
-
+</div>
+	
 <script type="text/template" id="content-home">
 <div class="span12">
 	<div class="widget stacked">

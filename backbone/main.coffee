@@ -5,6 +5,20 @@ App.translate = App.Zh_CN
 $.template = (name) ->
   _.template $("##{name}").html()
 
+App.Buffer =
+  commands: []
+  
+  add: (fn) ->
+    commands = @commands
+    commands.push(fn)
+    if @commands.length is 1
+      fn(next)
+    next = ->
+      commands.shift()
+      if commands.length
+        commands[0](next)
+
+
 $.fn.extend
   textNodes: ->
     whitespace = /^\s*$/
