@@ -173,48 +173,6 @@
 </div>
 </script>
 
-<script type="text/template" id="content-login">
-<div class="clearfix"></div>
-<form class="span4 box">
-	<div class="content-wrap">
-		<h6>Log in</h6>
-		<input class="span12" type="text" placeholder="E-mail address" name="username">
-		<input class="span12" type="password" placeholder="Your password" name="password">
-		<a href="#" class="forgot">Forgot password?</a>
-		<div class="remember">
-			<input id="remember-me" type="checkbox">
-			<label for="remember-me">Remember me</label>
-		</div>
-		<a class="btn-glow primary login" href="#">Log in</a>
-	</div>
-</form>
-<div class="span3 no-account alert-wrapper"></div>
-<div class="span4 no-account">
-	<p>Don&#x27;t have an account?</p>
-	<a href="#signup">Sign up</a>
-</div>
-</script>
-
-
-<script type="text/template" id="content-signup">
-<div class="clearfix"></div>
-<form class="box">
-	<div class="content-wrap">
-		<h6>Sign Up</h6>
-		<input class="span6" type="text" name="first_name" placeholder="First name">
-		<input class="span6" type="text" name="last_name" placeholder="Last name">
-		<input class="span12" type="text" name="email" placeholder="E-mail address">
-		<input class="span12" type="password" name="password" placeholder="Password">
-		<input class="span12" type="password" name="confirm_password" placeholder="Confirm Password">
-		<a class="btn-glow primary login" href="#">Sign up</a>
-	</div>
-</form>
-<div class="span3 no-account alert-wrapper"></div>
-<div class="span4 no-account">
-	<p>Already have an account?</p>
-	<a href="#login">Sign in</a>
-</div>
-</script>
 
 <script type="text/template" id="sidebar-menu">
 <li>
@@ -261,35 +219,100 @@
 
 </div>
 
+
+<script type="text/template" id="content-login">
+<div class="clearfix"></div>
+<form class="span4 box">
+	<div class="content-wrap">
+		<h6>Log in</h6>
+		<input class="span12" type="text" placeholder="E-mail address" name="username">
+		<input class="span12" type="password" placeholder="Your password" name="password">
+		<a href="#" class="forgot">Forgot password?</a>
+		<div class="remember">
+			<input id="remember-me" type="checkbox">
+			<label for="remember-me">Remember me</label>
+		</div>
+		<a class="btn-glow primary login" href="#">Log in</a>
+	</div>
+</form>
+<div class="span3 no-account alert-wrapper"></div>
+<div class="span4 no-account">
+	<p>Don&#x27;t have an account?</p>
+	<a href="#signup">Sign up</a>
+</div>
+</script>
+
+
+<script type="text/template" id="content-signup">
+<div class="clearfix"></div>
+<form class="box">
+	<div class="content-wrap">
+		<h6>Sign Up</h6>
+		<input class="span6" type="text" name="first_name" placeholder="First name">
+		<input class="span6" type="text" name="last_name" placeholder="Last name">
+		<input class="span12" type="text" name="email" placeholder="E-mail address">
+		<input class="span12" type="password" name="password" placeholder="Password">
+		<input class="span12" type="password" name="confirm_password" placeholder="Confirm Password">
+		<a class="btn-glow primary login" href="#">Sign up</a>
+	</div>
+</form>
+<div class="span3 no-account alert-wrapper"></div>
+<div class="span4 no-account">
+	<p>Already have an account?</p>
+	<a href="#login">Sign in</a>
+</div>
+</script>
+
+
 <div class="form-templates">
+<script type="text/template" id="widget-form-textfield">
+<div class="field-box">
+	<label><%= title %>:</label>
+	<input class="span8 inline-input" type="text" name="<%= options['name'] %>" <% if (options['readonly']) { %> readonly="readonly" <% } %> placeholder="<%= options['placeholder'] %>"<% if (options['tooltip']) { %> data-toggle="tooltip" data-trigger="focus" title="<%= options.tooltip %>" data-placement="right" <% } %>>
+</div>
+</script>
+
 <script type="text/template" id="form-measuring">
-<div class="span8 column">
+<div class="span8">
 	<form>
+		<h4 class="title">Basic Data</h4>
 		<div class="field-box">
-			<label>Normal input:</label>
-			<input class="span8" type="text" />
+			<label>Identity Number:</label>
+			<input class="span8" type="text" name="id">
 		</div>
-		<div class="field-box">
-			<label>Inline input:</label>
-			<input class="span8 inline-input" placeholder=".inline-input" type="text">
-		</div>							
-		<div class="field-box">
-			<label>Inline Password:</label>
-			<input class="span8 inline-input" type="password" value="blablabla" />
-		</div>
-		<div class="field-box">
-			<label>Read only:</label>
-			<input class="span8 inline-input" type="text" 
-				readonly="readonly" value="read only input">
-		</div>
-		<div class="field-box">
-			<label>With tooltip:</label>
-			<input class="span8 inline-input" data-toggle="tooltip" data-trigger="focus" title="Please insert a valid email address" data-placement="right" type="text" />
-		</div>
+		<%= textField('Name', {'name':'name', tooltip:'Measuring name'}) %>
+		<%= textField('Producer', {'name':'producer'}) %>
+		<%= textField('Serial number', {'name':'sn'}) %>
+		<%= textField('Rannge', {'name':'range'}) %>
+		<%= textField('Scale', {'name':'scale'}) %>
+		<%= textField('Precision', {'name':'precision'}) %>
+		<%= textField('Group', {'name':'group', readonly:true}) %>
+		<%= textField('Rank', {'name':'rank'}) %>
+		<%= textField('Base of rank', {'name':'base_of_rank'}) %>
+		<%= textField('Main instrument', {'name':'main_instrument'}) %>
+		<%= textField('Parts of instrument', {'name':'parts_of_instrument'}) %>
+
+		<h4 class="title">User</h4>
+		<%= textField('Deliverer', {'name':'deliverer'}) %>
+		<%= textField('Deliverer Code', {}) %>
+		<%= textField('Ordering number', {}) %>
+		<%= textField('Beszerzési engedély száma', {}) %>
+		<%= textField('Acquisition price', {}) %>
+		<%= textField('Currency', {}) %>
+		<%= textField('Store place', {}) %>
+		<%= textField('Date of acquisition', {}) %>
+		<%= textField('Username', {}) %>
+		<%= textField('Department', {}) %>
+		<%= textField('Address', {}) %>
+		<%= textField('Phone', {}) %>
+		<%= textField('Fax', {}) %>
+		<%= textField('Email', {}) %>
+		
+		<h4 class="title">Showcase</h4>
 		<div class="field-box">
 			<label>Predefined value:</label>
 			<div class="predefined">
-				<span class="value">http:%2F%2F</span>
+				<span class="value">http://</span>
 				<input class="span8 inline-input" type="text">
 			</div>
 		</div>
@@ -464,16 +487,16 @@
 			<label>Input prepend & append:</label>
 			<div class="input-prepend">
 				<span class="add-on">@</span>
-				<input class="input-large" type="text" />
+				<input class="input-large" type="text">
 			</div>
 			<div class="input-append">
-				<input class="input-large" type="text" />
+				<input class="input-large" type="text">
 				<span class="add-on">.00</span>
 			</div>
 		</div>
 		<div class="field-box">
 			<label>Datepicker:</label>
-			<input type="text" value="03/29/2013" class="input-large datepicker" />
+			<input type="text" value="03/29/2013" class="input-large datepicker">
 		</div>
 	</form>
 </div>
