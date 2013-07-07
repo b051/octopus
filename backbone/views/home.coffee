@@ -2,11 +2,14 @@ ToolCollection = Parse.Collection.extend
   model: Tool
 
 App.HomeView = Parse.View.extend
-  className: 'row'
+  className: 'table-wrapper products-table section'
 
-  template: _.template $('#content-home').html()
+  template: $.template 'table-measurings'
 
   initialize: ->
+  
+  events:
+    'keyup .search': 'search'
   
   render: ->
     collection = new ToolCollection()
@@ -26,9 +29,15 @@ App.HomeView = Parse.View.extend
       quantity: 200
       schedule: new Date 2013, 12, 12
     ]
-    @$el.html @template collection: collection
-    @$('table').dataTable().delegate 'tbody > tr', 'click', (event) ->
+    @$el.html @template {}
+    @table = @$('table.table').dataTable()
+    @table.delegate 'tbody > tr', 'click', (event) ->
       tr = $(event.target).parent('tr')
       number = $('td.sorting_1', tr).html()
-      $.msgbox number
+      console.log number
     @
+  
+  search: (event) ->
+    term = event.target.value
+    console.log @table
+    @table.fnFilter term, null

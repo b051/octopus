@@ -19,11 +19,12 @@ App.SideBar = Parse.View.extend
     submenu = toggle.next 'ul.submenu'
     li = toggle.parent()
     if li.hasClass 'active'
-      submenu.slideUp 'fast', ->
-        li.removeClass 'active'
+      li.removeClass 'active'
+      submenu.slideUp 'fast'
     else
-      submenu.slideDown 'fast', ->
-        li.addClass 'active'
+      li.addClass 'active'
+      submenu.slideDown 'fast'
+        
   
   update: ->
     fragment = Parse.history.fragment

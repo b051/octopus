@@ -1,9 +1,9 @@
 /* Set the defaults for DataTables initialisation */
 $.extend( true, $.fn.dataTable.defaults, {
-	"sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
+	"sDom": "<'row-fluid'<'span6'l>r>t<'row-fluid'<'span6'i><'span6'p>>",
 	"sPaginationType": "bootstrap",
 	"oLanguage": {
-		"sLengthMenu": "_MENU_ records per page"
+		"sLengthMenu": "Show _MENU_ entries"
 	}
 } );
 
@@ -34,7 +34,7 @@ $.fn.dataTableExt.oApi.fnPagingInfo = function ( oSettings )
 /* Bootstrap style pagination control */
 $.extend( $.fn.dataTableExt.oPagination, {
 	"bootstrap": {
-		"fnInit": function( oSettings, nPaging, fnDraw ) {
+		fnInit: function( oSettings, nPaging, fnDraw ) {
 			var oLang = oSettings.oLanguage.oPaginate;
 			var fnClickHandler = function ( e ) {
 				e.preventDefault();
@@ -43,10 +43,11 @@ $.extend( $.fn.dataTableExt.oPagination, {
 				}
 			};
 
-			$(nPaging).addClass('pagination').append(
+      console.log(oSettings, nPaging, fnDraw);
+			$(nPaging).addClass('pagination pull-right').append(
 				'<ul>'+
-					'<li class="prev disabled"><a href="#">&larr; '+oLang.sPrevious+'</a></li>'+
-					'<li class="next disabled"><a href="#">'+oLang.sNext+' &rarr; </a></li>'+
+					'<li class="prev disabled"><a href="#">&lsaquo;</a></li>'+
+					'<li class="next disabled"><a href="#">&rsaquo;</a></li>'+
 				'</ul>'
 			);
 			var els = $('a', nPaging);
@@ -54,7 +55,7 @@ $.extend( $.fn.dataTableExt.oPagination, {
 			$(els[1]).bind( 'click.DT', { action: "next" }, fnClickHandler );
 		},
 
-		"fnUpdate": function ( oSettings, fnDraw ) {
+		fnUpdate: function ( oSettings, fnDraw ) {
 			var iListLength = 5;
 			var oPaging = oSettings.oInstance.fnPagingInfo();
 			var an = oSettings.aanFeatures.p;
@@ -145,15 +146,3 @@ if ( $.fn.DataTable.TableTools ) {
 		}
 	} );
 }
-
-
-/* Table initialisation */
-$(document).ready(function() {
-	$('#example').dataTable( {
-		"sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
-		"sPaginationType": "bootstrap",
-		"oLanguage": {
-			"sLengthMenu": "_MENU_ records per page"
-		}
-	} );
-} );
