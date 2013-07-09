@@ -122,6 +122,7 @@ App.Router = Parse.Router.extend
   home: ->
     @requireLogin ->
       Parse.User.current().fetch()
+      $('#main-stats').html new App.StatsView().el
       new App.HomeView
   
   account: (tab) ->
@@ -138,8 +139,8 @@ App.Router = Parse.Router.extend
   
   listMeasurings: ->
     @requireLogin ->
-      new App.ChartsView
+      new App.MeasuringView
   
   newMeasuring: ->
     @requireLogin ->
-      new App.MeasuringView
+      new App.AddMeasuringView

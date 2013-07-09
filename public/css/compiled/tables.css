@@ -30,8 +30,6 @@
     margin-right: 23px; }
     .table-wrapper .table .img img {
       margin-top: 4px; }
-  .table-wrapper .table tr.first td {
-    border-top: 0 none; }
   .table-wrapper .table td a {
     text-decoration: underline;
     display: inline-block; }

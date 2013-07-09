@@ -17,22 +17,23 @@ App.SideBar = Parse.View.extend
     event.preventDefault()
     toggle = $(event.currentTarget)
     submenu = toggle.next 'ul.submenu'
-    li = toggle.parent()
-    if li.hasClass 'active'
-      li.removeClass 'active'
+    if toggle.hasClass 'active'
+      toggle.removeClass 'active'
       submenu.slideUp 'fast'
     else
-      li.addClass 'active'
+      toggle.addClass 'active'
       submenu.slideDown 'fast'
         
   
   update: ->
     fragment = Parse.history.fragment
-    activeTab = 0
-    if fragment in ['charts']
-      activeTab = 1
-    if fragment in ['calendar']
-      activeTab = 5
+    activeTab = switch
+      when fragment is 'charts' then 1
+      when fragment.match /^measurings/ then 2
+      when fragment.match /^users/ then 3
+      when fragment.match /^calendar/ then 4
+      else 0
+    
     @$('> li').each (index, li) =>
       if index is activeTab
         $(li).addClass('active', duration:200)

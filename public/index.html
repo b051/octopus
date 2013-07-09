@@ -64,6 +64,7 @@
 
 <div class="content">
 	<div class="container-fluid">
+		<div id="main-stats"></div>
 		<div id="pad-wrapper"></div>
 	</div>
 </div>
@@ -221,6 +222,51 @@
 
 </div>
 
+<script type="text/template" id="content-stats">
+<div class="span3 stat">
+	<div class="data">
+		<span class="number"><%= visits %></span>
+		visits
+	</div>
+	<span class="date">Today</span>
+</div>
+<div class="span3 stat">
+	<div class="data">
+		<span class="number"><%= users %></span>
+		users
+	</div>
+	<span class="date">February 2013</span>
+</div>
+<div class="span3 stat">
+	<div class="data">
+		<span class="number"><%= orders %></span>
+		orders
+	</div>
+	<span class="date">This week</span>
+</div>
+<div class="span3 stat last">
+	<div class="data">
+		<span class="number">$<%= sales %></span>
+		sales
+	</div>
+	<span class="date">last 30 days</span>
+</div>
+</script>
+
+
+<script type="text/template" id="content-home">
+<h4>
+	Statistics
+	<div class="btn-group pull-right">
+		<button class="glow left">DAY</button>
+		<button class="glow middle active">MONTH</button>
+		<button class="glow right">YEAR</button>
+	</div>
+</h4>
+<div class="span12">
+	<div id="statsChart"></div>
+</div>
+</script>
 
 <script type="text/template" id="content-login">
 <div class="clearfix"></div>
@@ -283,7 +329,7 @@
 			</select>
 		</div>
 		<input type="text" class="search">
-		<a class="btn-flat new-product">+ Add product</a>
+		<a class="btn-flat new-product" href="#measurings/add">+ Add product</a>
 	</div>
 </div>
 
@@ -293,119 +339,35 @@
 			<tr>
 				<th class="span3">
 					<input type="checkbox">
-					Product
+					ID
 				</th>
-				<th class="span3">
-					<span class="line"></span>Description
-				</th>
-				<th class="span3">
-					<span class="line"></span>Status
-				</th>
+				<% _.each(fields, function(field) { %>
+					<th class="span3">
+						<span class="line"></span><%= field %>
+					</th>
+				<% }) %>
 			</tr>
 		</thead>
 		<tbody>
-			<!-- row -->
-			<tr class="first">
-				<td>
-					<input type="checkbox">
-					<div class="img">
-						<img src="img/table-img.png">
-					</div>
-					<a href="#">There are many variations </a>
-				</td>
-				<td class="description">
-					if you are going to use a passage of Lorem Ipsum.
-				</td>
-				<td>
-					<span class="label label-success">Active</span>
-					<ul class="actions">
-						<li><i class="table-edit"></i></span></li>
-						<li><i class="table-settings"></i></li>
-						<li class="last"><i class="table-delete"></i></li>
-					</ul>
-				</td>
-			</tr>
-			<!-- row -->
+		<% tools.each(function(tool) { %>
 			<tr>
-				<td>
-					<input type="checkbox">
-					<div class="img">
-						<img src="img/table-img.png">
-					</div>
-					<a href="#">Internet tend</a>
-				</td>
-				<td class="description">
-					There are many variations of passages.
-				</td>
-				<td>
-					<ul class="actions">
-						<li><i class="table-edit"></i></span></li>
-						<li><i class="table-settings"></i></li>
-						<li class="last"><i class="table-delete"></i></li>
-					</ul>
-				</td>
+			<td>
+				<input type="checkbox">
+				<a href="#"><%= tool.get('_id') %></a>
+			</td>
+			<% _.each(fields, function(field) { if (field != 'status') { %>
+				<td class="<%= field %>"><%= tool.get(field) %></td>
+			<% }}) %>
+			<td>
+				<span class="label label-<%= tool.get('status') ? 'success' : 'info' %>"><%= tool.get('status') ? 'Active' : 'Standby' %></span>
+				<ul class="actions">
+					<li><i class="table-edit"></i></span></li>
+					<li><i class="table-settings"></i></li>
+					<li class="last"><i class="table-delete"></i></li>
+				</ul>
+			</td>
 			</tr>
-			<!-- row -->
-			<tr>
-				<td>
-					<input type="checkbox">
-					<div class="img">
-						<img src="img/table-img.png">
-					</div>
-					<a href="#">Many desktop publishing </a>
-				</td>
-				<td class="description">
-					if you are going to use a passage of Lorem Ipsum.
-				</td>
-				<td>
-					<ul class="actions">
-						<li><i class="table-edit"></i></span></li>
-						<li><i class="table-settings"></i></li>
-						<li class="last"><i class="table-delete"></i></li>
-					</ul>
-				</td>
-			</tr>
-			<!-- row -->
-			<tr>
-				<td>
-					<input type="checkbox">
-					<div class="img">
-						<img src="img/table-img.png">
-					</div>
-					<a href="#">Generate Lorem </a>
-				</td>
-				<td class="description">
-					There are many variations of passages.
-				</td>
-				<td>
-					<span class="label label-info">Standby</span>
-					<ul class="actions">
-						<li><i class="table-edit"></i></span></li>
-						<li><i class="table-settings"></i></li>
-						<li class="last"><i class="table-delete"></i></li>
-					</ul>
-				</td>
-			</tr>
-			<!-- row -->
-			<tr>
-				<td>
-					<input type="checkbox">
-					<div class="img">
-						<img src="img/table-img.png">
-					</div>
-					<a href="#">Internet tend</a>
-				</td>
-				<td class="description">
-					There are many variations of passages.
-				</td>
-				<td>
-					<ul class="actions">
-						<li><i class="table-edit"></i></span></li>
-						<li><i class="table-settings"></i></li>
-						<li class="last"><i class="table-delete"></i></li>
-					</ul>
-				</td>
-			</tr>
+		<% }) %>
 		</tbody>
 	</table>
 </div>

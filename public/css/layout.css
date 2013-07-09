@@ -367,7 +367,7 @@ input.search{
 }
 
 /* sidebar submenus */
-#dashboard-menu > li.active .dropdown-toggle {
+#dashboard-menu a.active.dropdown-toggle {
 	border-bottom: 0px;
 	box-shadow: none;
 }
