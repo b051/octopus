@@ -351,7 +351,8 @@
 		<tbody>
 		<% tools.each(function(tool) { %>
 			<tr>
-			<td>
+			<td class="id">
+				<input type="hidden" value="<%= tool.cid %>">
 				<input type="checkbox">
 				<a href="#"><%= tool.get('_id') %></a>
 			</td>
@@ -376,16 +377,17 @@
 <script type="text/template" id="widget-form-textfield">
 <div class="field-box">
 	<label><%= title %>:</label>
-	<input class="span6 inline-input" type="text" name="<%= options['name'] %>" <% if (options['readonly']) { %> readonly="readonly" <% } %> placeholder="<%= options['placeholder'] %>"<% if (options['tooltip']) { %> data-toggle="tooltip" data-trigger="focus" title="<%= options.tooltip %>" data-placement="right" <% } %>>
+	<input class="span6 inline-input" type="text" name="<%= options['name'] %>" <% if (options['readonly']) { %> readonly="readonly" <% } %> placeholder="<%= options['placeholder'] %>"<% if (options['tooltip']) { %> data-toggle="tooltip" data-trigger="focus" title="<%= options.tooltip %>" data-placement="right" <% } %> value="<%=value%>">
 </div>
 </script>
 
 <script type="text/template" id="form-measuring">
 <div class="span6">
 	<h4 class="title">Basic Data</h4>
+	<input type="hidden" value="<%= model.cid %>">
 	<div class="field-box">
 		<label>Identity Number:</label>
-		<input class="span6" type="text" name="id">
+		<input class="span6" type="text" name="id" value="<%= model.get('_id') %>">
 	</div>
 	<%= textField('Name', {'name':'name', tooltip:'Measuring name'}) %>
 	<%= textField('Producer', {'name':'producer'}) %>

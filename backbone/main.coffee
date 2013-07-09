@@ -70,8 +70,9 @@ App.Router = Parse.Router.extend
     logout: 'logout'
     signup: 'signup'
     charts: 'charts'
-    measurings : 'listMeasurings'
-    'measurings/add' : 'newMeasuring'
+    measurings : 'tools'
+    'measurings/add' : 'newTool'
+    'measuring/:cid' : 'tool'
     calendar: 'calendar'
     'account': 'account'
     'account/:tab': 'account'
@@ -94,6 +95,10 @@ App.Router = Parse.Router.extend
       @navbar.render()
       view = next()
       @_switchMain view.el
+      if Parse.history.fragment is ''
+        $('#main-stats').slideDown()
+      else
+        $('#main-stats').slideUp()
       view.render()
   
   _switchMain: (el) ->
@@ -137,10 +142,14 @@ App.Router = Parse.Router.extend
     @requireLogin ->
       new App.ChartsView
   
-  listMeasurings: ->
+  tools: ->
     @requireLogin ->
-      new App.MeasuringView
+      new App.ToolsTableView
   
-  newMeasuring: ->
+  newTool: ->
     @requireLogin ->
-      new App.AddMeasuringView
+      new App.ToolView
+
+  tool: (cid) ->
+    @requireLogin ->
+      new App.ToolView cid
