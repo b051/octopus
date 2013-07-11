@@ -1,32 +1,6 @@
 InstrumentCollection = Parse.Collection.extend
   model: Instrument
-
-collection = new InstrumentCollection()
-collection.add [
-  _id: "T001"
-  name: 'Duke'
-  producer: 'Apple'
-  type: 'digit'
-  group: 'etalon'
-  user: 'Szabi'
-  status: 1
-,
-  _id: "T002"
-  name: 'Duke'
-  producer: 'Apple'
-  type: 'digit'
-  group: 'etalon'
-  user: 'Szabi'
-  status: 1
-,
-  _id: "T003"
-  name: 'Duke'
-  producer: 'Apple'
-  type: 'digit'
-  group: 'etalon'
-  user: 'Szabi'
-  status: 0
-]
+  query: (new Parse.Query(Instrument))
 
 App.InstrumentsTableView = Parse.View.extend
   className: 'table-wrapper'
@@ -34,6 +8,8 @@ App.InstrumentsTableView = Parse.View.extend
   template: $.template 'table-instruments'
 
   initialize: ->
+    @fields = ["name", "producer", "type", "group", "user_name", "status"]
+    @collection = new InstrumentCollection()
   
   events:
     'keyup .search': 'search'
@@ -41,13 +17,26 @@ App.InstrumentsTableView = Parse.View.extend
     'click .table-edit': 'editInstrument'
   
   render: ->
-    @$el.html @template fields:["name", "producer", "type", "group", "user", "status"], tools: collection
-    @table = @$('table.table').dataTable()
+    @$el.html @template fields:@fields, tools: @collection
+    if not @table
+      @reloadData()
+      @table = @$('table.table').dataTable()
+    else
+      @table.fnDraw()
     @
   
+  reloadData: (event) ->
+    event?.preventDefault()
+    @collection.fetch
+      success: =>
+        @render()
+      error: (error) =>
+        @render()
+        console.log 'error'
+
+
   search: (event) ->
     term = event.target.value
-    console.log @table
     @table.fnFilter term, null
   
   selectInstrument: (event) ->
@@ -64,27 +53,70 @@ App.InstrumentsTableView = Parse.View.extend
 
 
 App.InstrumentView = Parse.View.extend
-  className: 'row-fluid form-wrapper'
-  template: $.template 'form-instrument'
-  textFieldTemplate: $.template 'widget-form-textfield'
 
-  initialize: (cid) ->
-    if cid?
-      @model = collection.getByCid cid
+  className: 'row-fluid form-wrapper'
+
+  template: $.template 'form-instrument'
+
+  initialize: (id) ->
+    if id?
+      query = new Parse.Query(Instrument)
+      @model = query.get id,
+        success: (@model) =>
+          if @rendered
+            @render()
     else
       @model = new Instrument()
+    
+  textField: (name, title, options={}) ->
+    box = $('<div>', class:'field-box')
+    box.append("<label>#{title}:</label>")
+    tooltip = options.tooltip
+    if tooltip
+      delete options.tooltip
+      $.extend options,
+        'data-toggle': 'tooltip'
+        'data-trigger': 'focus'
+        'data-placement': 'right'
+        'title': tooltip
+    
+    attrs =
+      class:'span6 input-large inline-input'
+      type:'text'
+      name: name
+      value: @model.get(name)
+    $.extend attrs, options
+    
+    input = $('<input>', attrs)
+    box.append input
+    box[0].outerHTML
+  
+  chosenField: (name, title, options=[], chosen={}) ->
+    box = $('<div>', class:'field-box')
+    box.append("<label>#{title}:</label>")
+    select = $('<select>', class:'chosen span6')
+    select.prop('multiple', chosen.multiple)
+    select.append('<option></option>')
+    for option in options
+      if $.isArray option
+        select.append("<option value='#{option[0]}'>#{option[1]}</option>")
+      else
+        select.append("<option value='#{option}'>#{option}</option>")
+    box.append select
+    box[0].outerHTML
   
   events:
     'click .currency a': 'changeCurrency'
     'click .star': 'clickStar'
+    'click .delete' : 'deleteInstrument'
+    'click .save': 'save'
   
   render: ->
-    textField = (title, options) =>
-      @textFieldTemplate title:title, options:options, value:@model.get(options.name)
-    
-    @$el.html @template textField:textField, model:@model
+    @rendered = yes
+    return if not @model
+    @$el.html @template textField:@textField, chosenField:@chosenField, model:@model
     @$('input:checkbox, input:radio').uniform()
-    @$('.datepicker').datepicker().on 'changeDate', (event) ->
+    @$('input.datepicker').datepicker().on 'changeDate', (event) ->
       $(@).datepicker('hide')
     @$('.wysihtml5').wysihtml5
       'font-styles': no
@@ -104,7 +136,15 @@ App.InstrumentView = Parse.View.extend
     currency = a.text()
     a.parents('.currency').find('button').html currency
   
-  save: ->
+  deleteInstrument: (event) ->
+    
+  save: (event) ->
+    event.preventDefault()
+    @model.set('acquisition_date', @$('input.datepicker').data('datepicker').getDate())
+    @$('.field-box > input[type=text]').each (i, input) =>
+      if input.name
+        @model.set input.name, input.value
+    
     groupACL = new Parse.ACL()
     groupACL.setRoleWriteAccess('octopus', yes)
     groupACL.setRoleReadAccess('octopus', yes)

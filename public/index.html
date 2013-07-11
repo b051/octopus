@@ -353,7 +353,7 @@
 			<tr>
 			<td class="id">
 				<input type="checkbox">
-				<a href="#instrument/<%= tool.cid %>"><%= tool.get('_id') %></a>
+				<a href="#instrument/<%= tool.id %>"><%= tool.get('iid') %></a>
 			</td>
 			<% _.each(fields, function(field) { if (field != 'status') { %>
 				<td class="<%= field %>"><%= tool.get(field) %></td>
@@ -373,51 +373,20 @@
 </div>
 </script>
 
-<script type="text/template" id="widget-form-textfield">
-<div class="field-box">
-	<label><%= title %>:</label>
-	<input class="span6 input-large inline-input" type="<%= options['type'] ? options['type'] : 'text' %>" name="<%= options['name'] %>" <% if (options['readonly']) { %> readonly="readonly" <% } %> placeholder="<%= options['placeholder'] %>"<% if (options['tooltip']) { %> data-toggle="tooltip" data-trigger="focus" title="<%= options.tooltip %>" data-placement="right" <% } %> value="<%= value %>">
-</div>
-</script>
-
 <script type="text/template" id="form-instrument">
 <div class="row-fluid">
 <div class="span6">
 	<h4 class="title">Basic Data</h4>
-	<input type="hidden" value="<%= model.cid %>">
-	<%= textField('Identity number', {'name':'_id', tooltip:'Instrument identify number'}) %>
-	<%= textField('Name', {'name':'name', tooltip:'Instrument name'}) %>
-	<%= textField('Producer', {'name':'producer'}) %>
-	<%= textField('Serial number', {'name':'sn'}) %>
-	<%= textField('Range', {'name':'range'}) %>
-	<%= textField('Scale', {'name':'scale'}) %>
-	<%= textField('Precision', {'name':'precision'}) %>
-	<div class="field-box">
-		<label>Group:</label>
-		<select class="chosen span6">
-			<option></option>
-			<option>auditing instrument</option>
-			<option>not auditing instr.</option>
-			<option>etalon</option>
-			<option>dummy</option>
-		</select>
-	</div>
-	<div class="field-box">
-		<label>State:</label>
-		<select class="span6 chosen">
-			<option></option>
-			<option>closed</option>
-			<option>lost</option>
-			<option>wasted</option>
-			<option>repairing</option>
-			<option>may use</option>
-			<option>destroyed</option>
-			<option>calibrated over</option>
-			<option>is calibrating</option>
-			<option>discharged</option>
-			<option>reserve</option>
-		</select>
-	</div>
+	<input type="hidden" value="<%= model.id %>">
+	<%= textField('iid', 'Identity number', {tooltip:'Instrument identify number'}) %>
+	<%= textField('name', 'Name', {tooltip:'Instrument name'}) %>
+	<%= textField('producer', 'Producer') %>
+	<%= textField('sn', 'Serial number') %>
+	<%= textField('range', 'Range') %>
+	<%= textField('scale', 'Scale') %>
+	<%= textField('precision', 'Precision') %>
+	<%= chosenField('group', 'Group', ['auditing instrument', 'not auditing intr.', 'etalon', 'dummy']) %>
+	<%= chosenField('state', 'State', ['closed', 'lost', 'wasted', 'repairing', 'may use', 'destroyed', 'calibrated over', 'is calibrating', 'discharged', 'reserve'], {'multiple':true}) %>
 	<div class="field-box">
 		<label>Rank:</label>
 		<span class="rating">
@@ -428,17 +397,17 @@
 		  <span class="star"></span>
 		</span>
 	</div>
-	<%= textField('Base of rank', {'name':'base_of_rank'}) %>
-	<%= textField('Main instrument', {'name':'main_instrument'}) %>
-	<%= textField('Parts of instrument', {'name':'parts_of_instrument'}) %>
+	<%= textField('base_of_rank', 'Base of rank') %>
+	<%= textField('main_instrument', 'Main instrument') %>
+	<%= textField('parts_of_instrument', 'Parts of instrument') %>
 </div>
 
 <div class="span6">
 	<h4 class="title">User</h4>
-	<%= textField('Deliverer', {'name':'deliverer'}) %>
-	<%= textField('Deliverer Code', {}) %>
-	<%= textField('Ordering number', {}) %>
-	<%= textField('Available licenses', {}) %>
+	<%= textField('deliverer', 'Deliverer') %>
+	<%= textField('deliverer_code', 'Deliverer Code') %>
+	<%= textField('ordering_number', 'Ordering number') %>
+	<%= textField('available_licenses', 'Available licenses') %>
 	<div class="field-box">
 		<label>Acquisition price:</label>
 		<div class="input-prepend input-append span6">
@@ -471,147 +440,23 @@
 		<label>Date of acquisition:</label>
 		<input type="text" value="03/29/2013" class="input-large inline-input span6 datepicker">
 	</div>
-	<%= textField('Username', {}) %>
-	<%= textField('Department', {}) %>
-	<%= textField('Address', {}) %>
-	<%= textField('Phone', {}) %>
-	<%= textField('Fax', {}) %>
-	<%= textField('Email', {'type':'email'}) %>
+	<%= textField('user_name', 'Username') %>
+	<%= textField('user_department', 'Department') %>
+	<%= textField('user_address', 'Address') %>
+	<%= textField('user_phone', 'Phone') %>
+	<%= textField('user_fax', 'Fax') %>
+	<%= textField('user_email', 'Email', {'type':'email'}) %>
+</div>
+</div>
+<div class="row-fluid">
+<button class="btn-flat span2 primary save">Save</button>
+<% if (!model.isNew()) { %>
+<button class="btn-flat span2 white delete">Delete</button>
+<% } %>
 
-</div>
-<div class="row-fluid" style="display:none;">
-<div class="span12">
-	<h4 class="title">Showcase</h4>
-	<div class="field-box">
-		<label>Predefined value:</label>
-		<div class="predefined">
-			<span class="value">http://</span>
-			<input class="span6 inline-input" type="text">
-		</div>
-	</div>
-	<div class="field-box">
-		<label>With max length:</label>
-		<input class="span6 inline-input" type="text" placeholder="max 20 characters here" maxlength="20">
-	</div>
-	<div class="field-box">
-		<label>Textarea:</label>
-		<textarea class="span6" rows="4"></textarea>
-	</div>
-	<div class="field-box">
-		<label>Checkboxes:</label>
-		<label class="checkbox">
-			<input type="checkbox"> Option 1
-		</label>
-		<label class="checkbox">
-			<input type="checkbox"> Option 2
-		</label>
-		<label class="checkbox">
-			<input type="checkbox"> Option 3
-		</label>
-	</div>
-	<div class="field-box">
-		<label>Radiobuttons:</label>
-			<label class="radio">
-				<input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
-				Option one is this and that—be sure to include why it%27s great
-			</label>
-			<label class="radio">
-				<input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
-				Option two can be something else and selecting it will deselect option one
-			</label>
-	</div>
-	<div class="field-box">
-		<label>Wysiwyg:</label>
-		<div class="wysi-column">
-			<textarea id="wysi" class="span8 wysihtml5" rows="5"></textarea>
-		</div>
-	</div>
-	<div class="field-box">
-		<label>Input prepend & append:</label>
-		<div class="input-prepend span3">
-			<span class="add-on">@</span>
-			<input class="input-small" type="text">
-		</div>
-		<div class="input-append span3">
-			<input class="input-small" type="text">
-			<span class="add-on">.00</span>
-		</div>
-	</div>
-	<div class="field-box">
-		<label>Datepicker:</label>
-		<input type="text" value="03/29/2013" class="input-large datepicker">
-	</div>
-</div>
 </div>
 </script>
 </div>
-
-<script type="text/template" id="content-home">
-<div class="span12">
-	<div class="widget stacked">
-		<div class="widget-header">
-			<i class="icon-pencil"></i>
-			<h3>Bootstrap Elements</h3>
-		</div>
-		<div class="widget-content">
-			<table class="table table-bordered table-striped table-highlight">
-			<thead>
-				<tr>
-					<th>#</th>
-					<th>Name</th>
-					<th>Manufacture</th>
-					<th>Quantity</th>
-					<th>Schedule</th>
-				</tr>
-			</thead>
-			<tbody>
-			<% collection.each(function(tool, i) { %>
-				<tr>
-					<td><%= i + 1 %></td>
-					<td><%- tool.get('name') %></td>
-					<td><%- tool.get('manufacture') %></td>
-					<td><%- tool.get('quantity') %></td>
-					<td><%- tool.get('schedule') %></td>
-				</tr>
-			<% }) %>
-			</tbody>
-			</table>
-		</div>
-	</div>
-</div>
-
-<div class="span12">
-	<div class="widget stacked">
-		
-		<div class="widget-header">
-			<i class="icon-user"></i>
-			<h3>Item Detail</h3>
-		</div>
-	
-		<div class="widget-content">
-			<div class="tabbable">
-				<ul class="nav nav-tabs">
-					<li class="active"><a href="#tab1" data-toggle="tab">Tab1</a></li>
-					<li><a href="#tab2" data-toggle="tab">Tab2</a></li>
-					<li><a href="#tab3" data-toggle="tab">Tab3</a></li>
-					<li><a href="#tab4" data-toggle="tab">Tab4</a></li>
-					<li><a href="#tab5" data-toggle="tab">Tab5</a></li>
-				</ul>
-				<div class="tab-content" style="margin-top:1em;">
-					<div class="tab-pane active" id="tab1"></div>
-					<div class="tab-pane" id="tab2"></div>
-					<div class="tab-pane" id="tab3"></div>
-					<div class="tab-pane" id="tab4"></div>
-					<div class="tab-pane" id="tab5"></div>
-				</div>
-			</div>
-		</div>
-
-	</div>
-</div>
-
-</script>
-
 
 <script type="text/template" id="content-account">
 <div class="span8">
