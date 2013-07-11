@@ -2,6 +2,17 @@ InstrumentCollection = Parse.Collection.extend
   model: Instrument
   query: (new Parse.Query(Instrument))
 
+collection = App.collection = new InstrumentCollection()
+
+reloadData = (callback) ->
+  console.log 'reloading instruments...'
+  collection.fetch
+    success: ->
+      callback?()
+    error: (error) =>
+      callback?()
+      console.log 'error'
+
 App.InstrumentsTableView = Parse.View.extend
   className: 'table-wrapper'
 
@@ -9,7 +20,6 @@ App.InstrumentsTableView = Parse.View.extend
 
   initialize: ->
     @fields = ["name", "producer", "type", "group", "user_name", "status"]
-    @collection = new InstrumentCollection()
   
   events:
     'keyup .search': 'search'
@@ -17,7 +27,7 @@ App.InstrumentsTableView = Parse.View.extend
     'click .table-edit': 'editInstrument'
   
   render: ->
-    @$el.html @template fields:@fields, tools: @collection
+    @$el.html @template fields:@fields, tools:collection
     if not @table
       @reloadData()
       @table = @$('table.table').dataTable()
@@ -26,14 +36,9 @@ App.InstrumentsTableView = Parse.View.extend
     @
   
   reloadData: (event) ->
-    event?.preventDefault()
-    @collection.fetch
-      success: =>
+    if collection.isEmpty()
+      reloadData =>
         @render()
-      error: (error) =>
-        @render()
-        console.log 'error'
-
 
   search: (event) ->
     term = event.target.value
@@ -60,11 +65,15 @@ App.InstrumentView = Parse.View.extend
 
   initialize: (id) ->
     if id?
-      query = new Parse.Query(Instrument)
-      @model = query.get id,
-        success: (@model) =>
+      if collection.isEmpty()
+        reloadData =>
+          console.log 'reloaded'
+          @model = collection.get id
+          console.log @model
           if @rendered
             @render()
+      else
+        @model = collection.get id
     else
       @model = new Instrument()
     
