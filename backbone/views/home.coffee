@@ -1,6 +1,3 @@
-ToolCollection = Parse.Collection.extend
-  model: Tool
-
 App.HomeView = Parse.View.extend
   className: 'row-fluid chart'
 
@@ -9,7 +6,7 @@ App.HomeView = Parse.View.extend
   
   render: ->
     @$el.html @template {}
-    showTooltip = (x, y, contents) ->
+    showInstrumenttip = (x, y, contents) ->
       $("<div id=\"tooltip\">#{contents}</div>").css(
         position: "absolute"
         display: "none"
@@ -84,7 +81,7 @@ App.HomeView = Parse.View.extend
           x = item.datapoint[0].toFixed(0)
           y = item.datapoint[1].toFixed(0)
           month = item.series.xaxis.ticks[item.dataIndex].label
-          showTooltip item.pageX, item.pageY, item.series.label + " of " + month + ": " + y
+          showInstrumenttip item.pageX, item.pageY, item.series.label + " of " + month + ": " + y
       else
         $("#tooltip").remove()
         previousPoint = null

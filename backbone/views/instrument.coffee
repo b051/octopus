@@ -1,7 +1,7 @@
-ToolCollection = Parse.Collection.extend
-  model: Tool
+InstrumentCollection = Parse.Collection.extend
+  model: Instrument
 
-collection = new ToolCollection()
+collection = new InstrumentCollection()
 collection.add [
   _id: "T001"
   name: 'Duke'
@@ -28,16 +28,17 @@ collection.add [
   status: 0
 ]
 
-App.ToolsTableView = Parse.View.extend
-  className: 'table-wrapper products-table section'
+App.InstrumentsTableView = Parse.View.extend
+  className: 'table-wrapper'
 
-  template: $.template 'table-measurings'
+  template: $.template 'table-instruments'
 
   initialize: ->
-
+  
   events:
     'keyup .search': 'search'
-    'click tbody > tr': 'selectTool'
+    'click tbody > tr': 'selectInstrument'
+    'click .table-edit': 'editInstrument'
   
   render: ->
     @$el.html @template fields:["name", "producer", "type", "group", "user", "status"], tools: collection
@@ -49,24 +50,33 @@ App.ToolsTableView = Parse.View.extend
     console.log @table
     @table.fnFilter term, null
   
-  selectTool: (event) ->
+  selectInstrument: (event) ->
     tr = event.currentTarget
     checkbox = $('td.id input[type=checkbox]', tr)
     checkbox.prop('checked', !checkbox.prop('checked'))
-    cid = $('td.id input[type=hidden]', tr).val()
-    app.navigate "measuring/#{cid}", yes
+  
+  editInstrument: (event) ->
+    link = $(event.target).parents('tr').find('a').attr('href')
+    app.navigate link, yes
+  
+  deleteInstrument: (event) ->
+    
 
 
-App.ToolView = Parse.View.extend
+App.InstrumentView = Parse.View.extend
   className: 'row-fluid form-wrapper'
-  template: $.template 'form-measuring'
+  template: $.template 'form-instrument'
   textFieldTemplate: $.template 'widget-form-textfield'
 
   initialize: (cid) ->
     if cid?
       @model = collection.getByCid cid
     else
-      @model = new Tool
+      @model = new Instrument()
+  
+  events:
+    'click .currency a': 'changeCurrency'
+    'click .star': 'clickStar'
   
   render: ->
     textField = (title, options) =>
@@ -78,6 +88,29 @@ App.ToolView = Parse.View.extend
       $(@).datepicker('hide')
     @$('.wysihtml5').wysihtml5
       'font-styles': no
-    @$('.select2').chosen()
+    @$('.chosen').chosen disable_search_threshold: 10
     @$('input').tooltip()
     @
+  
+  clickStar: (event) ->
+    star = $(event.target)
+    star.siblings().removeClass('on')
+    star.addClass('on')
+  
+  
+  changeCurrency: (event) ->
+    event.preventDefault()
+    a = $(event.target)
+    currency = a.text()
+    a.parents('.currency').find('button').html currency
+  
+  save: ->
+    groupACL = new Parse.ACL()
+    groupACL.setRoleWriteAccess('octopus', yes)
+    groupACL.setRoleReadAccess('octopus', yes)
+    @model.setACL(groupACL)
+    @model.save
+      success: ->
+        console.log 'saved!'
+      error: (error) ->
+        console.error error

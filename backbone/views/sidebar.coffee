@@ -5,7 +5,7 @@ App.SideBar = Parse.View.extend
     @arrow = $('<div>', class:'pointer').append $('<div>', class:'arrow'), $('<div>', class:'arrow_border')
     @render()
   
-  template: _.template $('#sidebar-menu').html()
+  template: $.template 'sidebar-menu'
   
   render: ->
     @$el.html @template {}
@@ -29,7 +29,7 @@ App.SideBar = Parse.View.extend
     fragment = Parse.history.fragment
     activeTab = switch
       when fragment is 'charts' then 1
-      when fragment.match /^measurings/ then 2
+      when fragment.match /^instrument/ then 2
       when fragment.match /^users/ then 3
       when fragment.match /^calendar/ then 4
       else 0

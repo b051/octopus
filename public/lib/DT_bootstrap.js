@@ -1,6 +1,6 @@
 /* Set the defaults for DataTables initialisation */
 $.extend( true, $.fn.dataTable.defaults, {
-	"sDom": "<'row-fluid'<'span6'l>r>t<'row-fluid'<'span6'i><'span6'p>>",
+	"sDom": "<'row-fluid'r>t<'row-fluid'<'span6'i><'span6'p>>",
 	"sPaginationType": "bootstrap",
 	"oLanguage": {
 		"sLengthMenu": "Show _MENU_ entries"
@@ -43,7 +43,6 @@ $.extend( $.fn.dataTableExt.oPagination, {
 				}
 			};
 
-      console.log(oSettings, nPaging, fnDraw);
 			$(nPaging).addClass('pagination pull-right').append(
 				'<ul>'+
 					'<li class="prev disabled"><a href="#">&lsaquo;</a></li>'+

@@ -193,12 +193,12 @@
 <li>
 	<a class="dropdown-toggle" href="#">
 		<i class="icon-th-large"></i>
-		<span>Measuring</span>
+		<span>Instr.</span>
 		<i class="icon-chevron-down"></i>
 	</a>
 	<ul class="submenu">
-		<li><a href="#measurings">All measuring</a></li>
-		<li><a href="#measurings/add">Add measuring</a></li>
+		<li><a href="#instruments">All instruments</a></li>
+		<li><a href="#instruments/add">Add instrument</a></li>
 	</ul>
 </li>
 <li>
@@ -312,11 +312,11 @@
 </script>
 
 
-<div class="measurings-templates">
-<script type="text/template" id="table-measurings">
+<div class="instruments-templates">
+<script type="text/template" id="table-instruments">
 <div class="row-fluid head">
 	<div class="span12">
-		<h4>Measurings <small>sample</small></h4>
+		<h4>Instruments <small>sample</small></h4>
 	</div>
 </div>
 
@@ -329,7 +329,7 @@
 			</select>
 		</div>
 		<input type="text" class="search">
-		<a class="btn-flat new-product" href="#measurings/add">+ Add product</a>
+		<a class="btn-flat new-product" href="#instruments/add">+ Add instrument</a>
 	</div>
 </div>
 
@@ -352,9 +352,8 @@
 		<% tools.each(function(tool) { %>
 			<tr>
 			<td class="id">
-				<input type="hidden" value="<%= tool.cid %>">
 				<input type="checkbox">
-				<a href="#"><%= tool.get('_id') %></a>
+				<a href="#instrument/<%= tool.cid %>"><%= tool.get('_id') %></a>
 			</td>
 			<% _.each(fields, function(field) { if (field != 'status') { %>
 				<td class="<%= field %>"><%= tool.get(field) %></td>
@@ -377,19 +376,17 @@
 <script type="text/template" id="widget-form-textfield">
 <div class="field-box">
 	<label><%= title %>:</label>
-	<input class="span6 inline-input" type="text" name="<%= options['name'] %>" <% if (options['readonly']) { %> readonly="readonly" <% } %> placeholder="<%= options['placeholder'] %>"<% if (options['tooltip']) { %> data-toggle="tooltip" data-trigger="focus" title="<%= options.tooltip %>" data-placement="right" <% } %> value="<%=value%>">
+	<input class="span6 input-large inline-input" type="<%= options['type'] ? options['type'] : 'text' %>" name="<%= options['name'] %>" <% if (options['readonly']) { %> readonly="readonly" <% } %> placeholder="<%= options['placeholder'] %>"<% if (options['tooltip']) { %> data-toggle="tooltip" data-trigger="focus" title="<%= options.tooltip %>" data-placement="right" <% } %> value="<%= value %>">
 </div>
 </script>
 
-<script type="text/template" id="form-measuring">
+<script type="text/template" id="form-instrument">
+<div class="row-fluid">
 <div class="span6">
 	<h4 class="title">Basic Data</h4>
 	<input type="hidden" value="<%= model.cid %>">
-	<div class="field-box">
-		<label>Identity Number:</label>
-		<input class="span6" type="text" name="id" value="<%= model.get('_id') %>">
-	</div>
-	<%= textField('Name', {'name':'name', tooltip:'Measuring name'}) %>
+	<%= textField('Identity number', {'name':'_id', tooltip:'Instrument identify number'}) %>
+	<%= textField('Name', {'name':'name', tooltip:'Instrument name'}) %>
 	<%= textField('Producer', {'name':'producer'}) %>
 	<%= textField('Serial number', {'name':'sn'}) %>
 	<%= textField('Range', {'name':'range'}) %>
@@ -397,63 +394,93 @@
 	<%= textField('Precision', {'name':'precision'}) %>
 	<div class="field-box">
 		<label>Group:</label>
-		<select class="select2 span6">
+		<select class="chosen span6">
 			<option></option>
-			<option value="AK">Alaska</option>
-			<option value="HI">Hawaii</option>
-			<option value="CA">California</option>
-			<option value="NV">Nevada</option>
-			<option value="OR">Oregon</option>
-			<option value="WA">Washington</option>
+			<option>auditing instrument</option>
+			<option>not auditing instr.</option>
+			<option>etalon</option>
+			<option>dummy</option>
 		</select>
 	</div>
 	<div class="field-box">
 		<label>State:</label>
-		<select class="span6 select2">
+		<select class="span6 chosen">
 			<option></option>
-			<option value="AK">Alaska</option>
-			<option value="HI">Hawaii</option>
-			<option value="CA">California</option>
-			<option value="NV">Nevada</option>
-			<option value="OR">Oregon</option>
-			<option value="WA">Washington</option>
+			<option>closed</option>
+			<option>lost</option>
+			<option>wasted</option>
+			<option>repairing</option>
+			<option>may use</option>
+			<option>destroyed</option>
+			<option>calibrated over</option>
+			<option>is calibrating</option>
+			<option>discharged</option>
+			<option>reserve</option>
 		</select>
 	</div>
 	<div class="field-box">
 		<label>Rank:</label>
-		<select class="span6 select2">
-			<option></option>
-			<option value="AK">Alaska</option>
-			<option value="HI">Hawaii</option>
-			<option value="CA">California</option>
-			<option value="NV">Nevada</option>
-			<option value="OR">Oregon</option>
-			<option value="WA">Washington</option>
-		</select>
+		<span class="rating">
+		  <span class="star"></span>
+		  <span class="star"></span>
+		  <span class="star"></span>
+		  <span class="star"></span>
+		  <span class="star"></span>
+		</span>
 	</div>
 	<%= textField('Base of rank', {'name':'base_of_rank'}) %>
 	<%= textField('Main instrument', {'name':'main_instrument'}) %>
 	<%= textField('Parts of instrument', {'name':'parts_of_instrument'}) %>
 </div>
 
-<!-- right column -->
 <div class="span6">
 	<h4 class="title">User</h4>
 	<%= textField('Deliverer', {'name':'deliverer'}) %>
 	<%= textField('Deliverer Code', {}) %>
 	<%= textField('Ordering number', {}) %>
-	<%= textField('Beszerzési engedély száma', {}) %>
-	<%= textField('Acquisition price', {}) %>
-	<%= textField('Currency', {}) %>
-	<%= textField('Store place', {}) %>
-	<%= textField('Date of acquisition', {}) %>
+	<%= textField('Available licenses', {}) %>
+	<div class="field-box">
+		<label>Acquisition price:</label>
+		<div class="input-prepend input-append span6">
+			<div class="btn-group currency">
+				<button class="btn dropdown-toggle" data-toggle="dropdown">$</button>
+				<ul class="dropdown-menu">
+					<li><a tabindex="-1" href="#">$</a></li>
+					<li><a tabindex="-1" href="#">¥</a></li>
+				</ul>
+			</div>
+			<input class="input-large span8" type="text">
+			<span class="add-on">.00</span>
+		</div>
+	</div>
+	<div class="field-box">
+		<label>Store price:</label>
+		<div class="input-prepend input-append span6">
+			<div class="btn-group currency">
+				<button class="btn dropdown-toggle" data-toggle="dropdown">$</button>
+				<ul class="dropdown-menu">
+					<li><a tabindex="-1" href="#">$</a></li>
+					<li><a tabindex="-1" href="#">¥</a></li>
+				</ul>
+			</div>
+			<input class="input-large span8" type="text" value="<%= model.get('store_price') %>">
+			<span class="add-on">.00</span>
+		</div>
+	</div>
+	<div class="field-box">
+		<label>Date of acquisition:</label>
+		<input type="text" value="03/29/2013" class="input-large inline-input span6 datepicker">
+	</div>
 	<%= textField('Username', {}) %>
 	<%= textField('Department', {}) %>
 	<%= textField('Address', {}) %>
 	<%= textField('Phone', {}) %>
 	<%= textField('Fax', {}) %>
-	<%= textField('Email', {}) %>
+	<%= textField('Email', {'type':'email'}) %>
 
+</div>
+<div class="row-fluid" style="display:none;">
+<div class="span12">
 	<h4 class="title">Showcase</h4>
 	<div class="field-box">
 		<label>Predefined value:</label>
@@ -464,7 +491,7 @@
 	</div>
 	<div class="field-box">
 		<label>With max length:</label>
-		<input class="span6 inline-input" type="text" placeholder="max 20 characters here" maxlength="20" />
+		<input class="span6 inline-input" type="text" placeholder="max 20 characters here" maxlength="20">
 	</div>
 	<div class="field-box">
 		<label>Textarea:</label>
@@ -514,6 +541,7 @@
 		<label>Datepicker:</label>
 		<input type="text" value="03/29/2013" class="input-large datepicker">
 	</div>
+</div>
 </div>
 </script>
 </div>
@@ -807,7 +835,7 @@ Download all message on connection
 <script src="js/views/home.js"></script>
 <script src="js/views/calendar.js"></script>
 <script src="js/views/charts.js"></script>
-<script src="js/views/measuring.js"></script>
+<script src="js/views/instrument.js"></script>
 <script type="text/javascript">
 $(function() {
   window.app = new App.Router();

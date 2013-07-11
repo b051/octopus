@@ -70,9 +70,9 @@ App.Router = Parse.Router.extend
     logout: 'logout'
     signup: 'signup'
     charts: 'charts'
-    measurings : 'tools'
-    'measurings/add' : 'newTool'
-    'measuring/:cid' : 'tool'
+    instruments : 'tools'
+    'instruments/add' : 'newInstrument'
+    'instrument/:cid' : 'tool'
     calendar: 'calendar'
     'account': 'account'
     'account/:tab': 'account'
@@ -144,12 +144,12 @@ App.Router = Parse.Router.extend
   
   tools: ->
     @requireLogin ->
-      new App.ToolsTableView
+      new App.InstrumentsTableView
   
-  newTool: ->
+  newInstrument: ->
     @requireLogin ->
-      new App.ToolView
+      new App.InstrumentView
 
   tool: (cid) ->
     @requireLogin ->
-      new App.ToolView cid
+      new App.InstrumentView cid
