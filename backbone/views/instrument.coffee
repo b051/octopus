@@ -127,8 +127,6 @@ App.InstrumentView = Parse.View.extend
     @$('input:checkbox, input:radio').uniform()
     @$('input.datepicker').datepicker().on 'changeDate', (event) ->
       $(@).datepicker('hide')
-    @$('.wysihtml5').wysihtml5
-      'font-styles': no
     @$('.chosen').chosen disable_search_threshold: 10
     @$('input').tooltip()
     @
