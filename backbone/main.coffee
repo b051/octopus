@@ -126,9 +126,9 @@ App.Router = Parse.Router.extend
   
   home: ->
     @requireLogin ->
-      Parse.User.current().fetch()
+      # Parse.User.current().fetch()
       $('#main-stats').html new App.StatsView().el
-      new App.HomeView
+      new App.InstrumentsTableView
   
   account: (tab) ->
     @requireLogin ->
