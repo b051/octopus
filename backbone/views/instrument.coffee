@@ -59,13 +59,18 @@ App.InstrumentsTableView = Parse.View.extend
     'click tbody > tr': 'selectInstrument'
     'click .table-edit': 'editInstrument'
   
+  _render: ->
+    @$el.html @template fields:@fields, tools:collection
+    @table = @$('table.table').dataTable()
+  
   render: ->
     if collection.isEmpty()
       @$el.html '<h4>Loading...</h4>'
       reloadData =>
-        @$el.html @template fields:@fields, tools:collection
-        @table = @$('table.table').dataTable()
+        @_render()
       , yes
+    else
+      @_render()
     @
   
   search: (event) ->
@@ -130,14 +135,26 @@ App.InstrumentView = Parse.View.extend
   chosenField: (name, title, options=[], chosen={}) ->
     box = $('<div>', class:'field-box')
     box.append("<label>#{title}:</label>")
-    select = $('<select>', class:'chosen span6')
+    select = $('<select>', class:'chosen span6', name: name)
     select.prop('multiple', chosen.multiple)
     select.append('<option></option>')
-    for option in options
-      if $.isArray option
+    
+    value = @model.get(name)
+    for arr in options
+      option = $('<option>')
+      
+      if $.isArray arr
+        option.val(arr[0])
+        option.html(arr[1])
         select.append("<option value='#{option[0]}'>#{option[1]}</option>")
       else
-        select.append("<option value='#{option}'>#{option}</option>")
+        option.val(arr)
+        option.html(arr)
+      if $.isArray value
+        option.attr('selected', option.val() in value)
+      else
+        option.attr('selected', option.val() is value)
+      select.append option
     box.append select
     box[0].outerHTML
   
@@ -173,6 +190,10 @@ App.InstrumentView = Parse.View.extend
       date = @model.get(el.name) or new Date()
       $(el).data('datepicker').setDate(date)
     
+    rank = @model.get('rank')
+    if rank >= 0
+      $(@$('.rating .star')[rank]).addClass('on')
+    
     @$('.chosen').chosen disable_search_threshold: 10
     @$('input').tooltip()
     @
@@ -193,10 +214,16 @@ App.InstrumentView = Parse.View.extend
     
   save: (event) ->
     event.preventDefault()
-    @model.set('acquisition_date', @$('input.datepicker[name=acquisition_date]').data('datepicker').getDate())
-    @$('.field-box > input[type=text]').each (i, input) =>
-      if input.name
-        @model.set input.name, input.value
+    @model.set('rank', @$('.rating .star').index(@$('.rating .on')))
+    
+    @$('.field-box > input, .field-box > select').each (i, input) =>
+      key = input.name
+      if key
+        field = $(input)
+        if field.hasClass('datepicker')
+          @model.set(key, field.data('datepicker').getDate())
+        else
+          @model.set key, field.val()
     
     groupACL = new Parse.ACL()
     groupACL.setRoleWriteAccess('octopus', yes)
