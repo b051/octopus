@@ -34,7 +34,7 @@ App.SignupView = Parse.View.extend
 
     @user.signUp null,
       success: (user) ->
-        app.navigate "", yes
+        app.navigate "instruments", yes
       error: (user, error) =>
         @alert "<b>Warning!</b> #{error.message}"
 
@@ -68,7 +68,7 @@ App.LoginView = Parse.View.extend
     else
       @user.logIn
         success: (user) ->
-          app.navigate "", yes
+          app.navigate "instruments", yes
         error: (user, error) =>
           @alert "<b>Warning!</b> #{error.message}"
 
