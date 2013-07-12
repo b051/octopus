@@ -194,6 +194,14 @@ App.InstrumentView = Parse.View.extend
     if rank >= 0
       $(@$('.rating .star')[rank]).addClass('on')
     
+    for key in ['store_price', 'acquisition_price']
+      input = @$("input[name=#{key}]")
+      match = @model.get(key).match /(.)(\d+)(\.\d+)/
+      c = input.parent()
+      $('button', c).html match[1]
+      input.val match[2]
+      $('.add-on', c).html match[3]
+    
     @$('.chosen').chosen disable_search_threshold: 10
     @$('input').tooltip()
     @
@@ -214,6 +222,7 @@ App.InstrumentView = Parse.View.extend
     
   save: (event) ->
     event.preventDefault()
+    $(event.target).attr('disabled', yes).html('Saving...')
     @model.set('rank', @$('.rating .star').index(@$('.rating .on')))
     
     @$('.field-box > input, .field-box > select').each (i, input) =>
@@ -225,6 +234,14 @@ App.InstrumentView = Parse.View.extend
         else
           @model.set key, field.val()
     
+    @$('.currency').each (i, div) =>
+      c = $(div)
+      currency = $('button', c).text()
+      fraction = $('.add-on', c).text()
+      input = $('input', c)
+      val = currency + input.val() + fraction
+      @model.set(input.attr('name'), val)
+    
     groupACL = new Parse.ACL()
     groupACL.setRoleWriteAccess('octopus', yes)
     groupACL.setRoleReadAccess('octopus', yes)
@@ -232,5 +249,10 @@ App.InstrumentView = Parse.View.extend
     @model.save
       success: ->
         console.log 'saved!'
+        $(event.target).html('Saved!').removeClass('primary').addClass('success')
+        setTimeout ->
+          $(event.target).html('Save').attr('disabled', no).removeClass('success').addClass('primary', 200)
+        , 2000
       error: (error) ->
+        $(event.target).html('Save').attr('disabled', no)
         console.error error

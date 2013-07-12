@@ -410,29 +410,29 @@
 	<%= textField('available_licenses', 'Available licenses') %>
 	<div class="field-box">
 		<label>Acquisition price:</label>
-		<div class="input-prepend input-append span6">
-			<div class="btn-group currency">
+		<div class="input-prepend input-append span6 currency">
+			<div class="btn-group">
 				<button class="btn dropdown-toggle" data-toggle="dropdown">$</button>
 				<ul class="dropdown-menu">
 					<li><a tabindex="-1" href="#">$</a></li>
 					<li><a tabindex="-1" href="#">¥</a></li>
 				</ul>
 			</div>
-			<input class="input-large span8" type="text">
+			<input class="input-large span8 text-right" type="text" name="acquisition_price">
 			<span class="add-on">.00</span>
 		</div>
 	</div>
 	<div class="field-box">
 		<label>Store price:</label>
-		<div class="input-prepend input-append span6">
-			<div class="btn-group currency">
+		<div class="input-prepend input-append span6 currency">
+			<div class="btn-group">
 				<button class="btn dropdown-toggle" data-toggle="dropdown">$</button>
 				<ul class="dropdown-menu">
 					<li><a tabindex="-1" href="#">$</a></li>
 					<li><a tabindex="-1" href="#">¥</a></li>
 				</ul>
 			</div>
-			<input class="input-large span8" type="text" value="<%= model.get('store_price') %>">
+			<input class="input-large span8 text-right" type="text" name="store_price">
 			<span class="add-on">.00</span>
 		</div>
 	</div>
