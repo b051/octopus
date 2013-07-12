@@ -4,10 +4,43 @@ InstrumentCollection = Parse.Collection.extend
 
 collection = App.collection = new InstrumentCollection()
 
-reloadData = (callback) ->
+loadLocal = ->
+  data = Parse.localStorage.getItem(Parse._getParsePath('instruments'))
+  if data
+    models = JSON.parse data
+    instruments = []
+    for model in models
+      instr = new Parse.Object._create('Instrument')
+      instr.id = model._id
+      delete model._id
+      instr.set model
+      instr._refreshCache()
+      instr._opSetQueue = [{}]
+      instruments.push instr
+    collection.add instruments
+    return instruments.length
+  return 0
+
+saveLocal = ->
+  models = []
+  for instr in collection.models
+    model = instr.toJSON()
+    model._id = instr.id
+    models.push model
+  Parse.localStorage.setItem(Parse._getParsePath('instruments'), JSON.stringify(models))
+
+
+reloadData = (callback, force=no) ->
+  if not force
+    try
+      if loadLocal()
+        return callback?()
+    catch error
+      console.log error
   console.log 'reloading instruments...'
   collection.fetch
     success: ->
+      saveLocal()
       callback?()
     error: (error) =>
       callback?()
@@ -27,19 +60,14 @@ App.InstrumentsTableView = Parse.View.extend
     'click .table-edit': 'editInstrument'
   
   render: ->
-    @$el.html @template fields:@fields, tools:collection
-    if not @table
-      @reloadData()
-      @table = @$('table.table').dataTable()
-    else
-      @table.fnDraw()
+    if collection.isEmpty()
+      @$el.html '<h4>Loading...</h4>'
+      reloadData =>
+        @$el.html @template fields:@fields, tools:collection
+        @table = @$('table.table').dataTable()
+      , yes
     @
   
-  reloadData: (event) ->
-    if collection.isEmpty()
-      reloadData =>
-        @render()
-
   search: (event) ->
     term = event.target.value
     @table.fnFilter term, null
@@ -67,11 +95,10 @@ App.InstrumentView = Parse.View.extend
     if id?
       if collection.isEmpty()
         reloadData =>
-          console.log 'reloaded'
           @model = collection.get id
-          console.log @model
           if @rendered
             @render()
+        , yes
       else
         @model = collection.get id
     else
@@ -114,19 +141,38 @@ App.InstrumentView = Parse.View.extend
     box.append select
     box[0].outerHTML
   
+  dateField: (name, title) ->
+    box = $('<div>', class:'field-box')
+    box.append("<label>#{title}:</label>")
+    picker = $ '<input>',
+      class:'input-large inline-input span6 datepicker'
+      type:'text'
+      name: name
+    box.append picker
+    box[0].outerHTML
+  
   events:
     'click .currency a': 'changeCurrency'
     'click .star': 'clickStar'
     'click .delete' : 'deleteInstrument'
     'click .save': 'save'
   
+  changeDate: (event) ->
+    console.log 'changeDate'
   render: ->
     @rendered = yes
-    return if not @model
-    @$el.html @template textField:@textField, chosenField:@chosenField, model:@model
+    if not @model
+      @$el.html '<h4>Loading...</h4>'
+      return @
+    @$el.html @template textField:@textField, chosenField:@chosenField, dateField:@dateField, model:@model
     @$('input:checkbox, input:radio').uniform()
     @$('input.datepicker').datepicker().on 'changeDate', (event) ->
       $(@).datepicker('hide')
+    
+    @$('input.datepicker').each (i, el) =>
+      date = @model.get(el.name) or new Date()
+      $(el).data('datepicker').setDate(date)
+    
     @$('.chosen').chosen disable_search_threshold: 10
     @$('input').tooltip()
     @
@@ -147,7 +193,7 @@ App.InstrumentView = Parse.View.extend
     
   save: (event) ->
     event.preventDefault()
-    @model.set('acquisition_date', @$('input.datepicker').data('datepicker').getDate())
+    @model.set('acquisition_date', @$('input.datepicker[name=acquisition_date]').data('datepicker').getDate())
     @$('.field-box > input[type=text]').each (i, input) =>
       if input.name
         @model.set input.name, input.value

@@ -436,10 +436,7 @@
 			<span class="add-on">.00</span>
 		</div>
 	</div>
-	<div class="field-box">
-		<label>Date of acquisition:</label>
-		<input type="text" value="03/29/2013" class="input-large inline-input span6 datepicker">
-	</div>
+	<%= dateField('acquisition_date', 'Date of acquisition') %>
 	<%= textField('user_name', 'Username') %>
 	<%= textField('user_department', 'Department') %>
 	<%= textField('user_address', 'Address') %>
