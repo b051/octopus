@@ -1,18 +1,12 @@
 {
   "name": "octopus",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
     "start": "foreman start"
   },
   "dependencies": {
     "express": "3.x",
-    "mongoose": "3.6.11",
-    "socket.io": "*",
-    "passport": "*",
-    "passport-local": "0.1.6",
-    "connect-redis": "1.4.5",
-    "pwd": "0.0.2",
-    "parse": "1.2.7"
+    "parse": "1.x"
   }
 }

@@ -34,6 +34,10 @@ reloadData = (callback, force=no) ->
   if not force
     try
       if loadLocal()
+        collection.fetch
+          success: ->
+            console.log "fetched"
+            saveLocal()
         return callback?()
     catch error
       console.log error
@@ -53,13 +57,15 @@ App.InstrumentsTableView = Parse.View.extend
 
   initialize: ->
     @fields = ["name", "producer", "type", "group", "user_name", "status"]
-  
+    collection.on 'all', (event) ->
+      console.log event
   events:
     'keyup .search': 'search'
     'click tbody > tr': 'selectInstrument'
     'click .table-edit': 'editInstrument'
   
-  _render: ->
+  _render: (event) ->
+    console.log "event: #{event}" if event
     @$el.html @template fields:@fields, tools:collection
     @table = @$('table.table').dataTable()
   
@@ -68,7 +74,6 @@ App.InstrumentsTableView = Parse.View.extend
       @$el.html '<h4>Loading...</h4>'
       reloadData =>
         @_render()
-      , yes
     else
       @_render()
     @
@@ -96,18 +101,13 @@ App.InstrumentView = Parse.View.extend
 
   template: $.template 'form-instrument'
 
-  initialize: (id) ->
-    if id?
+  initialize: (@instrumentId) ->
+    if @instrumentId?
       if collection.isEmpty()
         reloadData =>
-          @model = collection.get id
           if @rendered
             @render()
-        , yes
-      else
-        @model = collection.get id
     else
-      @model = new Instrument()
     
   textField: (name, title, options={}) ->
     box = $('<div>', class:'field-box')
@@ -176,11 +176,14 @@ App.InstrumentView = Parse.View.extend
   
   changeDate: (event) ->
     console.log 'changeDate'
-  render: ->
-    @rendered = yes
-    if not @model
-      @$el.html '<h4>Loading...</h4>'
-      return @
+  
+  _render: ->
+    console.log arguments
+    
+    if @instrumentId
+      @model = collection.get @instrumentId
+    else
+      @model = new Instrument()
     @$el.html @template textField:@textField, chosenField:@chosenField, dateField:@dateField, model:@model
     @$('input:checkbox, input:radio').uniform()
     @$('input.datepicker').datepicker().on 'changeDate', (event) ->
@@ -204,13 +207,22 @@ App.InstrumentView = Parse.View.extend
     
     @$('.chosen').chosen disable_search_threshold: 10
     @$('input').tooltip()
+  
+  render: ->
+    if @instrumentId
+      if collection.isEmpty()
+        @$el.html '<h4>Loading...</h4>'
+        reloadData =>
+          @_render()
+      else
+        @_render()
+      collection.on('reset', @_render.bind @)
     @
   
   clickStar: (event) ->
     star = $(event.target)
     star.siblings().removeClass('on')
     star.addClass('on')
-  
   
   changeCurrency: (event) ->
     event.preventDefault()
