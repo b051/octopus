@@ -375,82 +375,18 @@
 
 <script type="text/template" id="form-instrument">
 <div class="row-fluid">
-<div class="span6">
-	<h4 class="title">Basic Data</h4>
-	<input type="hidden" value="<%= model.id %>">
-	<%= textField('iid', 'Identity number', {tooltip:'Instrument identify number'}) %>
-	<%= textField('name', 'Name', {tooltip:'Instrument name'}) %>
-	<%= textField('producer', 'Producer') %>
-	<%= textField('sn', 'Serial number') %>
-	<%= textField('range', 'Range') %>
-	<%= textField('scale', 'Scale') %>
-	<%= textField('precision', 'Precision') %>
-	<%= chosenField('group', 'Group', ['auditing instrument', 'not auditing intr.', 'etalon', 'dummy']) %>
-	<%= chosenField('state', 'State', ['closed', 'lost', 'wasted', 'repairing', 'may use', 'destroyed', 'calibrated over', 'is calibrating', 'discharged', 'reserve'], {'multiple':true}) %>
-	<div class="field-box">
-		<label>Rank:</label>
-		<span class="rating">
-		  <span class="star"></span>
-		  <span class="star"></span>
-		  <span class="star"></span>
-		  <span class="star"></span>
-		  <span class="star"></span>
-		</span>
+	<div class="span6 basic-data">
+		<h4 class="title">Basic Data</h4>
 	</div>
-	<%= textField('base_of_rank', 'Base of rank') %>
-	<%= textField('main_instrument', 'Main instrument') %>
-	<%= textField('parts_of_instrument', 'Parts of instrument') %>
-</div>
-
-<div class="span6">
-	<h4 class="title">User</h4>
-	<%= textField('deliverer', 'Deliverer') %>
-	<%= textField('deliverer_code', 'Deliverer Code') %>
-	<%= textField('ordering_number', 'Ordering number') %>
-	<%= textField('available_licenses', 'Available licenses') %>
-	<div class="field-box">
-		<label>Acquisition price:</label>
-		<div class="input-prepend input-append span6 currency">
-			<div class="btn-group">
-				<button class="btn dropdown-toggle" data-toggle="dropdown">$</button>
-				<ul class="dropdown-menu">
-					<li><a tabindex="-1" href="#">$</a></li>
-					<li><a tabindex="-1" href="#">¥</a></li>
-				</ul>
-			</div>
-			<input class="input-large span8 text-right" type="text" name="acquisition_price">
-			<span class="add-on">.00</span>
-		</div>
+	<div class="span6 instrument-user">
+		<h4 class="title">User</h4>
 	</div>
-	<div class="field-box">
-		<label>Store price:</label>
-		<div class="input-prepend input-append span6 currency">
-			<div class="btn-group">
-				<button class="btn dropdown-toggle" data-toggle="dropdown">$</button>
-				<ul class="dropdown-menu">
-					<li><a tabindex="-1" href="#">$</a></li>
-					<li><a tabindex="-1" href="#">¥</a></li>
-				</ul>
-			</div>
-			<input class="input-large span8 text-right" type="text" name="store_price">
-			<span class="add-on">.00</span>
-		</div>
-	</div>
-	<%= dateField('acquisition_date', 'Date of acquisition') %>
-	<%= textField('user_name', 'Username') %>
-	<%= textField('user_department', 'Department') %>
-	<%= textField('user_address', 'Address') %>
-	<%= textField('user_phone', 'Phone') %>
-	<%= textField('user_fax', 'Fax') %>
-	<%= textField('user_email', 'Email', {'type':'email'}) %>
-</div>
 </div>
 <div class="row-fluid">
-<button class="btn-flat span2 primary save">Save</button>
-<% if (!model.isNew()) { %>
-<button class="btn-flat span2 white delete">Delete</button>
-<% } %>
-
+	<button class="btn-flat span2 primary save">Save</button>
+	<% if (!model.isNew()) { %>
+	<button class="btn-flat span2 white delete">Delete</button>
+	<% } %>
 </div>
 </script>
 </div>

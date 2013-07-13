@@ -64,8 +64,8 @@ App.InstrumentsTableView = Parse.View.extend
     'click tbody > tr': 'selectInstrument'
     'click .table-edit': 'editInstrument'
   
-  _render: (event) ->
-    console.log "event: #{event}" if event
+  _render: ->
+    console.log arguments
     @$el.html @template fields:@fields, tools:collection
     @table = @$('table.table').dataTable()
   
@@ -102,16 +102,13 @@ App.InstrumentView = Parse.View.extend
   template: $.template 'form-instrument'
 
   initialize: (@instrumentId) ->
-    if @instrumentId?
-      if collection.isEmpty()
-        reloadData =>
-          if @rendered
-            @render()
-    else
-    
-  textField: (name, title, options={}) ->
+  
+  _box: (title) ->
     box = $('<div>', class:'field-box')
     box.append("<label>#{title}:</label>")
+  
+  textField: (name, title, options={}) ->
+    box = @_box title
     tooltip = options.tooltip
     if tooltip
       delete options.tooltip
@@ -120,7 +117,6 @@ App.InstrumentView = Parse.View.extend
         'data-trigger': 'focus'
         'data-placement': 'right'
         'title': tooltip
-    
     attrs =
       class:'span6 input-large inline-input'
       type:'text'
@@ -129,12 +125,12 @@ App.InstrumentView = Parse.View.extend
     $.extend attrs, options
     
     input = $('<input>', attrs)
+    if tooltip
+      input.tooltip()
     box.append input
-    box[0].outerHTML
   
   chosenField: (name, title, options=[], chosen={}) ->
-    box = $('<div>', class:'field-box')
-    box.append("<label>#{title}:</label>")
+    box = @_box title
     select = $('<select>', class:'chosen span6', name: name)
     select.prop('multiple', chosen.multiple)
     select.append('<option></option>')
@@ -155,27 +151,58 @@ App.InstrumentView = Parse.View.extend
       else
         option.attr('selected', option.val() is value)
       select.append option
+    select.chosen disable_search_threshold: 10
     box.append select
-    box[0].outerHTML
   
   dateField: (name, title) ->
-    box = $('<div>', class:'field-box')
-    box.append("<label>#{title}:</label>")
+    box = @_box title
     picker = $ '<input>',
       class:'input-large inline-input span6 datepicker'
       type:'text'
       name: name
+    
+    date = @model.get(name) or new Date()
+    picker.datepicker().on 'changeDate', (event) ->
+      $(@).datepicker('hide')
+    picker.data('datepicker').setDate(date)
+    
     box.append picker
-    box[0].outerHTML
+  
+  rateField: (name, title, number) ->
+    box = @_box title
+    rating = $('<span>', class:'rating')
+    value = @model.get(name)
+    for num in [0...number]
+      star = $('<span>', class:'star')
+      if num is value
+        star.addClass 'on'
+      rating.append star
+    box.append rating
+  
+  currencyField: (name, title, symbols) ->
+    box = @_box title
+    currency = $('<div>', class:'input-prepend input-append span6 currency')
+    match = @model.get(name).match /(.)(\d+)(\.\d+)/
+    symbolPicker = $('<div>', class:'btn-group')
+    button = $('<button class="btn dropdown-toggle" data-toggle="dropdown"></button>')
+    symbolList = $('<ul>', class:'dropdown-menu')
+    for symbol in symbols
+      symbolList.append $('<li>').append($('<a>', href:'#', html:symbol))
+    symbolPicker.append button, symbolList
+    
+    input = $('<input>', class:'input-large span8 text-right', type:'text', name:name)
+    fraction = $('<span>', class:'add-on')
+    currency.append symbolPicker, input, fraction
+    button.html match[1]
+    input.val match[2]
+    fraction.html match[3]
+    box.append currency
   
   events:
     'click .currency a': 'changeCurrency'
     'click .star': 'clickStar'
     'click .delete' : 'deleteInstrument'
     'click .save': 'save'
-  
-  changeDate: (event) ->
-    console.log 'changeDate'
   
   _render: ->
     console.log arguments
@@ -184,29 +211,42 @@ App.InstrumentView = Parse.View.extend
       @model = collection.get @instrumentId
     else
       @model = new Instrument()
-    @$el.html @template textField:@textField, chosenField:@chosenField, dateField:@dateField, model:@model
-    @$('input:checkbox, input:radio').uniform()
-    @$('input.datepicker').datepicker().on 'changeDate', (event) ->
-      $(@).datepicker('hide')
+    @$el.html @template model:@model
     
-    @$('input.datepicker').each (i, el) =>
-      date = @model.get(el.name) or new Date()
-      $(el).data('datepicker').setDate(date)
+    basic_data = @$('.basic-data')
+    basic_data.append @textField('iid', 'Identity number', {tooltip:'Instrument identify number'})
+    basic_data.append @textField('name', 'Name', {tooltip:'Instrument name'})
+    basic_data.append @textField('producer', 'Producer')
+    basic_data.append @textField('sn', 'Serial number')
+    basic_data.append @textField('range', 'Range')
+    basic_data.append @textField('scale', 'Scale')
+    basic_data.append @textField('precision', 'Precision')
+    basic_data.append @chosenField('group', 'Group', ['auditing instrument', 'not auditing intr.', 'etalon', 'dummy'])
+    basic_data.append @chosenField('state', 'State', [
+      'closed', 'lost', 'wasted'
+      'repairing', 'may use', 'destroyed'
+      'calibrated over', 'is calibrating'
+      'discharged', 'reserve'], 'multiple':yes)
     
-    rank = @model.get('rank')
-    if rank >= 0
-      $(@$('.rating .star')[rank]).addClass('on')
+    basic_data.append @rateField('rank', 'Rank', 5)
+    basic_data.append @textField('base_of_rank', 'Base of rank')
+    basic_data.append @textField('main_instrument', 'Main instrument')
+    basic_data.append @textField('parts_of_instrument', 'Parts of instrument')
     
-    for key in ['store_price', 'acquisition_price']
-      input = @$("input[name=#{key}]")
-      match = @model.get(key).match /(.)(\d+)(\.\d+)/
-      c = input.parent()
-      $('button', c).html match[1]
-      input.val match[2]
-      $('.add-on', c).html match[3]
-    
-    @$('.chosen').chosen disable_search_threshold: 10
-    @$('input').tooltip()
+    user = @$('.instrument-user')
+    user.append @textField('deliverer', 'Deliverer')
+    user.append @textField('deliverer_code', 'Deliverer Code')
+    user.append @textField('ordering_number', 'Ordering number')
+    user.append @textField('available_licenses', 'Available licenses')
+    user.append @currencyField 'acquisition_price', 'Acquisition price', ['$', '¥']
+    user.append @currencyField 'store_price', 'Store price', ['$', '¥']
+    user.append @dateField('acquisition_date', 'Date of acquisition')
+    user.append @textField('user_name', 'Username')
+    user.append @textField('user_department', 'Department')
+    user.append @textField('user_address', 'Address')
+    user.append @textField('user_phone', 'Phone')
+    user.append @textField('user_fax', 'Fax')
+    user.append @textField('user_email', 'Email', {'type':'email'})
   
   render: ->
     if @instrumentId
