@@ -69,7 +69,7 @@ App.Router = Parse.Router.extend
     login: 'login'
     logout: 'logout'
     signup: 'signup'
-    charts: 'charts'
+    analytics: 'analytics'
     instruments : 'instruments'
     'instruments/add' : 'newInstrument'
     'instrument/:cid' : 'tool'
@@ -95,11 +95,11 @@ App.Router = Parse.Router.extend
       @navbar.render()
       view = next()
       @_switchMain view.el
-      if Parse.history.fragment is ''
-        $('#main-stats').slideDown()
+      view.render()
+      if Parse.history.fragment is 'analytics'
+        $('#main-stats').show()
       else
         $('#main-stats').slideUp()
-      view.render()
   
   _switchMain: (el) ->
     $('#pad-wrapper').empty().append el
@@ -126,8 +126,7 @@ App.Router = Parse.Router.extend
   
   home: ->
     @requireLogin ->
-      # Parse.User.current().fetch()
-      # $('#main-stats').html new App.StatsView().el
+      Parse.User.current().fetch()
       new App.InstrumentsTableView
   
   account: (tab) ->
@@ -138,8 +137,9 @@ App.Router = Parse.Router.extend
     @requireLogin ->
       new App.CalendarView
   
-  charts: ->
+  analytics: ->
     @requireLogin ->
+      $('#main-stats').html new App.StatsView().el
       new App.ChartsView
   
   instruments: ->

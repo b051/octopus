@@ -28,10 +28,9 @@ App.SideBar = Parse.View.extend
   update: ->
     fragment = Parse.history.fragment
     activeTab = switch
-      when fragment is 'charts' then 1
-      when fragment.match /^instrument/ then 2
+      when fragment.match /^calendar/ then 1
+      when fragment is 'analytics' then 2
       when fragment.match /^users/ then 3
-      when fragment.match /^calendar/ then 4
       else 0
     
     @$('> li').each (index, li) =>
