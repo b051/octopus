@@ -30,6 +30,35 @@ saveLocal = ->
   Parse.localStorage.setItem(Parse._getParsePath('instruments'), JSON.stringify(models))
 
 
+all_fields =
+  name: "Name"
+  producer: "Producer"
+  type: "Type"
+  group: "Group"
+  user_name: "Username"
+  status: "Status"
+  acquisition_price: "acquisition price"
+  acquisition_date: "acquisition date"
+  available_licenses: "available_licenses"
+  base_of_rank: "base_of_rank"
+  deliverer: "deliverer"
+  deliverer_code: "deliverer_code"
+  main_instrument: "main_instrument"
+  ordering_number: "ordering_number"
+  precision: "precision"
+  range: "range"
+  rank: "rank"
+  scale: "scale"
+  sn: "sn"
+  state: "state"
+  store_price: "store_price"
+  user_department: "user_department"
+  user_address: "user_address"
+  user_phone: "user_phone"
+  user_email: "user_email"
+  user_fax: "user_fax"
+
+
 reloadData = (callback, force=no) ->
   if not force
     try
@@ -65,6 +94,12 @@ App.InstrumentsTableView = Parse.View.extend
 
   template: $.template 'table-instruments'
   
+  itemTemplate: _.template '<div class="item">
+              <i class="icon-reorder"></i>
+              <%= title %>
+              <input type="checkbox" <% if (checked) { %>checked<% } %> class="check">
+            </div>'
+  
   popUpTemplate: '<div class="pop-dialog" style="position:absolute;">
       <div class="pointer">
         <div class="arrow"></div>
@@ -74,11 +109,6 @@ App.InstrumentsTableView = Parse.View.extend
         <div class="settings">
           <a href="#" class="close-icon"><i class="icon-remove-sign"></i></a>
           <div class="items">
-            <div class="item">
-              <i class="icon-reorder"></i>
-              List item
-              <input type="checkbox" checked="checked" class="check">
-            </div>
           </div>
         </div>
       </div>
@@ -86,14 +116,19 @@ App.InstrumentsTableView = Parse.View.extend
 
   initialize: ->
     @fields = ["name", "producer", "type", "group", "user_name", "status"]
-    $(window).on('resize', @place.bind(@))
+    @place = @place.bind @
+    
+    mousedown = (e) ->
+      closest = $(e.target).closest('.pop-dialog')
+      if closest.length is 0
+        @closePopup e
+    @mousedown = mousedown.bind @
   
   events:
     'keyup .search': 'search'
     'click tbody > tr': 'selectInstrument'
     'click .table-edit': 'editInstrument'
     'click .custom-columns': 'openPopup'
-    'click .pop-dialog .close-icon': 'closePopup'
   
   _render: ->
     console.log arguments
@@ -106,28 +141,31 @@ App.InstrumentsTableView = Parse.View.extend
   
   openPopup: (event) ->
     event.stopPropagation()
+    event.preventDefault()
     if not @picker
       @picker = $ @popUpTemplate
       @picker.element = @$('.custom-columns')
-      @picker.appendTo @picker.element.parent()
+      @picker.appendTo 'body'
+      $('.close-icon', @picker).on 'click', @closePopup.bind @
     @picker.addClass('is-visible')
+    items = @picker.find('.items').empty()
+    for key, title of all_fields
+      checked = key in @fields
+      items.append @itemTemplate title:title, checked: checked
+    
     @$('.btn-group').removeClass('open')
-    mousedown = (e) ->
-      closest = $(e.target).closest('.pop-dialog')
-      if closest.length is 0
-        @closePopup()
-    @mousedown = mousedown.bind @
     $(document).on 'mousedown', @mousedown
+    $(window).on('resize', @place)
     @place()
   
   
   closePopup: (event) ->
-    console.log 'closePop'
     $(document).off 'mousedown', @mousedown
     @picker.removeClass('is-visible')
+    $(window).off 'resize', @place
   
   place: ->
-    offset = @picker.element.position()
+    offset = @picker.element.offset()
     height = @picker.element.outerHeight(yes)
     zIndex = @picker.element.parents().filter ->
       $(@).css('z-index') != 'auto'
