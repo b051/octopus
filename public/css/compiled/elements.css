@@ -397,7 +397,7 @@
 /* Custom Dialog */
 .pop-dialog {
   z-index: 10000;
-  display: inline-block; }
+  display: none; }
   .pop-dialog.is-visible {
     display: block;
     -webkit-animation: reveal .2s ease-out;

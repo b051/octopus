@@ -50,19 +50,50 @@ reloadData = (callback, force=no) ->
       callback?()
       console.log 'error'
 
+viewConnect = ->
+  if collection.isEmpty()
+    @$el.html '<h4>Loading...</h4>'
+    reloadData =>
+      @_render()
+  else
+    @_render()
+  collection.on('reset', @_render.bind @)
+
+
 App.InstrumentsTableView = Parse.View.extend
   className: 'table-wrapper'
 
   template: $.template 'table-instruments'
+  
+  popUpTemplate: '<div class="pop-dialog" style="position:absolute;">
+      <div class="pointer">
+        <div class="arrow"></div>
+        <div class="arrow_border"></div>
+      </div>
+      <div class="body">
+        <div class="settings">
+          <a href="#" class="close-icon"><i class="icon-remove-sign"></i></a>
+          <div class="items">
+            <div class="item">
+              <i class="icon-reorder"></i>
+              List item
+              <input type="checkbox" checked="checked" class="check">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>'
 
   initialize: ->
     @fields = ["name", "producer", "type", "group", "user_name", "status"]
-    collection.on 'all', (event) ->
-      console.log event
+    $(window).on('resize', @place.bind(@))
+  
   events:
     'keyup .search': 'search'
     'click tbody > tr': 'selectInstrument'
     'click .table-edit': 'editInstrument'
+    'click .custom-columns': 'openPopup'
+    'click .pop-dialog .close-icon': 'closePopup'
   
   _render: ->
     console.log arguments
@@ -70,13 +101,42 @@ App.InstrumentsTableView = Parse.View.extend
     @table = @$('table.table').dataTable()
   
   render: ->
-    if collection.isEmpty()
-      @$el.html '<h4>Loading...</h4>'
-      reloadData =>
-        @_render()
-    else
-      @_render()
+    viewConnect.apply @
     @
+  
+  openPopup: (event) ->
+    event.stopPropagation()
+    if not @picker
+      @picker = $ @popUpTemplate
+      @picker.element = @$('.custom-columns')
+      @picker.appendTo @picker.element.parent()
+    @picker.addClass('is-visible')
+    @$('.btn-group').removeClass('open')
+    mousedown = (e) ->
+      closest = $(e.target).closest('.pop-dialog')
+      if closest.length is 0
+        @closePopup()
+    @mousedown = mousedown.bind @
+    $(document).on 'mousedown', @mousedown
+    @place()
+  
+  
+  closePopup: (event) ->
+    console.log 'closePop'
+    $(document).off 'mousedown', @mousedown
+    @picker.removeClass('is-visible')
+  
+  place: ->
+    offset = @picker.element.position()
+    height = @picker.element.outerHeight(yes)
+    zIndex = @picker.element.parents().filter ->
+      $(@).css('z-index') != 'auto'
+    .first().css('z-index')
+    @picker.css
+      top: offset.top + height + 10
+      left: offset.left
+      width: 354
+      zIndex: parseInt(zIndex) + 10
   
   search: (event) ->
     term = event.target.value
@@ -131,7 +191,7 @@ App.InstrumentView = Parse.View.extend
   
   chosenField: (name, title, options=[], chosen={}) ->
     box = @_box title
-    select = $('<select>', class:'chosen span6', name: name)
+    select = $('<select>', class:'chzn-select span6', name: name)
     select.prop('multiple', chosen.multiple)
     select.append('<option></option>')
     
@@ -151,8 +211,8 @@ App.InstrumentView = Parse.View.extend
       else
         option.attr('selected', option.val() is value)
       select.append option
-    select.chosen disable_search_threshold: 10
     box.append select
+    box
   
   dateField: (name, title) ->
     box = @_box title
@@ -165,7 +225,6 @@ App.InstrumentView = Parse.View.extend
     picker.datepicker().on 'changeDate', (event) ->
       $(@).datepicker('hide')
     picker.data('datepicker').setDate(date)
-    
     box.append picker
   
   rateField: (name, title, number) ->
@@ -209,6 +268,8 @@ App.InstrumentView = Parse.View.extend
     
     if @instrumentId
       @model = collection.get @instrumentId
+      if not @model
+        return app.navigate '', yes
     else
       @model = new Instrument()
     @$el.html @template model:@model
@@ -247,16 +308,12 @@ App.InstrumentView = Parse.View.extend
     user.append @textField('user_phone', 'Phone')
     user.append @textField('user_fax', 'Fax')
     user.append @textField('user_email', 'Email', {'type':'email'})
+    @$('.chzn-select').chosen()
+  
   
   render: ->
     if @instrumentId
-      if collection.isEmpty()
-        @$el.html '<h4>Loading...</h4>'
-        reloadData =>
-          @_render()
-      else
-        @_render()
-      collection.on('reset', @_render.bind @)
+      viewConnect.apply @
     @
   
   clickStar: (event) ->

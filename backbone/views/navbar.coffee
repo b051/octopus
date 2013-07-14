@@ -58,7 +58,7 @@ NavNotificationDropDown = Parse.View.extend
   className: 'notification-dropdown hidden-phone'
   
   events:
-    'click .pop-dialog': 'stopEvent'
+    'click .pop-dialog': stopEvent
     'click .pop-dialog .close-icon': 'closeMenu'
     'click .trigger': 'openMenu'
   
@@ -73,9 +73,6 @@ NavNotificationDropDown = Parse.View.extend
       stopEvent(event)
     @dialog.removeClass('is-visible')
     @trigger.removeClass('active')
-  
-  stopEvent: (event) ->
-    stopEvent(event)
   
   openMenu: (event) ->
     stopEvent(event)

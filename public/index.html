@@ -23,7 +23,7 @@
 
 		<!-- global styles -->
 		<link rel="stylesheet" href="css/layout.css">
-		<link rel="stylesheet" href="css/elements.css">
+		<link rel="stylesheet" href="css/compiled/elements.css">
 		<link rel="stylesheet" href="css/icons.css">
 
 		<!-- page specific styles -->
@@ -33,6 +33,7 @@
 		<link rel="stylesheet" href="css/compiled/chart-showcase.css" media="screen">
 		<link rel="stylesheet" href="css/compiled/form-showcase.css" media="screen">
 		<link rel="stylesheet" href="css/compiled/tables.css" media="screen">
+		<link rel="stylesheet" href="css/compiled/ui-elements.css" media="screen">
 		<!-- open sans font -->
 		<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
 
@@ -310,15 +311,23 @@
 </div>
 
 <div class="row-fluid filter-block">
-	<div class="pull-right">
-		<div class="ui-select">
-			<select>
-			  <option>Filter all</option>
-			  <option>Filter on name</option>
-			</select>
+	<div class="row pull-right">
+		<a class="btn-flat custom-columns small white" href="javascript:void(0);">
+			<i class="icon-wrench"></i>
+			Custom
+		</a>
+		<div class="btn-group">
+			<a class="btn-flat small white" data-toggle="dropdown">
+				Filter all
+				<i class="icon-filter"></i>
+			</a>
+			<ul class="dropdown-menu">
+					<li><a href="#">Filter all</a></li>
+					<li><a href="#">Filter on name</a></li>
+			</ul>
 		</div>
-		<input type="text" class="search">
-		<a class="btn-flat new-product" href="#instruments/add">+ Add instrument</a>
+		<input type="text" class="search" placeholder="Search...">
+		<a class="btn-flat new-product success" href="#instruments/add">+ Add instrument</a>
 	</div>
 </div>
 
@@ -605,8 +614,8 @@ Download all message on connection
 <script src="js/views/instrument.js"></script>
 <script type="text/javascript">
 $(function() {
-  window.app = new App.Router();
-  Parse.history.start();
+	window.app = new App.Router();
+	Parse.history.start();
 });
 </script>
 </body>
