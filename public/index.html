@@ -338,23 +338,23 @@
 				</th>
 				<% _.each(fields, function(field) { %>
 					<th class="span3">
-						<span class="line"></span><%= field %>
+						<span class="line"></span><%= all_fields[field] %>
 					</th>
 				<% }) %>
 			</tr>
 		</thead>
 		<tbody>
-		<% tools.each(function(tool) { %>
+		<% collection.each(function(instrument) { %>
 			<tr>
 			<td class="id">
 				<input type="checkbox">
-				<a href="#instrument/<%= tool.id %>"><%= tool.get('iid') %></a>
+				<a href="#instrument/<%= instrument.id %>"><%= instrument.get('iid') %></a>
 			</td>
 			<% _.each(fields, function(field) { if (field != 'status') { %>
-				<td class="<%= field %>"><%= tool.get(field) %></td>
+				<td class="<%= field %>"><%= instrument.get(field) %></td>
 			<% }}) %>
 			<td>
-				<span class="label label-<%= tool.get('status') ? 'success' : 'info' %>"><%= tool.get('status') ? 'Active' : 'Standby' %></span>
+				<span class="label label-<%= instrument.get('status') ? 'success' : 'info' %>"><%= instrument.get('status') ? 'Active' : 'Standby' %></span>
 				<ul class="actions">
 					<li><i class="table-edit"></i></span></li>
 					<li><i class="table-settings"></i></li>

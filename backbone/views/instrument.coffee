@@ -37,26 +37,26 @@ all_fields =
   group: "Group"
   user_name: "Username"
   status: "Status"
-  acquisition_price: "acquisition price"
-  acquisition_date: "acquisition date"
-  available_licenses: "available_licenses"
-  base_of_rank: "base_of_rank"
-  deliverer: "deliverer"
-  deliverer_code: "deliverer_code"
-  main_instrument: "main_instrument"
-  ordering_number: "ordering_number"
+  acquisition_price: "Acquisition price"
+  acquisition_date: "Acquisition date"
+  available_licenses: "Available licenses"
+  base_of_rank: "Base of rank"
+  deliverer: "Deliverer"
+  deliverer_code: "Deliverer code"
+  main_instrument: "Main instrument"
+  ordering_number: "Ordering number"
   precision: "precision"
-  range: "range"
-  rank: "rank"
-  scale: "scale"
-  sn: "sn"
-  state: "state"
-  store_price: "store_price"
-  user_department: "user_department"
-  user_address: "user_address"
-  user_phone: "user_phone"
-  user_email: "user_email"
-  user_fax: "user_fax"
+  range: "Range"
+  rank: "Rank"
+  scale: "Scale"
+  sn: "Serial number"
+  state: "State"
+  store_price: "Store price"
+  user_department: "Department"
+  user_address: "Address"
+  user_phone: "Phone"
+  user_email: "Email"
+  user_fax: "Fax"
 
 
 reloadData = (callback, force=no) ->
@@ -94,7 +94,7 @@ App.InstrumentsTableView = Parse.View.extend
 
   template: $.template 'table-instruments'
   
-  itemTemplate: _.template '<li class="item">
+  itemTemplate: _.template '<li class="item" name="<%=name%>">
               <i class="icon-reorder"></i>
               <%= title %>
               <input type="checkbox" <% if (checked) { %>checked<% } %> class="check">
@@ -132,7 +132,7 @@ App.InstrumentsTableView = Parse.View.extend
   
   _render: ->
     console.log arguments
-    @$el.html @template fields:@fields, tools:collection
+    @$el.html @template fields:@fields, all_fields:all_fields, collection:collection
     @table = @$('table.table').dataTable()
   
   render: ->
@@ -146,12 +146,22 @@ App.InstrumentsTableView = Parse.View.extend
       @picker = $ @popUpTemplate
       @picker.appendTo 'body'
       $('.close-icon', @picker).on 'click', @closePopup.bind @
+      $('.items', @picker).sortable
+        cursor: 'move'
+        stop: =>
+          fields = []
+          checkedItems = @$('.items item').filter ->
+            if $('input', @).is ':checked'
+              fields.push @.attr 'name'
+          @fields = fields
+          console.log fields
+          @_render()
+    
     @picker.addClass('is-visible')
     items = @picker.find('.items').empty()
     for key, title of all_fields
       checked = key in @fields
-      items.append @itemTemplate title:title, checked: checked
-    items.sortable()
+      items.append @itemTemplate name:key, title:title, checked:checked
     items.disableSelection()
     @$('.btn-group').removeClass('open')
     $(document).on 'mousedown', @mousedown
