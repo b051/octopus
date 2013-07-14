@@ -89,7 +89,7 @@
     color: #95a8b7;
     cursor: pointer; }
   .pop-dialog .settings .items {
-    margin-top: 15px; }
+    margin: 15px 0 0; }
     .pop-dialog .settings .items .item {
       display: block;
       padding: 7px 0px 7px 20px;

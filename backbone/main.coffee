@@ -93,9 +93,9 @@ App.Router = Parse.Router.extend
     else
       @_switchToLogin no
       @navbar.render()
-      view = next()
-      @_switchMain view.el
-      view.render()
+      @content = next()
+      @_switchMain @content.el
+      @content.render()
       if Parse.history.fragment is 'analytics'
         $('#main-stats').show()
       else

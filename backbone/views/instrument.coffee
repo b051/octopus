@@ -94,11 +94,11 @@ App.InstrumentsTableView = Parse.View.extend
 
   template: $.template 'table-instruments'
   
-  itemTemplate: _.template '<div class="item">
+  itemTemplate: _.template '<li class="item">
               <i class="icon-reorder"></i>
               <%= title %>
               <input type="checkbox" <% if (checked) { %>checked<% } %> class="check">
-            </div>'
+            </li>'
   
   popUpTemplate: '<div class="pop-dialog" style="position:absolute;">
       <div class="pointer">
@@ -108,8 +108,8 @@ App.InstrumentsTableView = Parse.View.extend
       <div class="body">
         <div class="settings">
           <a href="#" class="close-icon"><i class="icon-remove-sign"></i></a>
-          <div class="items">
-          </div>
+          <ul class="items">
+          </ul>
         </div>
       </div>
     </div>'
@@ -144,7 +144,6 @@ App.InstrumentsTableView = Parse.View.extend
     event.preventDefault()
     if not @picker
       @picker = $ @popUpTemplate
-      @picker.element = @$('.custom-columns')
       @picker.appendTo 'body'
       $('.close-icon', @picker).on 'click', @closePopup.bind @
     @picker.addClass('is-visible')
@@ -152,12 +151,12 @@ App.InstrumentsTableView = Parse.View.extend
     for key, title of all_fields
       checked = key in @fields
       items.append @itemTemplate title:title, checked: checked
-    
+    items.sortable()
+    items.disableSelection()
     @$('.btn-group').removeClass('open')
     $(document).on 'mousedown', @mousedown
     $(window).on('resize', @place)
-    @place()
-  
+    @place.apply @
   
   closePopup: (event) ->
     $(document).off 'mousedown', @mousedown
@@ -165,16 +164,13 @@ App.InstrumentsTableView = Parse.View.extend
     $(window).off 'resize', @place
   
   place: ->
-    offset = @picker.element.offset()
-    height = @picker.element.outerHeight(yes)
-    zIndex = @picker.element.parents().filter ->
-      $(@).css('z-index') != 'auto'
-    .first().css('z-index')
+    element = @$('.custom-columns')
+    offset = element.offset()
+    height = element.outerHeight(yes)
     @picker.css
       top: offset.top + height + 10
       left: offset.left
       width: 354
-      zIndex: parseInt(zIndex) + 10
   
   search: (event) ->
     term = event.target.value
