@@ -64,6 +64,6 @@
 .rating{unicode-bidi:bidi-override;direction:rtl;}.rating span.star{font-family:FontAwesome;font-weight:normal;font-style:normal;display:inline-block;}
 .rating span.star:before{content:"\f006";padding-right:5px;color:#999999;}
 .rating span.star.on:before,.rating span.star.on~span.star:before{content:"\f005";color:#e3cf7a;}
-.form-warpper .rating span.star:hover:before,.form-warpper .rating span.star:hover~span.star:before{content:"\f005";color:#e3cf7a;}
-.form-warpper .rating{font-size:30px;}
+.form-wrapper .rating span.star:hover:before,.form-warpper .rating span.star:hover~span.star:before{content:"\f005";color:#e3cf7a;}
+.form-wrapper .rating{font-size:30px;}
 .form-wrapper .rating span.star:hover{cursor:pointer;}
