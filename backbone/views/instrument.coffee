@@ -37,7 +37,6 @@ all_fields =
   type: "Type"
   group: "Group"
   user_name: "Username"
-  status: "Status"
   acquisition_price: "Acquisition price"
   acquisition_date: "Date of acquisition"
   available_licenses: "Available licenses"
@@ -117,9 +116,9 @@ App.InstrumentsTableView = Parse.View.extend
     </div>'
 
   initialize: ->
-    @fields = ["name", "producer", "type", "group", "user_name", "status"]
+    @fields = ["iid", "name", "producer", "type", "group", "user_name", "user_email"]
     @place = @place.bind @
-  
+    
     mousedown = (e) ->
       closest = $(e.target).closest('.pop-dialog')
       if closest.length is 0
@@ -134,13 +133,24 @@ App.InstrumentsTableView = Parse.View.extend
 
   _render: ->
     console.log arguments
-    @$el.html @template fields:@fields, all_fields:all_fields, collection:collection
-    @table = @$('table.table').dataTable()
-      # aoColumnDefs:[
-      #   mRender: (data, type, row) ->
-      #     data
-      # ]
-
+    @$el.html @template all_fields:all_fields, collection:collection
+    @table = @$('table.table').dataTable
+      aoColumnDefs:[
+        mRender: (data, type, row) ->
+          return "<a href='#instrument/#{row[0]}'>#{data}</a>"
+        aTargets: [1]
+      ,
+        bVisible: no
+        aTargets: [0]
+      ]
+    
+    @_updateFields()
+  
+  _updateFields: ->
+    fields = Object.keys all_fields
+    for i in [0...fields.length]
+      @table.fnSetColumnVis(i + 1, fields[i] in @fields)
+  
   render: ->
     viewConnect.apply @
     @
@@ -153,9 +163,8 @@ App.InstrumentsTableView = Parse.View.extend
     
     @fields = fields
     console.log 'changeTable', @fields
+    @_updateFields()
   
-  
-
   openPopup: (event) ->
     event.stopPropagation()
     event.preventDefault()

@@ -332,35 +332,21 @@
 	<table class="table table-hover">
 		<thead>
 			<tr>
+			<th></th>
+			<% _.each(all_fields, function(title, key) { %>
 				<th class="span3">
-					<input type="checkbox">
-					ID
+					<span class="line"></span><%= title %>
 				</th>
-				<% _.each(fields, function(field) { %>
-					<th class="span3">
-						<span class="line"></span><%= all_fields[field] %>
-					</th>
-				<% }) %>
+			<% }) %>
 			</tr>
 		</thead>
 		<tbody>
 		<% collection.each(function(instrument) { %>
 			<tr>
-			<td class="id">
-				<input type="checkbox">
-				<a href="#instrument/<%= instrument.id %>"><%= instrument.get('iid') %></a>
-			</td>
-			<% _.each(fields, function(field) { if (field != 'status') { %>
-				<td class="<%= field %>"><%= instrument.get(field) %></td>
-			<% }}) %>
-			<td>
-				<span class="label label-<%= instrument.get('status') ? 'success' : 'info' %>"><%= instrument.get('status') ? 'Active' : 'Standby' %></span>
-				<ul class="actions">
-					<li><i class="table-edit"></i></span></li>
-					<li><i class="table-settings"></i></li>
-					<li class="last"><i class="table-delete"></i></li>
-				</ul>
-			</td>
+			<td><%= instrument.id %></td>
+			<% _.each(all_fields, function(title, key) { %>
+				<td class="<%= key %>"><%= instrument.get(key) %></td>
+			<% }) %>
 			</tr>
 		<% }) %>
 		</tbody>
