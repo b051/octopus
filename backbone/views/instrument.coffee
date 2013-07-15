@@ -118,7 +118,6 @@ App.InstrumentsTableView = Parse.View.extend
     </div>'
 
   initialize: ->
-    @fields = ["iid", "name", "producer", "type", "group", "state", "rank", "acquisition_date", "user_name", "user_email"]
     @place = @place.bind @
     
     mousedown = (e) ->
@@ -173,11 +172,15 @@ App.InstrumentsTableView = Parse.View.extend
           labels.join('')
       ]
     
-    @_updateFieldsVisible()
     totalCount = Object.keys(all_fields).length + 1
-    @setOrders [0...totalCount]
+    @orders = [0...totalCount]
+    @all_fields = Object.keys(all_fields)
+    @setFields ["iid", "name", "producer", "type", "group", "state", "rank", "acquisition_date", "user_name", "user_email"]
   
-  _updateFieldsVisible: ->
+  setFields: (fields) ->
+    @fields = []
+    for i in fields
+      @fields.push i
     fields = Object.keys all_fields
     for i in [0...fields.length]
       @table.fnSetColumnVis(i + 1, fields[i] in @fields)
@@ -198,21 +201,31 @@ App.InstrumentsTableView = Parse.View.extend
     viewConnect.apply @
     @
 
-  changeTable: ->
-    fields = []
-    orders = [0]
-    _all_fields = Object.keys(all_fields)
-    $('.item', @items).each ->
-      field = $(@).attr 'name'
-      index = _all_fields.indexOf(field) + 1
-      orders[orders.length] = index
-      if $('input', @).is ':checked'
-        fields.push field
+  changeTable: (event, options) ->
+    if event.type is 'sortstop'
+      console.log arguments
+      changed = options.item.attr 'name'
+      console.log changed
+      orders = [0]
+      
+      new_fields = $('.item', @items).map ->
+        $(@).attr 'name'
+      new_fields = new_fields.toArray()
+      window.new_fields = new_fields
+      console.log new_fields
+      for field in @all_fields
+        index = new_fields.indexOf(field)
+        orders.push index + 1
+      @all_fields = new_fields
+      @setOrders orders
     
-    @fields = fields
-    
-    @_updateFieldsVisible()
-    @setOrders orders
+    else if event.type is 'change'
+      fields = []
+      $('.item', @items).each ->
+        field = $(@).attr 'name'
+        if $('input', @).is ':checked'
+          fields.push field
+      @setFields fields
   
   openPopup: (event) ->
     event.stopPropagation()
@@ -227,10 +240,8 @@ App.InstrumentsTableView = Parse.View.extend
   
     @picker.addClass('is-visible')
     @items = items = @picker.find('.items').empty()
-    _all_fields = Object.keys(all_fields)
-    console.log @orders
-    for i in @orders when i > 0
-      key = _all_fields[i - 1]
+    
+    for key in @all_fields
       title = all_fields[key]
       checked = key in @fields
       items.append @itemTemplate name:key, title:title, checked:checked
