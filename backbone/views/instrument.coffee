@@ -83,9 +83,11 @@ reloadData = (callback, force=no) ->
 viewConnect = ->
   if collection.isEmpty()
     @$el.html '<h4>Loading...</h4>'
+    console.log 'reloadData'
     reloadData =>
       @_render()
   else
+    console.log '_render'
     @_render()
   collection.on('reset', @_render.bind @)
 
@@ -133,17 +135,17 @@ App.InstrumentsTableView = Parse.View.extend
 
   _render: ->
     console.log arguments
+    @table?.dataTable().fnDestroy()
     @$el.html @template all_fields:all_fields, collection:collection
     @table = @$('table.table').dataTable
-      bStateSave: yes
       bAutoWidth: no
       aoColumnDefs:[
+        aTargets: [0]
+        bVisible: no
+      ,
+        aTargets: [1]
         mRender: (data, type, row) ->
           return "<a href='#instrument/#{row[0]}'>#{data}</a>"
-        aTargets: [1]
-      ,
-        bVisible: no
-        aTargets: [0]
       ,
         aTargets: [15]
         mRender: (data) ->
@@ -171,12 +173,26 @@ App.InstrumentsTableView = Parse.View.extend
           labels.join('')
       ]
     
-    @_updateFields()
+    @_updateFieldsVisible()
+    totalCount = Object.keys(all_fields).length + 1
+    @setOrders [0...totalCount]
   
-  _updateFields: ->
+  _updateFieldsVisible: ->
     fields = Object.keys all_fields
     for i in [0...fields.length]
       @table.fnSetColumnVis(i + 1, fields[i] in @fields)
+  
+  setOrders: (orders) ->
+    col = null
+    for inst in ColReorder.aoInstances
+      if inst.s.dt.oInstance is @table
+        col = inst
+        break
+    @orders = []
+    for i in orders
+      @orders.push i
+    console.log 'setOrders', orders
+    col?._fnOrderColumns orders
   
   render: ->
     viewConnect.apply @
@@ -184,13 +200,19 @@ App.InstrumentsTableView = Parse.View.extend
 
   changeTable: ->
     fields = []
+    orders = [0]
+    _all_fields = Object.keys(all_fields)
     $('.item', @items).each ->
+      field = $(@).attr 'name'
+      index = _all_fields.indexOf(field) + 1
+      orders[orders.length] = index
       if $('input', @).is ':checked'
-        fields.push $(@).attr 'name'
+        fields.push field
     
     @fields = fields
-    console.log 'changeTable', @fields
-    @_updateFields()
+    
+    @_updateFieldsVisible()
+    @setOrders orders
   
   openPopup: (event) ->
     event.stopPropagation()
@@ -205,7 +227,11 @@ App.InstrumentsTableView = Parse.View.extend
   
     @picker.addClass('is-visible')
     @items = items = @picker.find('.items').empty()
-    for key, title of all_fields
+    _all_fields = Object.keys(all_fields)
+    console.log @orders
+    for i in @orders when i > 0
+      key = _all_fields[i - 1]
+      title = all_fields[key]
       checked = key in @fields
       items.append @itemTemplate name:key, title:title, checked:checked
     items.disableSelection()
@@ -228,6 +254,7 @@ App.InstrumentsTableView = Parse.View.extend
       top: offset.top + height + 10
       left: offset.left
       width: 354
+    @picker.focus()
 
   search: (event) ->
     term = event.target.value
@@ -333,7 +360,7 @@ App.InstrumentView = Parse.View.extend
   currencyField: (name, symbols) ->
     box = @_box name
     currency = $('<div>', class:'input-prepend input-append span6 currency')
-    match = @model.get(name).match /(.)(\d+)(\.\d+)/
+    match = @model.get(name)?.match /(.)(\d+)(\.\d+)/
     symbolPicker = $('<div>', class:'btn-group')
     button = $('<button class="btn dropdown-toggle" data-toggle="dropdown"></button>')
     symbolList = $('<ul>', class:'dropdown-menu')
@@ -344,9 +371,10 @@ App.InstrumentView = Parse.View.extend
     input = $('<input>', class:'input-large span8 text-right', type:'text', name:name)
     fraction = $('<span>', class:'add-on')
     currency.append symbolPicker, input, fraction
-    button.html match[1]
-    input.val match[2]
-    fraction.html match[3]
+    if match
+      button.html match[1]
+      input.val match[2]
+      fraction.html match[3]
     box.append currency
 
   events:
@@ -405,6 +433,8 @@ App.InstrumentView = Parse.View.extend
   render: ->
     if @instrumentId
       viewConnect.apply @
+    else
+      @_render()
     @
 
   clickStar: (event) ->

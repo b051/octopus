@@ -93,6 +93,7 @@
     .pop-dialog .settings .items .item {
       display: block;
       padding: 7px 0px 7px 20px;
+      cursor: pointer;
       color: #333;
       font-size: 13px;
       font-weight: 600;
