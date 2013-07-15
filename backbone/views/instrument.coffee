@@ -35,24 +35,24 @@ all_fields =
   name: "Name"
   producer: "Producer"
   type: "Type"
+  sn: "Serial number"
   group: "Group"
-  user_name: "Username"
+  range: "Range"
+  scale: "Scale"
+  state: "State"
+  rank: "Rank"
+  base_of_rank: "Base of rank"
+  main_instrument: "Main instrument"
+  parts_of_instrument: "Parts of instrument"
   acquisition_price: "Acquisition price"
   acquisition_date: "Date of acquisition"
   available_licenses: "Available licenses"
-  base_of_rank: "Base of rank"
   deliverer: "Deliverer"
   deliverer_code: "Deliverer code"
-  main_instrument: "Main instrument"
-  parts_of_instrument: "Parts of instrument"
   ordering_number: "Ordering number"
   precision: "Precision"
-  range: "Range"
-  rank: "Rank"
-  scale: "Scale"
-  sn: "Serial number"
-  state: "State"
   store_price: "Store price"
+  user_name: "Username"
   user_department: "Department"
   user_address: "Address"
   user_phone: "Phone"
@@ -116,7 +116,7 @@ App.InstrumentsTableView = Parse.View.extend
     </div>'
 
   initialize: ->
-    @fields = ["iid", "name", "producer", "type", "group", "user_name", "user_email"]
+    @fields = ["iid", "name", "producer", "type", "group", "state", "rank", "acquisition_date", "user_name", "user_email"]
     @place = @place.bind @
     
     mousedown = (e) ->
@@ -135,6 +135,7 @@ App.InstrumentsTableView = Parse.View.extend
     console.log arguments
     @$el.html @template all_fields:all_fields, collection:collection
     @table = @$('table.table').dataTable
+      bAutoWidth: no
       aoColumnDefs:[
         mRender: (data, type, row) ->
           return "<a href='#instrument/#{row[0]}'>#{data}</a>"
@@ -142,6 +143,31 @@ App.InstrumentsTableView = Parse.View.extend
       ,
         bVisible: no
         aTargets: [0]
+      ,
+        aTargets: [15]
+        mRender: (data) ->
+          date = new Date(data)
+          y = date.getFullYear()
+          m = date.getMonth() + 1
+          d = date.getDate()
+          "#{m}/#{d}/#{y}"
+      ,
+        aTargets: [10]
+        mRender: (data) ->
+          rating = $('<span>', class:'rating')
+          value = Number data
+          for num in [0...5]
+            star = $('<span>', class:'star')
+            if num is value
+              star.addClass 'on'
+            rating.append star
+          rating[0].outerHTML
+      ,
+        aTargets: [6, 9]
+        mRender: (data) ->
+          labels = _.map data.split(','), (value) ->
+            '<span class="label label-success">' + value + '</span> '
+          labels.join('')
       ]
     
     @_updateFields()
@@ -300,7 +326,7 @@ App.InstrumentView = Parse.View.extend
       star = $('<span>', class:'star')
       if num is value
         star.addClass 'on'
-      rating.append star
+      rating.append star 
     box.append rating
 
   currencyField: (name, symbols) ->
