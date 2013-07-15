@@ -31,6 +31,7 @@ saveLocal = ->
 
 
 all_fields =
+  iid: "Identity number"
   name: "Name"
   producer: "Producer"
   type: "Type"
@@ -38,14 +39,15 @@ all_fields =
   user_name: "Username"
   status: "Status"
   acquisition_price: "Acquisition price"
-  acquisition_date: "Acquisition date"
+  acquisition_date: "Date of acquisition"
   available_licenses: "Available licenses"
   base_of_rank: "Base of rank"
   deliverer: "Deliverer"
   deliverer_code: "Deliverer code"
   main_instrument: "Main instrument"
+  parts_of_instrument: "Parts of instrument"
   ordering_number: "Ordering number"
-  precision: "precision"
+  precision: "Precision"
   range: "Range"
   rank: "Rank"
   scale: "Scale"
@@ -93,13 +95,13 @@ App.InstrumentsTableView = Parse.View.extend
   className: 'table-wrapper'
 
   template: $.template 'table-instruments'
-  
+
   itemTemplate: _.template '<li class="item" name="<%=name%>">
               <i class="icon-reorder"></i>
               <%= title %>
               <input type="checkbox" <% if (checked) { %>checked<% } %> class="check">
             </li>'
-  
+
   popUpTemplate: '<div class="pop-dialog" style="position:absolute;">
       <div class="pointer">
         <div class="arrow"></div>
@@ -117,28 +119,43 @@ App.InstrumentsTableView = Parse.View.extend
   initialize: ->
     @fields = ["name", "producer", "type", "group", "user_name", "status"]
     @place = @place.bind @
-    
+  
     mousedown = (e) ->
       closest = $(e.target).closest('.pop-dialog')
       if closest.length is 0
         @closePopup e
     @mousedown = mousedown.bind @
-  
+
   events:
     'keyup .search': 'search'
     'click tbody > tr': 'selectInstrument'
     'click .table-edit': 'editInstrument'
     'click .custom-columns': 'openPopup'
-  
+
   _render: ->
     console.log arguments
     @$el.html @template fields:@fields, all_fields:all_fields, collection:collection
     @table = @$('table.table').dataTable()
-  
+      # aoColumnDefs:[
+      #   mRender: (data, type, row) ->
+      #     data
+      # ]
+
   render: ->
     viewConnect.apply @
     @
+
+  changeTable: ->
+    fields = []
+    $('.item', @items).each ->
+      if $('input', @).is ':checked'
+        fields.push $(@).attr 'name'
+    
+    @fields = fields
+    console.log 'changeTable', @fields
   
+  
+
   openPopup: (event) ->
     event.stopPropagation()
     event.preventDefault()
@@ -148,31 +165,25 @@ App.InstrumentsTableView = Parse.View.extend
       $('.close-icon', @picker).on 'click', @closePopup.bind @
       $('.items', @picker).sortable
         cursor: 'move'
-        stop: =>
-          fields = []
-          checkedItems = @$('.items item').filter ->
-            if $('input', @).is ':checked'
-              fields.push @.attr 'name'
-          @fields = fields
-          console.log fields
-          @_render()
-    
+        stop: @changeTable.bind @
+  
     @picker.addClass('is-visible')
-    items = @picker.find('.items').empty()
+    @items = items = @picker.find('.items').empty()
     for key, title of all_fields
       checked = key in @fields
       items.append @itemTemplate name:key, title:title, checked:checked
     items.disableSelection()
+    $('input[type=checkbox]', items).on 'change', @changeTable.bind @
     @$('.btn-group').removeClass('open')
     $(document).on 'mousedown', @mousedown
     $(window).on('resize', @place)
     @place.apply @
-  
+
   closePopup: (event) ->
     $(document).off 'mousedown', @mousedown
     @picker.removeClass('is-visible')
     $(window).off 'resize', @place
-  
+
   place: ->
     element = @$('.custom-columns')
     offset = element.offset()
@@ -181,22 +192,22 @@ App.InstrumentsTableView = Parse.View.extend
       top: offset.top + height + 10
       left: offset.left
       width: 354
-  
+
   search: (event) ->
     term = event.target.value
     @table.fnFilter term, null
-  
+
   selectInstrument: (event) ->
     tr = event.currentTarget
     checkbox = $('td.id input[type=checkbox]', tr)
     checkbox.prop('checked', !checkbox.prop('checked'))
-  
+
   editInstrument: (event) ->
     link = $(event.target).parents('tr').find('a').attr('href')
     app.navigate link, yes
-  
+
   deleteInstrument: (event) ->
-    
+  
 
 
 App.InstrumentView = Parse.View.extend
@@ -206,13 +217,14 @@ App.InstrumentView = Parse.View.extend
   template: $.template 'form-instrument'
 
   initialize: (@instrumentId) ->
-  
-  _box: (title) ->
+
+  _box: (name) ->
+    title = all_fields[name]
     box = $('<div>', class:'field-box')
     box.append("<label>#{title}:</label>")
-  
-  textField: (name, title, options={}) ->
-    box = @_box title
+
+  textField: (name, options={}) ->
+    box = @_box name
     tooltip = options.tooltip
     if tooltip
       delete options.tooltip
@@ -227,22 +239,22 @@ App.InstrumentView = Parse.View.extend
       name: name
       value: @model.get(name)
     $.extend attrs, options
-    
+  
     input = $('<input>', attrs)
     if tooltip
       input.tooltip()
     box.append input
-  
-  chosenField: (name, title, options=[], chosen={}) ->
-    box = @_box title
+
+  chosenField: (name, options=[], chosen={}) ->
+    box = @_box name
     select = $('<select>', class:'chzn-select span6', name: name)
     select.prop('multiple', chosen.multiple)
     select.append('<option></option>')
-    
+  
     value = @model.get(name)
     for arr in options
       option = $('<option>')
-      
+    
       if $.isArray arr
         option.val(arr[0])
         option.html(arr[1])
@@ -257,22 +269,22 @@ App.InstrumentView = Parse.View.extend
       select.append option
     box.append select
     box
-  
-  dateField: (name, title) ->
-    box = @_box title
+
+  dateField: (name) ->
+    box = @_box name
     picker = $ '<input>',
       class:'input-large inline-input span6 datepicker'
       type:'text'
       name: name
-    
+  
     date = @model.get(name) or new Date()
     picker.datepicker().on 'changeDate', (event) ->
       $(@).datepicker('hide')
     picker.data('datepicker').setDate(date)
     box.append picker
-  
-  rateField: (name, title, number) ->
-    box = @_box title
+
+  rateField: (name, number) ->
+    box = @_box name
     rating = $('<span>', class:'rating')
     value = @model.get(name)
     for num in [0...number]
@@ -281,9 +293,9 @@ App.InstrumentView = Parse.View.extend
         star.addClass 'on'
       rating.append star
     box.append rating
-  
-  currencyField: (name, title, symbols) ->
-    box = @_box title
+
+  currencyField: (name, symbols) ->
+    box = @_box name
     currency = $('<div>', class:'input-prepend input-append span6 currency')
     match = @model.get(name).match /(.)(\d+)(\.\d+)/
     symbolPicker = $('<div>', class:'btn-group')
@@ -292,7 +304,7 @@ App.InstrumentView = Parse.View.extend
     for symbol in symbols
       symbolList.append $('<li>').append($('<a>', href:'#', html:symbol))
     symbolPicker.append button, symbolList
-    
+  
     input = $('<input>', class:'input-large span8 text-right', type:'text', name:name)
     fraction = $('<span>', class:'add-on')
     currency.append symbolPicker, input, fraction
@@ -300,16 +312,16 @@ App.InstrumentView = Parse.View.extend
     input.val match[2]
     fraction.html match[3]
     box.append currency
-  
+
   events:
     'click .currency a': 'changeCurrency'
     'click .star': 'clickStar'
     'click .delete' : 'deleteInstrument'
     'click .save': 'save'
-  
+
   _render: ->
     console.log arguments
-    
+  
     if @instrumentId
       @model = collection.get @instrumentId
       if not @model
@@ -317,67 +329,66 @@ App.InstrumentView = Parse.View.extend
     else
       @model = new Instrument()
     @$el.html @template model:@model
-    
+  
     basic_data = @$('.basic-data')
-    basic_data.append @textField('iid', 'Identity number', {tooltip:'Instrument identify number'})
-    basic_data.append @textField('name', 'Name', {tooltip:'Instrument name'})
-    basic_data.append @textField('producer', 'Producer')
-    basic_data.append @textField('sn', 'Serial number')
-    basic_data.append @textField('range', 'Range')
-    basic_data.append @textField('scale', 'Scale')
-    basic_data.append @textField('precision', 'Precision')
-    basic_data.append @chosenField('group', 'Group', ['auditing instrument', 'not auditing intr.', 'etalon', 'dummy'])
-    basic_data.append @chosenField('state', 'State', [
+    basic_data.append @textField 'iid', {tooltip:'Instrument identify number'}
+    basic_data.append @textField 'name', {tooltip:'Instrument name'}
+    basic_data.append @textField 'producer'
+    basic_data.append @textField 'sn'
+    basic_data.append @textField 'range'
+    basic_data.append @textField 'scale'
+    basic_data.append @textField 'precision'
+    basic_data.append @chosenField 'group', ['auditing instrument', 'not auditing intr.', 'etalon', 'dummy']
+    basic_data.append @chosenField 'state', [
       'closed', 'lost', 'wasted'
       'repairing', 'may use', 'destroyed'
       'calibrated over', 'is calibrating'
-      'discharged', 'reserve'], 'multiple':yes)
-    
-    basic_data.append @rateField('rank', 'Rank', 5)
-    basic_data.append @textField('base_of_rank', 'Base of rank')
-    basic_data.append @textField('main_instrument', 'Main instrument')
-    basic_data.append @textField('parts_of_instrument', 'Parts of instrument')
-    
+      'discharged', 'reserve'], 'multiple':yes
+ 
+    basic_data.append @rateField 'rank', 5
+    basic_data.append @textField 'base_of_rank'
+    basic_data.append @textField 'main_instrument'
+    basic_data.append @textField 'parts_of_instrument'
+ 
     user = @$('.instrument-user')
-    user.append @textField('deliverer', 'Deliverer')
-    user.append @textField('deliverer_code', 'Deliverer Code')
-    user.append @textField('ordering_number', 'Ordering number')
-    user.append @textField('available_licenses', 'Available licenses')
-    user.append @currencyField 'acquisition_price', 'Acquisition price', ['$', '¥']
-    user.append @currencyField 'store_price', 'Store price', ['$', '¥']
-    user.append @dateField('acquisition_date', 'Date of acquisition')
-    user.append @textField('user_name', 'Username')
-    user.append @textField('user_department', 'Department')
-    user.append @textField('user_address', 'Address')
-    user.append @textField('user_phone', 'Phone')
-    user.append @textField('user_fax', 'Fax')
-    user.append @textField('user_email', 'Email', {'type':'email'})
+    user.append @textField  'deliverer'
+    user.append @textField 'deliverer_code'
+    user.append @textField 'ordering_number'
+    user.append @textField 'available_licenses'
+    user.append @currencyField 'acquisition_price', ['$', '¥']
+    user.append @currencyField 'store_price', ['$', '¥']
+    user.append @dateField 'acquisition_date'
+    user.append @textField 'user_name'
+    user.append @textField 'user_department'
+    user.append @textField 'user_address'
+    user.append @textField 'user_phone'
+    user.append @textField 'user_fax'
+    user.append @textField 'user_email', {'type':'email'}
     @$('.chzn-select').chosen()
-  
-  
+
   render: ->
     if @instrumentId
       viewConnect.apply @
     @
-  
+
   clickStar: (event) ->
     star = $(event.target)
     star.siblings().removeClass('on')
     star.addClass('on')
-  
+
   changeCurrency: (event) ->
     event.preventDefault()
     a = $(event.target)
     currency = a.text()
     a.parents('.currency').find('button').html currency
-  
+
   deleteInstrument: (event) ->
-    
+  
   save: (event) ->
     event.preventDefault()
     $(event.target).attr('disabled', yes).html('Saving...')
     @model.set('rank', @$('.rating .star').index(@$('.rating .on')))
-    
+  
     @$('.field-box > input, .field-box > select').each (i, input) =>
       key = input.name
       if key
@@ -386,7 +397,7 @@ App.InstrumentView = Parse.View.extend
           @model.set(key, field.data('datepicker').getDate())
         else
           @model.set key, field.val()
-    
+  
     @$('.currency').each (i, div) =>
       c = $(div)
       currency = $('button', c).text()
@@ -394,7 +405,7 @@ App.InstrumentView = Parse.View.extend
       input = $('input', c)
       val = currency + input.val() + fraction
       @model.set(input.attr('name'), val)
-    
+  
     groupACL = new Parse.ACL()
     groupACL.setRoleWriteAccess('octopus', yes)
     groupACL.setRoleReadAccess('octopus', yes)
