@@ -1,6 +1,6 @@
 /* Set the defaults for DataTables initialisation */
 $.extend( true, $.fn.dataTable.defaults, {
-	"sDom": "<'row-fluid'r>t<'row-fluid'<'span6'i><'span6'p>>",
+	"sDom": "R<'row-fluid'r>t<'row-fluid'<'span6'i><'span6'p>>",
 	"sPaginationType": "bootstrap",
 	"oLanguage": {
 		"sLengthMenu": "Show _MENU_ entries"

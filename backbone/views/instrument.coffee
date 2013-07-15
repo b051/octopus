@@ -135,6 +135,7 @@ App.InstrumentsTableView = Parse.View.extend
     console.log arguments
     @$el.html @template all_fields:all_fields, collection:collection
     @table = @$('table.table').dataTable
+      bStateSave: yes
       bAutoWidth: no
       aoColumnDefs:[
         mRender: (data, type, row) ->
