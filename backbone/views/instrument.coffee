@@ -200,7 +200,7 @@ App.InstrumentsTableView = Parse.View.extend
   render: ->
     viewConnect.apply @
     @
-
+  
   changeTable: (event, options) ->
     if event.type is 'sortstop'
       console.log arguments
@@ -273,8 +273,16 @@ App.InstrumentsTableView = Parse.View.extend
 
   selectInstrument: (event) ->
     tr = event.currentTarget
-    checkbox = $('td.id input[type=checkbox]', tr)
-    checkbox.prop('checked', !checkbox.prop('checked'))
+    match = $(tr).find('.iid a').attr('href').match /#instrument\/(.*)/
+    iid = match[1]
+    wrapper = @$el.siblings('.instrumentview')
+    if not wrapper.length
+      wrapper = $('<div>', class:'instrumentview section')
+      @$el.parent().append wrapper
+    console.log @$el, wrapper
+    instrumentView = new App.InstrumentView(iid, yes)
+    wrapper.html instrumentView.el
+    instrumentView.render()
 
   editInstrument: (event) ->
     link = $(event.target).parents('tr').find('a').attr('href')
@@ -290,7 +298,7 @@ App.InstrumentView = Parse.View.extend
 
   template: $.template 'form-instrument'
 
-  initialize: (@instrumentId) ->
+  initialize: (@instrumentId, @usetabs) ->
 
   _box: (name) ->
     title = all_fields[name]
@@ -395,16 +403,15 @@ App.InstrumentView = Parse.View.extend
     'click .save': 'save'
 
   _render: ->
-    console.log arguments
-  
+    
     if @instrumentId
       @model = collection.get @instrumentId
       if not @model
         return app.navigate '', yes
     else
       @model = new Instrument()
-    @$el.html @template model:@model
-  
+    @$el.html @template model:@model, usetab: @usetabs
+    
     basic_data = @$('.basic-data')
     basic_data.append @textField 'iid', {tooltip:'Instrument identify number'}
     basic_data.append @textField 'name', {tooltip:'Instrument name'}
