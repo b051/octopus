@@ -15,25 +15,14 @@
 		<link rel="stylesheet" href="css/lib/uniform.default.css">
 		<link href="css/lib/font-awesome.css" rel="stylesheet">
 		<link href='css/lib/fullcalendar.css' rel="stylesheet">
-		<link rel="stylesheet" href="http://localhost:5000/chosen/chosen.min.css" media="screen">
+		<link rel="stylesheet" href="chosen/chosen.min.css" media="screen">
 		<!--<link rel="stylesheet" href="css/lib/bootstrap-wysihtml5.css" type="text/css" media="screen">-->
 		<link rel="stylesheet" href="css/lib/bootstrap.datepicker.css" type="text/css" media="screen">
 		<link href='css/lib/fullcalendar.print.css' rel="stylesheet" media="print">
 		<link href="css/lib/morris.css" rel="stylesheet">
 		<link rel="stylesheet" href="css/lib/ColReorder.css" media="screen">
 		<!-- global styles -->
-		<link rel="stylesheet" href="css/layout.css">
-		<link rel="stylesheet" href="css/compiled/elements.css">
-		<link rel="stylesheet" href="css/icons.css">
-
-		<!-- page specific styles -->
-		<link rel="stylesheet" href="css/compiled/index.css" media="screen">
-		<link rel="stylesheet" href="css/compiled/signin.css" media="screen">
-		<link rel="stylesheet" href="css/compiled/calendar.css" media="screen">
-		<link rel="stylesheet" href="css/compiled/chart-showcase.css" media="screen">
-		<link rel="stylesheet" href="css/compiled/form-showcase.css" media="screen">
-		<link rel="stylesheet" href="css/compiled/tables.css" media="screen">
-		<link rel="stylesheet" href="css/compiled/ui-elements.css" media="screen">
+		<link rel="stylesheet" href="octopus.min.css">
 		<!-- open sans font -->
 		<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
 
@@ -42,7 +31,7 @@
 		<![endif]-->
 <body>
 <div class="header" style="display:none;">
-	<a href="index.html#">
+	<a href="#">
 		<img src="img/logo.png" class="logo">
 	</a>
 </div>
@@ -54,7 +43,7 @@
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 		</button>
-		<a class="brand" href="index.html#"><img src="img/logo.png"></a>
+		<a class="brand" href="#"><img src="img/logo.png"></a>
 		<ul class="nav pull-right"></ul>
 	</div>
 </div>
@@ -76,7 +65,7 @@
 <script src="parse/parse-latest.js"></script>
 <script>_ = Parse._; App = {};</script>
 <script src="lib/bootstrap.datepicker.js"></script>
-<script src="http://localhost:5000/chosen/chosen.jquery.min.js"></script>
+<script src="chosen/chosen.jquery.min.js"></script>
 <script src="lib/jquery-ui-1.10.3.custom.min.js"></script>
 <script src='lib/fullcalendar.min.js'></script>
 <!-- knob -->
@@ -614,6 +603,7 @@ Download all message on connection
 <script src="js/views/calendar.js"></script>
 <script src="js/views/charts.js"></script>
 <script src="js/views/instrument.js"></script>
+<!--<script src="octopus.min.js"></script>-->
 <script type="text/javascript">
 $(function() {
 	window.app = new App.Router();
