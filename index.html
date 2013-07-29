@@ -15,7 +15,7 @@
 		<link rel="stylesheet" href="css/lib/uniform.default.css">
 		<link href="css/lib/font-awesome.css" rel="stylesheet">
 		<link href='css/lib/fullcalendar.css' rel="stylesheet">
-		<link rel="stylesheet" href="chosen/chosen.min.css" media="screen">
+		<link rel="stylesheet" href="lib/chosen/chosen.min.css" media="screen">
 		<!--<link rel="stylesheet" href="css/lib/bootstrap-wysihtml5.css" type="text/css" media="screen">-->
 		<link rel="stylesheet" href="css/lib/bootstrap.datepicker.css" type="text/css" media="screen">
 		<link href='css/lib/fullcalendar.print.css' rel="stylesheet" media="print">
@@ -62,10 +62,10 @@
 <!-- scripts -->
 <script src="lib/jquery-2.0.2.min.js"></script>
 <script src="lib/bootstrap.min.js"></script>
-<script src="parse/parse-latest.js"></script>
+<script src="lib/parse/parse-latest.js"></script>
 <script>_ = Parse._; App = {};</script>
 <script src="lib/bootstrap.datepicker.js"></script>
-<script src="chosen/chosen.jquery.min.js"></script>
+<script src="lib/chosen/chosen.jquery.min.js"></script>
 <script src="lib/jquery-ui-1.10.3.custom.min.js"></script>
 <script src='lib/fullcalendar.min.js'></script>
 <!-- knob -->
@@ -80,7 +80,6 @@
 <script src="lib/morris.min.js"></script>
 <script src="lib/DT_bootstrap.js"></script>
 <script src="lib/ColReorder.js"></script>
-<script src="js/models/models.js"></script>
 
 <div class="nav-templates">
 <script type="text/template" id="widget-dropdown">
@@ -593,7 +592,8 @@ Download all message on connection
 </div>
 </script>
 
-
+<!--
+<script src="js/models/models.js"></script>
 <script src="js/main.js"></script>
 <script src="js/views/navbar.js"></script>
 <script src="js/views/sidebar.js"></script>
@@ -603,7 +603,8 @@ Download all message on connection
 <script src="js/views/calendar.js"></script>
 <script src="js/views/charts.js"></script>
 <script src="js/views/instrument.js"></script>
-<!--<script src="octopus.min.js"></script>-->
+-->
+<script src="octopus.min.js"></script>
 <script type="text/javascript">
 $(function() {
 	window.app = new App.Router();
