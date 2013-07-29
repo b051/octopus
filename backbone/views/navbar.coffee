@@ -94,8 +94,8 @@ NavMessagesView = NavNotificationDropDown.extend
   render: ->
     @$el.html @template icon: 'icon-envelope-alt', type: 'messages'
     
-    collection = new MessageCollection()
-    collection.add [
+    messages = new MessageCollection()
+    messages.add [
       title: 'Alejandra Galván'
       detail: 'There are many variations of available, but the majority have suffered alterations.'
       thumbnail: 'img/contact-img.png'
@@ -112,8 +112,8 @@ NavMessagesView = NavNotificationDropDown.extend
       time: minsAgo 13
     ]
     
-    collection.each @addMessage.bind @
-    @$('.count').html if collection.length then collection.length else ''
+    messages.each @addMessage.bind @
+    @$('.count').html if messages.length then messages.length else ''
     @
   
   addMessage: (message) ->

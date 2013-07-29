@@ -45,14 +45,12 @@ module.exports = (grunt) ->
     copy:
       dist:
         files: [
-          { cwd: "public", src: ["img/**", "font/**", "lib/**", "index.html", "css/bootstrap/*.css", "css/lib/**", "octopus.min.js", "octopus.min.css"], dest: "dist/", expand: true, flatten: false, filter: 'isFile' }
-          { src: ["chosen/public/chosen.min.css", "chosen/public/chosen.jquery.min.js", "chosen/public/chosen-sprite*.png"], dest: "dist/chosen/", expand: true, flatten: true, filter: 'isFile' }
-          { src: ["node_modules/parse/build/parse-latest.js"], dest: "dist/parse/", expand: true, flatten: true, filter: 'isFile' }
+          { cwd: "public", src: ["img/**", "font/**", "lib/**", "index.html", "css/bootstrap/**", "css/lib/**", "octopus.min.js", "octopus.min.css"], dest: "dist/", expand: true, flatten: false, filter: 'isFile' }
+          { src: ["chosen/public/chosen.min.css", "chosen/public/chosen.jquery.min.js", "chosen/public/chosen-sprite*.png"], dest: "dist/lib/chosen/", expand: true, flatten: true, filter: 'isFile' }
+          { src: ["node_modules/parse/build/parse-latest.js"], dest: "dist/lib/parse/", expand: true, flatten: true, filter: 'isFile' }
         ]
 
-    clean:
-      dist: ["dist/"]
-      chosen_zip: ["*.zip"]
+    clean: ['dist']
 
     build_gh_pages:
       gh_pages: {}
@@ -84,4 +82,4 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'default', ['build']
   grunt.registerTask 'build', ['coffee', 'concat', 'uglify', 'cssmin']
-  grunt.registerTask 'gh_pages', ['clean', 'copy:dist', 'build_gh_pages:gh_pages']
+  grunt.registerTask 'gh_pages', ['clean', 'copy', 'build_gh_pages:gh_pages']
